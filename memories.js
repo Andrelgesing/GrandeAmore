@@ -28,6 +28,9 @@ const memories = [
     "date": "2026-07-19"
   }
 ];
+const memoryLightbox = document.querySelector('#memory-lightbox');
+const memoryLarge = document.querySelector('#memory-large');
+const memoryOpen = document.querySelector('#memory-open');
 const memoryImage = document.querySelector('#memory-image');
 const memoryDate = document.querySelector('#memory-date');
 const memoryCount = document.querySelector('#memory-count');
@@ -61,7 +64,7 @@ let memoryTimer;
 function restartTimer() {
   clearInterval(memoryTimer);
   memoryTimer = setInterval(() => {
-    if (!paused && !document.hidden && location.hash === '#memory-lane') moveMemory(1);
+    if (!paused && !memoryLightbox.open && !document.hidden && location.hash === '#memory-lane') moveMemory(1);
   }, 6000);
 }
 document.querySelector('#memory-prev').addEventListener('click', () => { moveMemory(-1); restartTimer(); });
@@ -71,3 +74,22 @@ window.addEventListener('hashchange', restartTimer);
 renderMemory();
 renderPause();
 restartTimer();
+
+memoryOpen.addEventListener('click', () => {
+  memoryLarge.src = memoryImage.src;
+  memoryLarge.alt = memoryImage.alt;
+  document.querySelector('#memory-large-date').textContent = memoryDate.textContent;
+  document.body.classList.add('modal-open');
+  memoryLightbox.showModal();
+});
+document.querySelector('#memory-close').addEventListener('click', () => memoryLightbox.close());
+memoryLightbox.addEventListener('close', () => {
+  document.body.classList.remove('modal-open');
+  restartTimer();
+});
+memoryLightbox.addEventListener('click', event => {
+  if (event.target !== memoryLightbox) return;
+  const bounds = memoryLightbox.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) memoryLightbox.close();
+});
+window.addEventListener('hashchange', () => { if (memoryLightbox.open) memoryLightbox.close(); });

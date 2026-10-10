@@ -45,8 +45,33 @@
     .mvp-name { font-weight: 700; }
     .mvp-name .legendary-badge { margin: 0 0 0 8px; }
     @media (max-width: 650px) { .stats-grid { grid-template-columns: 1fr; } }
+    .match-date { display: inline-block; padding: 8px 14px; border: 1px solid #dce2d9; border-radius: 30px; background: white; font-weight: 700; }
+    .match-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 30px 0 50px; }
+    .match-team { --team-color: #f5d478; padding: 0; overflow: hidden; }
+    .match-team-2 { --team-color: #a3d7ff; }
+    .match-team-3 { --team-color: #f5aaa7; }
+    .match-team-4 { --team-color: #d0b6ff; }
+    .match-team-heading { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 5px solid var(--team-color); }
+    .match-team-heading h2 { margin: 0; }
+    .match-average { text-align: right; line-height: 1.4; }
+    .match-average .stars { display: inline; margin: 0 6px 0 0; color: #9a7023; }
+    .match-average > span:last-child { display: block; font-size: .7rem; color: var(--muted); margin-top: 5px; }
+    .match-pitch { position: relative; isolation: isolate; min-height: 560px; padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; color: white; background: repeating-linear-gradient(180deg, #265c43 0, #265c43 70px, #2b654a 70px, #2b654a 140px); }
+    .match-pitch::before { content: ''; position: absolute; inset: 12px; border: 1px solid #ffffff60; z-index: -1; }
+    .match-pitch::after { content: ''; position: absolute; bottom: 12px; left: 30%; width: 40%; height: 95px; border: 1px solid #ffffff60; border-bottom: 0; z-index: -1; }
+    .pitch-center { position: absolute; top: 50%; left: 12px; right: 12px; height: 1px; background: #ffffff60; z-index: -1; }
+    .pitch-center::after { content: ''; position: absolute; width: 100px; height: 100px; border: 1px solid #ffffff60; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .pitch-row { display: flex; justify-content: space-evenly; align-items: flex-start; gap: 6px; }
+    .pitch-player { width: 120px; min-width: 0; text-align: center; line-height: 1.25; }
+    .match-portrait { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 7px; border: 3px solid var(--team-color); border-radius: 50%; background: #173e32; font-weight: 800; }
+    .match-portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .match-player-name { display: block; font-size: .8rem; font-weight: 700; overflow-wrap: anywhere; }
+    .pitch-player .stars { margin: 5px 0; color: #ffe097; font-size: .75rem; letter-spacing: .03em; white-space: nowrap; }
+    .match-position { display: block; color: #e0ece3; font-size: .62rem; }
+    @media (max-width: 760px) { .match-teams { grid-template-columns: 1fr; } }
+    @media (max-width: 380px) { .match-team-heading { padding: 16px 12px; } .match-average .stars { display: block; } .match-pitch { padding: 24px 10px; } }
     .memory-gallery { margin: 0 0 40px; background: white; border: 1px solid #dce2d9; border-radius: 16px; overflow: hidden; }
-    .memory-frame { background: #10261e; height: clamp(260px, 55vw, 570px); display: flex; align-items: center; justify-content: center; }
+    .memory-frame { width: 100%; border: 0; padding: 0; cursor: zoom-in; background: #10261e; height: clamp(260px, 55vw, 570px); display: flex; align-items: center; justify-content: center; }
     .memory-frame img { width: 100%; height: 100%; object-fit: contain; }
     .memory-gallery figcaption { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 24px; }
     .memory-gallery time { font-weight: 700; }
@@ -93,6 +118,10 @@
     .legendary-badge { display: inline-block; margin-top: 12px; padding: 4px 12px; border: 1px solid #7959ad; border-radius: 20px; background: #eee5ff; color: #573487; font-size: .72rem; font-weight: 800; letter-spacing: .07em; }
     dialog { border: 0; padding: 0; border-radius: 22px; width: min(420px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; background: transparent; box-shadow: 0 25px 90px #0005; }
     dialog::backdrop { background: #10261e80; backdrop-filter: blur(8px); }
+    #memory-lightbox { width: calc(100% - 32px); max-width: 1500px; background: #10261e; color: white; padding: 48px 12px 12px; }
+    #memory-large { display: block; width: 100%; height: calc(100dvh - 150px); object-fit: contain; }
+    #memory-large-date { margin: 12px 0 0; text-align: center; }
+    #memory-close { color: #10261e; }
     dialog .player-card { padding: 35px 28px; }
     dialog .portrait { width: 180px; height: 180px; font-size: 2.4rem; }
     dialog .player-name { font-size: 1.7rem; }
@@ -137,12 +166,13 @@
       <div class="player-grid" id="player-grid"></div>
     </section>
     <section id="matches-view" hidden aria-labelledby="matches-title">
-      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">The next kick-off.</h1><p>Our next match has not been announced yet. Fixtures and results will appear here.</p></div>
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Sunday's line-ups.</h1><time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time><p>Four recommended teams, balanced by position and current Elo. Each plays with 1 ST, 2 CM, 3 CB and 1 GK.</p><p id="match-balance"></p><p class="small-note">Shahrom is unavailable this Sunday. AlexG and Andre play on separate teams. With two specialist keepers and fewer strikers and defenders than needed, midfielders cover the remaining spots; covering roles are marked on the pitches. Recommendations refresh when ratings change.</p></div>
+      <div id="match-teams" class="match-teams"></div>
     </section>
     <section id="memory-lane-view" hidden aria-labelledby="memory-lane-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Memory lane</div><h1 id="memory-lane-title">A look back.</h1><p>Our matches, shared moments and memories on and off the pitch.</p></div>
       <figure class="memory-gallery" aria-label="Team memories slideshow">
-        <div class="memory-frame"><img id="memory-image" alt="Grande Amore team memory"></div>
+        <button type="button" class="memory-frame" id="memory-open" aria-label="Enlarge this photo" aria-haspopup="dialog"><img id="memory-image" alt="Grande Amore team memory"></button>
         <figcaption><div><time id="memory-date"></time><span class="small-note memory-source">Date from filename</span></div><span id="memory-count"></span></figcaption>
         <div class="memory-controls"><button type="button" id="memory-prev" aria-label="Previous photo">← Previous</button><button type="button" id="memory-pause">Pause slideshow</button><button type="button" id="memory-next" aria-label="Next photo">Next →</button></div>
       </figure>
@@ -156,11 +186,13 @@
       </div>
     </section>
   </main>
+<dialog id="memory-lightbox" aria-label="Enlarged team photo"><button class="close" id="memory-close" type="button" aria-label="Close enlarged photo">×</button><img id="memory-large" alt=""><p id="memory-large-date"></p></dialog>
   <dialog id="player-dialog" aria-labelledby="detail-name"><div id="player-detail"></div></dialog>
   <dialog id="fight-result" aria-labelledby="fight-result-title"><h2 id="fight-result-title">Round complete</h2><p id="fight-result-text"></p><button class="button" id="fight-next">Close &amp; next pair</button></dialog>
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
 <script src="config.js"></script>
 <script src="players.js"></script>
+<script src="matches.js"></script>
 <script src="memories.js"></script>
 <script src="fight.js"></script>
 </body>
