@@ -58,6 +58,13 @@ standings refresh after voting and every 30 seconds while the page is visible.
 Local file previews cannot vote against the live API; use the GitHub Pages site.
 See backend/README.md for deployment and configuration details.
 
+Fight chooses a random first player and uses a 70% Elo-weighted / 30% completely
+random opponent mix. Weighted opponents have weight `1 / (1 + Elo gap / 200)^2`,
+so closer ratings are favored while every opponent remains possible. Consecutive
+repeats of the same unordered pair are skipped. Current ratings are used; pairing
+never writes Elo or changes the existing K=32 vote scoring. Shahrom remains
+eligible for Fight. Check the selection behavior with `node fight.test.cjs`.
+
 ## Sunday teams
 
 The Matches tab shows four recommended seven-player teams for 11 October 2026.

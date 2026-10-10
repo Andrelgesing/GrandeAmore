@@ -12,21 +12,40 @@ let saving = false;
 let sharedReady = !RATINGS_API;
 let previousPair = '';
 let previousArena = -1;
+function chooseDuel(pool, previous = '', random = Math.random) {
+  if (pool.length < 2) throw new Error('A duel needs at least two players.');
+  // Choose the mode once, so rejecting an immediate repeat preserves 70/30.
+  const preferSimilar = random() < 0.7;
+  let first, second, key;
+  do {
+    first = Math.floor(random() * pool.length);
+    if (preferSimilar) {
+      const candidates = pool.flatMap((player, index) => index === first ? [] : [{
+        index, weight: 1 / (1 + Math.abs(player.elo - pool[first].elo) / 200) ** 2
+      }]);
+      let draw = random() * candidates.reduce((sum, candidate) => sum + candidate.weight, 0);
+      second = candidates[candidates.length - 1].index;
+      for (const candidate of candidates) {
+        draw -= candidate.weight;
+        if (draw < 0) { second = candidate.index; break; }
+      }
+    } else {
+      second = Math.floor(random() * (pool.length - 1));
+      if (second >= first) second++;
+    }
+    key = [first, second].sort((a, b) => a - b).join(':');
+  } while (pool.length > 2 && key === previous);
+  return [first, second];
+}
 function nextFight() {
   voteId = crypto.randomUUID();
   selected = null;
   submitted = false;
   confirmFight.disabled = true;
   selection.textContent = 'Choose your fighter.';
-  let key;
-  do {
-    const first = Math.floor(Math.random() * players.length);
-    let second = Math.floor(Math.random() * (players.length - 1));
-    if (second >= first) second++;
-    pair = [players[first], players[second]];
-    key = [first, second].sort((a, b) => a - b).join(':');
-  } while (key === previousPair);
-  previousPair = key;
+  const [first, second] = chooseDuel(players, previousPair);
+  pair = [players[first], players[second]];
+  previousPair = [first, second].sort((a, b) => a - b).join(':');
   const arenaIndex = (previousArena + 1 + Math.floor(Math.random() * 3)) % arenas.length;
   previousArena = arenaIndex;
   arena.style.backgroundImage = `url('arenas/${arenas[arenaIndex]}.svg')`;
@@ -94,8 +113,10 @@ async function refreshRatings() {
  try {
   const response = await fetch(RATINGS_API + '/ratings', { cache: 'no-store' });
   if (!response.ok) throw new Error();
+  const firstLoad = !sharedReady;
   applyShared(await response.json());
   sharedReady = true;
+  if (firstLoad && selected === null && !submitted) nextFight();
   if (selected !== null && !submitted) confirmFight.disabled = false;
  } catch (_) { if (!sharedReady) selection.textContent = 'Connecting to ratings. Please try again shortly.'; }
  finally { syncing = false; }
