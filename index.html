@@ -70,6 +70,16 @@
     .match-position { display: block; color: #e0ece3; font-size: .62rem; }
     @media (max-width: 760px) { .match-teams { grid-template-columns: 1fr; } }
     @media (max-width: 380px) { .match-team-heading { padding: 16px 12px; } .match-average .stars { display: block; } .match-pitch { padding: 24px 10px; } }
+    @media (max-width: 650px) {
+      header, main, footer { padding-left: 16px; padding-right: 16px; }
+      nav { gap: 4px 16px; }
+      nav a { display: inline-flex; align-items: center; min-height: 44px; }
+      .squad-heading h1 { overflow-wrap: anywhere; }
+      .match-team-heading h2 { flex-shrink: 0; }
+      .match-average { min-width: 0; }
+      .match-average .stars { display: block; margin-right: 0; }
+      .pitch-player { flex: 0 1 120px; }
+    }
     .memory-gallery { margin: 0 0 40px; background: white; border: 1px solid #dce2d9; border-radius: 16px; overflow: hidden; }
     .memory-frame { width: 100%; border: 0; padding: 0; cursor: zoom-in; background: #10261e; height: clamp(260px, 55vw, 570px); display: flex; align-items: center; justify-content: center; }
     .memory-frame img { width: 100%; height: 100%; object-fit: contain; }
@@ -166,7 +176,7 @@
       <div class="player-grid" id="player-grid"></div>
     </section>
     <section id="matches-view" hidden aria-labelledby="matches-title">
-      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Sunday's line-ups.</h1><time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time><p>Four recommended teams, balanced by position and current Elo. Each plays with 1 ST, 2 CM, 3 CB and 1 GK.</p><p id="match-balance"></p><p class="small-note">Shahrom is unavailable this Sunday. AlexG and Andre play on separate teams. With two specialist keepers and fewer strikers and defenders than needed, midfielders cover the remaining spots; covering roles are marked on the pitches. Recommendations refresh when ratings change.</p></div>
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament!!!!</h1><time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time></div>
       <div id="match-teams" class="match-teams"></div>
     </section>
     <section id="memory-lane-view" hidden aria-labelledby="memory-lane-title">

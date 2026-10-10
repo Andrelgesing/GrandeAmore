@@ -57,3 +57,17 @@ Fight uses K=32. Anonymous votes update shared Elo; Players and the top 10/20
 standings refresh after voting and every 30 seconds while the page is visible.
 Local file previews cannot vote against the live API; use the GitHub Pages site.
 See backend/README.md for deployment and configuration details.
+
+## Sunday teams
+
+The Matches tab shows four recommended seven-player teams for 11 October 2026.
+`matches.js` excludes Shahrom for this fixture, keeps AlexG and Andre in separate
+goals, and assigns one ST, two CM, three CB and one GK to each pitch. Position fit
+is optimized before Elo balance; each team retains at least two natural defenders
+and at most one natural striker. Midfielders cover the six unavoidable gaps.
+Players without photos show an initial; the available roster photos are connected
+in `players.js`. Team averages use the seven players' displayed star ratings.
+Recommendations recalculate when the existing shared ratings refresh, with a
+repeatable tie-break so unchanged ratings give unchanged line-ups.
+
+Run the allocation and rendering checks with `node matches.test.cjs`.

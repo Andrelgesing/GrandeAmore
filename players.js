@@ -4,15 +4,15 @@ const starsFromElo = elo => Math.round(rawStars(elo) * 2) / 2;
 // Add a photo path to a player when photos are available.
 const roster = [
   ['AlexG', 'GK', 1200], ['Andre', 'GK', 1200, 'players/andre.jpg'], ['Darius', 'CB', 1000],
-  ['fabian', 'CM', 1000, 'players/fabian.jpg'], ['Enil', 'CM', 1200, 'players/enil.jpg'], ['gabi', 'CM', 1000],
-  ['Daniel', 'CM/ST', 1200], ['Levi', 'CM', 1000], ['Samu', 'CM', 1000, 'players/samu.jpg'],
+  ['fabian', 'CM', 1000, 'players/fabian.jpg'], ['Enil', 'CM', 1200, 'players/enil.jpg'], ['gabi', 'CM', 1000, 'players/gabi.jpg'],
+  ['Daniel', 'CM/ST', 1200], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'CM', 1000, 'players/samu.jpg'],
   ['Dejan', 'CB', 1000], ['Jack', 'CB', 1000, 'players/jack.jpg'], ['Ali', 'CB', 1000],
-  ['Omar', 'CM', 1000], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
-  ['Danilo', 'CB', 1000], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000],
+  ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
+  ['Danilo', 'CB', 1000], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
   ['Nikita', 'CB', 1000], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000],
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000], ['Mohamed', 'CB', 1000],
-  ['Paolo (pac)', 'CM', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000],
-  ['Lucas', 'CM', 1200], ['@~❄️', 'ST', 1000],
+  ['Paolo (pac)', 'CM', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
+  ['Lucas', 'CM', 1200], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
   ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary']
 ];
 let ratingState = {};
@@ -170,6 +170,7 @@ function renderMvp() {
   row.append(rank, name, position, rating, elo);
   mvpList.append(row);
   });
+  document.dispatchEvent(new Event('ratings-updated'));
 }
 mvpToggle.addEventListener('click', () => {
   mvpLimit = mvpLimit === 10 ? 20 : 10;
