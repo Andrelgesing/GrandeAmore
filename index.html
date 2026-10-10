@@ -120,6 +120,9 @@
     .bronze { --metal: #cd9b79; --shine: #f5ded0; --edge: #ae7956; }
     .player-card .position { font-size: .75rem; font-weight: 800; letter-spacing: .12em; }
     .portrait { width: 86px; height: 86px; border-radius: 50%; background: #ffffff80; border: 1px solid #ffffff; display: grid; place-items: center; margin: 18px auto; font-size: 1.7rem; font-weight: 800; }
+    .portrait, .match-portrait { overflow: hidden; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+    .portrait img, .match-portrait img { display: block; min-width: 0; min-height: 0; }
+    img[src="players/lucas.jpg"] { object-fit: contain !important; background: white; }
     .player-name { display: block; font-size: 1.1rem; font-weight: 800; overflow-wrap: anywhere; }
     .stars { display: block; color: #385749; letter-spacing: .13em; margin: 8px 0; }
     .star { position: relative; display: inline-block; }
