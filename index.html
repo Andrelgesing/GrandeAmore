@@ -36,6 +36,7 @@
     a:focus-visible { outline: 3px solid #b17f25; outline-offset: 5px; }
     @media (max-width: 650px) { header { flex-direction: column; align-items: flex-start; } .hero { padding: 35px 0; } .cards { grid-template-columns: 1fr; } nav { gap: 20px; } }
     .stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 50px; }
+    .stats-grid > article { min-width: 0; }
     .mvp-panel { grid-column: 1 / -1; }
     .table-wrap { overflow-x: auto; margin-top: 24px; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
