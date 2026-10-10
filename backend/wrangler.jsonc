@@ -1,0 +1,25 @@
+{
+  "name": "grande-amore-ratings",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-10",
+  "vars": {
+    "ELO_K": "16",
+    "ALLOWED_ORIGIN": "https://andrelgesing.github.io"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RANKINGS",
+        "class_name": "Rankings"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "Rankings"
+      ]
+    }
+  ]
+}
