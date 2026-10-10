@@ -10,7 +10,7 @@ const roster = [
   ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
   ['Danilo', 'CB', 1000], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
   ['Nikita', 'CB', 1000], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000],
-  ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000], ['Mohamed', 'CB', 1000],
+  ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000],
   ['Paolo (pac)', 'CB', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
   ['Lucas', 'CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
   ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary']
