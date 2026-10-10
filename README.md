@@ -64,7 +64,7 @@ The Matches tab shows four recommended seven-player teams for 11 October 2026.
 `matches.js` excludes Shahrom for this fixture, keeps AlexG and Andre in separate
 goals, and assigns one ST, two CM, three CB and one GK to each pitch. Position fit
 is optimized before Elo balance; each team retains at least two natural defenders
-and at most one natural striker. Midfielders cover the six unavoidable gaps.
+and at most one natural striker. Midfielders cover the five unavoidable gaps.
 Players without photos show an initial; the available roster photos are connected
 in `players.js`. Team averages use the seven players' displayed star ratings.
 Recommendations recalculate when the existing shared ratings refresh, with a

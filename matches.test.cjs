@@ -24,9 +24,9 @@ function check(pool) {
     assert(team.filter(entry => entry.player.position.split('/').includes('ST')).length <= 1);
     for (const entry of team.filter(entry => entry.player.position === 'GK')) assert.equal(entry.role, 'GK');
   }
-  // Only the six unavoidable covering assignments: two GK, two ST, two CB.
-  assert.equal(teams.flat().filter(entry => cost(entry.player, entry.role) > 0).length, 6);
-  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 14);
+  // Only the five unavoidable covering assignments: two GK, two ST, one CB.
+  assert.equal(teams.flat().filter(entry => cost(entry.player, entry.role) > 0).length, 5);
+  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 12);
   assert.equal(JSON.stringify(recommend([...pool].reverse())), JSON.stringify(teams));
   return teams;
 }
