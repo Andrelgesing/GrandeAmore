@@ -2,6 +2,7 @@ const arenas = ['neon-city', 'sunset-rooftop', 'mountain-temple', 'moonlit-docks
 const arena = document.querySelector('#fight-arena');
 const options = document.querySelector('#fight-options');
 const confirmFight = document.querySelector('#fight-confirm');
+const skipFight = document.querySelector('#fight-skip');
 const selection = document.querySelector('#fight-selection');
 const resultDialog = document.querySelector('#fight-result');
 let pair = [];
@@ -42,6 +43,7 @@ function nextFight() {
   selected = null;
   submitted = false;
   confirmFight.disabled = true;
+  skipFight.disabled = false;
   selection.textContent = 'Choose your fighter.';
   const [first, second] = chooseDuel(players, previousPair);
   pair = [players[first], players[second]];
@@ -123,7 +125,7 @@ async function refreshRatings() {
 }
 confirmFight.addEventListener('click', async () => {
  if (selected === null || submitted || saving || !sharedReady) return;
- saving = true; confirmFight.disabled = true;
+ saving = true; confirmFight.disabled = true; skipFight.disabled = true;
  const winner = pair[selected], loser = pair[1 - selected];
  try {
   if (RATINGS_API) {
@@ -146,7 +148,11 @@ confirmFight.addEventListener('click', async () => {
  } catch (_) {
   selection.textContent = 'Your choice could not be saved. Please try again.';
   confirmFight.disabled = false;
- } finally { saving = false; }
+ } finally { saving = false; skipFight.disabled = submitted; }
+});
+skipFight.addEventListener('click', () => {
+  if (saving || submitted) return;
+  nextFight();
 });
 refreshRatings();
 setInterval(() => { if (!document.hidden) refreshRatings(); }, 30000);

@@ -102,6 +102,8 @@
     .fighter-name { display: block; font-weight: 800; overflow-wrap: anywhere; }
     .versus { font-size: 1.8rem; font-weight: 900; font-style: italic; color: #ffdd61; text-shadow: 2px 2px #ad2937; }
     .fight .button { border: 1px solid #fbd267; background: #fbd267; color: #20182f; margin-top: 0; }
+    .fight-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .fight .fight-skip { background: transparent; color: #fbd267; }
     .fight button:disabled { opacity: .5; cursor: default; }
     #fight-result { background: #17172b; color: white; padding: 28px; border: 2px solid #ffd968; text-align: center; }
     #fight-result::backdrop { background: #10261e80; backdrop-filter: blur(8px); }
@@ -165,7 +167,7 @@
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
       <div class="arena" id="fight-arena"><div id="fight-options" class="fight-options"></div></div>
-      <div class="fight-actions"><p id="fight-selection" aria-live="polite">Choose your fighter.</p><button class="button" id="fight-confirm" disabled>Confirm &amp; submit</button></div>
+      <div class="fight-actions"><p id="fight-selection" aria-live="polite">Choose your fighter.</p><div class="fight-buttons"><button class="button" id="fight-confirm" disabled>Confirm &amp; submit</button><button class="button fight-skip" id="fight-skip" type="button">Next</button></div></div>
     </section>
     <div class="cards">
       <a class="card-link" href="#players"><span class="number">THE SQUAD / PLAYERS</span><h2>Meet the team</h2><p>The faces behind Grande Amore. Explore our players and their cards.</p><div class="home-player-photos" id="home-player-photos"></div></a>
@@ -208,6 +210,6 @@
 <script src="players.js?v=20261010-milan-photo"></script>
 <script src="matches.js?v=20261010-tournament"></script>
 <script src="memories.js"></script>
-<script src="fight.js?v=20261010-pairing-70-30"></script>
+<script src="fight.js?v=20261010-duel-skip"></script>
 </body>
 </html>
