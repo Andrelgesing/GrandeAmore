@@ -53,7 +53,7 @@ Match-driven Elo updates and historical achievement storage are not yet implemen
 
 Cloudflare ratings API: https://grande-amore-ratings.andrelgesing.workers.dev
 
-Fight uses K=16. Anonymous votes update shared Elo; Players and the top 10/20
+Fight uses K=32. Anonymous votes update shared Elo; Players and the top 10/20
 standings refresh after voting and every 30 seconds while the page is visible.
 Local file previews cannot vote against the live API; use the GitHub Pages site.
 See backend/README.md for deployment and configuration details.

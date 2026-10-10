@@ -37,7 +37,7 @@ export class Rankings {
     if (previous.winner !== winner || previous.loser !== loser) return new Response('Conflicting vote', { status: 409 });
     return Response.json({ ratings, revision: await tx.get('revision') || 0 });
    }
-   const k = Number(this.env.ELO_K || 16);
+   const k = Number(this.env.ELO_K || 32);
    const beforeWinner = ratings[winner].elo, beforeLoser = ratings[loser].elo;
    const points = Math.round(k * (1 - 1 / (1 + 10 ** ((beforeLoser - beforeWinner) / 400))));
    ratings[winner].elo += points; ratings[loser].elo -= points;

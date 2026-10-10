@@ -69,7 +69,7 @@ function nextFight() {
 }
 function eloPoints(winner, loser) {
   const expected = 1 / (1 + 10 ** ((loser - winner) / 400));
-  return Math.round(16 * (1 - expected));
+  return Math.round(32 * (1 - expected));
 }
 let sharedRevision = -1;
 function applyShared(data) {

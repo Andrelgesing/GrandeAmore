@@ -3,7 +3,7 @@
   "main": "worker.js",
   "compatibility_date": "2026-10-10",
   "vars": {
-    "ELO_K": "16",
+    "ELO_K": "32",
     "ALLOWED_ORIGIN": "https://andrelgesing.github.io"
   },
   "durable_objects": {
