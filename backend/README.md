@@ -29,6 +29,9 @@ is empty. Cross-origin restrictions are not authentication or abuse prevention.
 ## Behavior
 
 GET /ratings returns all players and a monotonic revision.
+On initialization, newly added roster members are merged into storage at their
+starting Elo. Existing scores, Legendary honors, vote records and revision are
+preserved; adding a player does not count as a vote.
 POST /votes takes an id, winner name, and loser name. The server uses its current
 Elo and K=32; it never accepts client-provided scores. Both updates and the vote
 record commit together. Retrying a vote with the same ID does not count twice.

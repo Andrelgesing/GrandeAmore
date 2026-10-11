@@ -1,4 +1,5 @@
 const seed = {"AlexG": {"elo": 1200, "legendary": false}, "Andre": {"elo": 1200, "legendary": false}, "Darius": {"elo": 1000, "legendary": false}, "fabian": {"elo": 1000, "legendary": false}, "Enil": {"elo": 1200, "legendary": false}, "gabi": {"elo": 1000, "legendary": false}, "Daniel": {"elo": 1200, "legendary": false}, "Levi": {"elo": 1000, "legendary": false}, "Samu": {"elo": 1000, "legendary": false}, "Dejan": {"elo": 1000, "legendary": false}, "Jack": {"elo": 1000, "legendary": false}, "Ali": {"elo": 1000, "legendary": false}, "Omar": {"elo": 1000, "legendary": false}, "Baraa": {"elo": 1000, "legendary": false}, "Takunda": {"elo": 1000, "legendary": false}, "Danilo": {"elo": 1000, "legendary": false}, "Andreeas": {"elo": 1000, "legendary": false}, "davideb": {"elo": 1000, "legendary": false}, "Nikita": {"elo": 1000, "legendary": false}, "Iacob": {"elo": 1000, "legendary": false}, "Damien": {"elo": 1000, "legendary": false}, "Valentin": {"elo": 1000, "legendary": false}, "Milan": {"elo": 1000, "legendary": false}, "Mohamed": {"elo": 1000, "legendary": false}, "Paolo (pac)": {"elo": 1000, "legendary": false}, "@Fabien Vjaceslavs": {"elo": 1000, "legendary": false}, "Lucas": {"elo": 1200, "legendary": false}, "@~\u2744\ufe0f": {"elo": 1000, "legendary": false}, "Shahrom": {"elo": 1000, "legendary": true}};
+seed.Loay = { elo: 1100, legendary: false };
 export default {
  async fetch(request, env) {
   const origin = request.headers.get('Origin');
@@ -19,7 +20,14 @@ export class Rankings {
  constructor(ctx, env) {
   this.ctx = ctx; this.env = env;
   ctx.blockConcurrencyWhile(async () => {
-   if (!await ctx.storage.get('ratings')) await ctx.storage.put('ratings', seed);
+   await ctx.storage.transaction(async tx => {
+    const ratings = await tx.get('ratings') || {};
+    let changed = false;
+    for (const [name, initial] of Object.entries(seed)) {
+     if (!Object.hasOwn(ratings, name)) { ratings[name] = { ...initial }; changed = true; }
+    }
+    if (changed) await tx.put('ratings', ratings);
+   });
   });
  }
  async fetch(request) {

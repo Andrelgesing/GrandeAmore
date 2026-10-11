@@ -5,7 +5,7 @@ const path = require('node:path');
 const context = vm.createContext({});
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'players.js'), 'utf8').split('let ratingState')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8').split('function matchPlayer')[0], context);
-const available = vm.runInContext("roster.filter(entry => entry[0] !== 'Shahrom').map(([name, position, elo, photo], rosterOrder) => ({ name, position, elo, photo, rosterOrder }))", context);
+const available = vm.runInContext("roster.filter(entry => !sundayMatch.unavailable.includes(entry[0]) && !sundayMatch.squadOnly.includes(entry[0])).map(([name, position, elo, photo], rosterOrder) => ({ name, position, elo, photo, rosterOrder }))", context);
 const recommend = vm.runInContext('recommendTeams', context);
 const cost = vm.runInContext('positionCost', context);
 
@@ -16,6 +16,7 @@ function check(pool) {
   assert.equal(names.length, 28);
   assert.equal(new Set(names).size, 28);
   assert(!names.includes('Shahrom'));
+  assert(!names.includes('Loay'));
   for (const team of teams) {
     assert.equal(team.length, 7);
     assert.deepEqual(Array.from(team.map(entry => entry.role)), ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK']);
@@ -25,8 +26,8 @@ function check(pool) {
     for (const entry of team.filter(entry => entry.player.position === 'GK')) assert.equal(entry.role, 'GK');
   }
   // Only the five unavoidable covering assignments: two GK, two ST, one CB.
-  assert.equal(teams.flat().filter(entry => cost(entry.player, entry.role) > 0).length, 5);
-  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 12);
+  assert.equal(teams.flat().filter(entry => !entry.player.position.split('/').includes(entry.role)).length, 5);
+  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 13);
   assert.equal(JSON.stringify(recommend([...pool].reverse())), JSON.stringify(teams));
   return teams;
 }
@@ -56,6 +57,7 @@ context.document = {
 };
 context.players = available.map(player => ({ ...player, rating: Math.round(Math.max(1, Math.min(5, (player.elo - 400) / 200)) * 2) / 2 }));
 context.players.push({ name: 'Shahrom', position: 'ST', elo: 1400, rating: 5, rosterOrder: 28 });
+context.players.push({ name: 'Loay', position: 'CM/ST', elo: 1100, rating: 3.5, rosterOrder: 29 });
 const playerSource = fs.readFileSync(path.join(__dirname, 'players.js'), 'utf8');
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 const matchSource = fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8');

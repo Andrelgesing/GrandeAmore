@@ -1,10 +1,11 @@
 // Sunday recommendations use the current ratings and a repeatable tie-break.
-const sundayMatch = { date: '2026-10-11', unavailable: ['Shahrom'] };
+const sundayMatch = { date: '2026-10-11', unavailable: ['Shahrom'], squadOnly: ['Loay'] };
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 
 function positionCost(player, role) {
   const positions = player.position.split('/');
-  if (positions.includes(role)) return 0;
+  if (positions[0] === role) return 0;
+  if (positions[1] === role) return 1;
   // Keep every specialist goalkeeper in goal, on a separate team.
   if (positions.includes('GK')) return Infinity;
   if (positions.includes('CM')) return role === 'GK' ? (positions.includes('ST') ? 4 : 3) : 2;
@@ -92,7 +93,7 @@ function matchPlayer({ player, role }) {
 
 let matchFingerprint = '';
 function renderMatches() {
-  const available = players.filter(player => !sundayMatch.unavailable.includes(player.name));
+  const available = players.filter(player => !sundayMatch.unavailable.includes(player.name) && !sundayMatch.squadOnly.includes(player.name));
   const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo]));
   if (fingerprint === matchFingerprint) return;
   matchFingerprint = fingerprint;

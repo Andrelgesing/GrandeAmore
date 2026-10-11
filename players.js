@@ -13,13 +13,15 @@ const roster = [
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000],
   ['Paolo (pac)', 'CB', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
   ['Lucas', 'CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
-  ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary']
+  ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary'],
+  ['Loay', 'CM/ST', 1100]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
 const players = roster.map(([name, position, elo, photo = null, status = null], index) => ({
-  name, position, elo: Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo, rating: starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo), photo,
+  name, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
+  elo: Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo, rating: starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo), photo,
   status: ratingState[name]?.legendary || starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo) === 5 ? 'Legendary' : status, rosterOrder: index,
   // Stable playful scores, chosen randomly once per page load.
   stats: [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
@@ -58,7 +60,13 @@ function cardContent(player, full = false) {
   const fragment = document.createDocumentFragment();
   const position = document.createElement('span');
   position.className = 'position';
-  position.textContent = player.position;
+  position.textContent = player.secondaryPosition ? `${player.primaryPosition} · preferred` : player.primaryPosition;
+  if (player.secondaryPosition) {
+    const secondary = document.createElement('span');
+    secondary.className = 'secondary-position';
+    secondary.textContent = `${player.secondaryPosition} · secondary`;
+    position.append(secondary);
+  }
   const portrait = document.createElement('div');
   portrait.className = 'portrait';
   if (player.photo) {
@@ -163,6 +171,8 @@ function renderMvp() {
   }
   const position = document.createElement('td');
   position.textContent = player.position;
+  position.setAttribute('aria-label', player.secondaryPosition ? `Preferred: ${player.primaryPosition}; secondary: ${player.secondaryPosition}` : player.primaryPosition);
+  position.title = position.getAttribute('aria-label');
   const rating = document.createElement('td');
   rating.append(stars(player.rating));
   const elo = document.createElement('td');
