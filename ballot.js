@@ -37,9 +37,9 @@ const ballotTeams = [
   ]
 ];
 
-// Tournament voting is open immediately; no opening timer.
-const ballotOpening = 0;
-const ballotKey = 'grande-amore-mvp-online-2026-10-11';
+// 18:30 Vienna time (UTC+2) on tournament day.
+const ballotOpening = Date.parse('2026-10-11T18:30:00+02:00');
+const ballotKey = 'grande-amore-mvp-online-2026-10-11-official';
 const voterKey = 'grande-amore-mvp-voter';
 let voterId;
 try {
@@ -54,6 +54,9 @@ let pollTotal = -1;
 const ballotContainer = document.querySelector('#ballot-teams');
 const ballotSubmit = document.querySelector('#ballot-submit');
 const ballotSelection = document.querySelector('#ballot-selection');
+const ballotDialog = document.querySelector('#ballot-confirm-dialog');
+const ballotConfirmName = document.querySelector('#ballot-confirm-name');
+document.querySelector('#ballot-cancel').addEventListener('click', () => ballotDialog.close());
 let chosenMvp = null;
 let submittedMvp = null;
 try { submittedMvp = localStorage.getItem(ballotKey); } catch (_) {}
@@ -82,8 +85,10 @@ ballotTeams.forEach((team, index) => {
    if (Date.now() < ballotOpening || submittedMvp || pollBusy || !pollReady) return;
    chosenMvp = name;
    ballotButtons.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-   ballotSelection.textContent = `${name} selected. Confirm your MVP choice below.`;
+   ballotSelection.textContent = `${name} selected.`;
+   ballotConfirmName.textContent = `Vote for ${name} as tournament MVP?`;
    updateBallotClock();
+   ballotDialog.showModal();
   });
   ballotButtons.push(button); candidates.append(button);
  });
@@ -112,6 +117,7 @@ ballotSubmit.addEventListener('click', async () => {
   const response = await fetch(RATINGS_API + '/mvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voter: voterId, player: chosenMvp }) });
   if (!response.ok) throw new Error();
   applyPoll(await response.json());
+  ballotDialog.close();
   showBallotResults(true);
  } catch (_) { ballotSelection.textContent = 'Your vote could not be confirmed. Please try again.'; }
  finally { pollBusy = false; updateBallotClock(); }
@@ -126,7 +132,7 @@ function showBallotResults(show, focus = true) {
  viewingResults = show;
  ballotContainer.hidden = show;
  resultsPanel.hidden = !show;
- ballotSubmit.hidden = show;
+
  resultsToggle.hidden = Boolean(submittedMvp);
  resultsToggle.textContent = show ? 'Back to voting' : 'View preliminary results';
  if (!show) return;

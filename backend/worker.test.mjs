@@ -68,6 +68,13 @@ console.log('Passed: preferred/secondary positions, single positions, starting s
 // MVP totals, duplicate browser votes and Fight ratings remain independent.
 const beforeMvp = await getRatings();
 const mvp = (voter, player) => service.fetch(new Request('https://test/mvp', { method: 'POST', body: JSON.stringify({ voter, player }) }));
+const actualNow = Date.now;
+Date.now = () => Date.parse('2026-10-11T18:29:59+02:00');
+assert.equal((await mvp('mvp-browser-00001', 'Andre')).status, 403);
+assert.deepEqual((await (await service.fetch(new Request('https://test/mvp'))).json()).totals, {});
+data.set('mvp:2026-10-11:totals', { Andre: 99 });
+data.set('mvp:2026-10-11:voter:mvp-browser-00001', { player: 'Andre' });
+Date.now = () => Date.parse('2026-10-11T18:30:00+02:00');
 let poll = await (await mvp('mvp-browser-00001', 'Andre')).json();
 assert.equal(poll.totals.Andre, 1);
 poll = await (await mvp('mvp-browser-00001', 'Enil')).json();
@@ -83,3 +90,5 @@ assert.deepEqual(await getRatings(), beforeMvp);
 service = await create();
 assert.deepEqual((await (await service.fetch(new Request('https://test/mvp?voter=mvp-browser-00001'))).json()), poll);
 console.log('MVP tests passed: persistence, duplicate prevention, concurrent totals, valid candidates and Elo isolation.');
+
+Date.now = actualNow;

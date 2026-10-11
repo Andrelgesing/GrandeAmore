@@ -191,7 +191,7 @@
     </section>
     <section class="ballot" id="ballon-dor" aria-labelledby="ballot-title">
       <div class="ballot-banner"><h2 id="ballot-title" class="visually-hidden">1st GrandeAmore ballon d'or</h2><img src="assets/ballon-dor.png" alt="1st GrandeAmore ballon d'or — golden football trophy"></div>
-      <div class="ballot-body"><p class="eyebrow">Tournament MVP · 11 October 2026</p><h2>Who deserves the Ballon d’Or?</h2><p>Choose your MVP from today’s four teams.</p><p>Please vote only once.</p><div id="ballot-teams" class="ballot-teams"></div><div id="ballot-results" hidden tabindex="-1" aria-labelledby="ballot-results-title"><h3 id="ballot-results-title">Preliminary results</h3><p id="ballot-results-summary"></p><div id="ballot-results-list"></div></div><button type="button" class="ballot-results-toggle" id="ballot-results-toggle">View preliminary results</button><p id="ballot-selection" aria-live="polite">Select one player for MVP.</p><button type="button" class="button" id="ballot-submit" disabled>Confirm MVP choice</button></div>
+      <div class="ballot-body"><p class="eyebrow">Tournament MVP · 11 October 2026</p><h2>Who deserves the Ballon d’Or?</h2><p>Choose your MVP from today’s four teams.</p><p>Please vote only once.</p><div class="ballot-clock"><div id="ballot-countdown" role="timer"></div><p>Voting opens today at 18:30 · Vienna time</p></div><div id="ballot-teams" class="ballot-teams"></div><div id="ballot-results" hidden tabindex="-1" aria-labelledby="ballot-results-title"><h3 id="ballot-results-title">Preliminary results</h3><p id="ballot-results-summary"></p><div id="ballot-results-list"></div></div><button type="button" class="ballot-results-toggle" id="ballot-results-toggle">View preliminary results</button><p id="ballot-selection" aria-live="polite">Select one player for MVP.</p></div>
     </section>
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
@@ -232,6 +232,7 @@
     </section>
   </main>
 <dialog id="memory-lightbox" aria-label="Enlarged team photo"><button class="close" id="memory-close" type="button" aria-label="Close enlarged photo">×</button><img id="memory-large" alt=""><p id="memory-large-date"></p></dialog>
+<dialog id="ballot-confirm-dialog" aria-labelledby="ballot-confirm-name" style="background:#10261e;color:#fff;padding:28px"><h2 id="ballot-confirm-name">Confirm your vote</h2><p>Please vote only once.</p><button type="button" class="button" id="ballot-submit">Confirm &amp; submit</button> <button type="button" class="button" id="ballot-cancel">Cancel</button></dialog>
   <dialog id="player-dialog" aria-labelledby="detail-name"><div id="player-detail"></div></dialog>
   <dialog id="fight-result" aria-labelledby="fight-result-title"><h2 id="fight-result-title">Round complete</h2><p id="fight-result-text"></p><button class="button" id="fight-next">Close &amp; next pair</button></dialog>
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
@@ -239,7 +240,7 @@
 <script src="players.js?v=20261011-hay"></script>
 <script src="matches.js?v=20261011-approved-teams"></script>
 <script src="memories.js"></script>
-<script src="ballot.js?v=20261011-approved-online"></script>
+<script src="ballot.js?v=20261011-official-timer"></script>
 <script src="fight.js?v=20261010-duel-skip"></script>
 </body>
 </html>
