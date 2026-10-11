@@ -64,3 +64,22 @@ assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);
 assert.equal(response.revision, 0);
 console.log('Passed: preferred/secondary positions, single positions, starting stars, additive roster migration, preserved Elo/honors/revision/history, restart, and Loay/Hay voting.');
+
+// MVP totals, duplicate browser votes and Fight ratings remain independent.
+const beforeMvp = await getRatings();
+const mvp = (voter, player) => service.fetch(new Request('https://test/mvp', { method: 'POST', body: JSON.stringify({ voter, player }) }));
+let poll = await (await mvp('mvp-browser-00001', 'Andre')).json();
+assert.equal(poll.totals.Andre, 1);
+poll = await (await mvp('mvp-browser-00001', 'Enil')).json();
+assert.equal(poll.choice.player, 'Andre');
+assert.equal(poll.totals.Enil, undefined);
+await Promise.all([mvp('mvp-browser-00002', 'Enil'), mvp('mvp-browser-00003', 'Andre')]);
+poll = await (await service.fetch(new Request('https://test/mvp?voter=mvp-browser-00001'))).json();
+assert.equal(poll.totals.Andre, 2);
+assert.equal(poll.totals.Enil, 1);
+assert.equal((await mvp('mvp-browser-00004', 'Shahrom')).status, 400);
+assert.equal((await mvp('short', 'Andre')).status, 400);
+assert.deepEqual(await getRatings(), beforeMvp);
+service = await create();
+assert.deepEqual((await (await service.fetch(new Request('https://test/mvp?voter=mvp-browser-00001'))).json()), poll);
+console.log('MVP tests passed: persistence, duplicate prevention, concurrent totals, valid candidates and Elo isolation.');

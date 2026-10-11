@@ -51,3 +51,12 @@ when shared mode is configured.
 
 Syntax and mocked storage tests were run. Real Cloudflare deployment and
 multi-browser integration verification require account activation.
+
+## Tournament MVP poll
+
+GET /mvp returns shared totals and optionally the existing choice for a browser
+voter ID. POST /mvp accepts voter and player; one vote per anonymous browser ID
+is stored transactionally for the 11 October 2026 poll. Results refresh every
+15 seconds. The 28 candidates are frozen; MVP votes do not alter Fight Elo.
+Voting is currently open without a timer. Clearing browser data or using another
+browser allows another vote; this is deliberately lightweight identification.

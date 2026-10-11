@@ -89,6 +89,30 @@
     .memory-source { display: block; color: var(--muted); }
     .memory-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 0 16px 24px; }
     .memory-controls button { border: 1px solid #dce2d9; border-radius: 6px; background: var(--cream); color: var(--green); padding: 10px 16px; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .ballot { margin-bottom: 28px; border: 2px solid #c79d51; border-radius: 16px; overflow: hidden; background: #091a25; color: #f8ead0; }
+    .ballot-banner img { width: 100%; display: block; }
+    .ballot-body { padding: 26px; text-align: center; }
+    .ballot-body h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+    .ballot-clock { padding: 16px; margin: 20px 0; background: #ffffff09; border: 1px solid #c79d5140; border-radius: 10px; }
+    #ballot-countdown { font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800; font-variant-numeric: tabular-nums; color: #f3cd81; }
+    .ballot-clock p { margin: 8px 0 0; font-size: .85rem; }
+    .ballot-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; text-align: left; }
+    .ballot-team { border: 1px solid #ffffff25; padding: 16px; border-radius: 12px; }
+    .ballot-team h3 { margin: 0 0 14px; border-bottom: 3px solid var(--ballot-color); padding-bottom: 8px; }
+    .ballot-candidates { display: grid; gap: 8px; }
+    .ballot-candidate { display: flex; align-items: center; gap: 12px; padding: 8px 12px; width: 100%; border: 2px solid transparent; border-radius: 8px; color: inherit; background: #ffffff09; text-align: left; }
+    .ballot-candidate[aria-pressed="true"] { border-color: #f3cd81; background: #c79d5125; }
+    .ballot-avatar { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: #ffffff18; overflow: hidden; }
+    .ballot-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ballot-candidate:disabled { cursor: default; }
+    .ballot-results-toggle { display: block; margin: 20px auto; padding: 10px 16px; border: 1px solid #c79d51; border-radius: 8px; background: transparent; color: #f8ead0; }
+    .ballot-result-row { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px; text-align: left; padding: 12px 0; border-bottom: 1px solid #ffffff18; }
+    .ballot-result-bar { display: block; height: 6px; background: #ffffff18; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+    .ballot-result-fill { display: block; height: 100%; background: #f3cd81; }
+    .ballot .button { background: #f3cd81; color: #091a25; border: 0; }
+    .ballot .button:disabled { opacity: .45; cursor: default; }
+    @media (max-width: 650px) { .ballot-teams { grid-template-columns: 1fr; } .ballot-body { padding: 18px; } }
     .fight { margin: 0 0 28px; border-radius: 16px; overflow: hidden; background: #161626; color: #fff; border: 2px solid #eabc53; }
     .fight-header, .fight-actions { padding: 22px 26px; text-align: center; }
     .fight-header h2 { font-size: clamp(1.7rem, 5vw, 2.5rem); text-transform: uppercase; font-style: italic; color: #ffd968; text-shadow: 3px 3px #bd3546; }
@@ -165,6 +189,10 @@
       <h1 id="welcome">One team.<br>One great love.</h1>
       <p class="intro">Simply Grande Amore</p>
     </section>
+    <section class="ballot" id="ballon-dor" aria-labelledby="ballot-title">
+      <div class="ballot-banner"><h2 id="ballot-title" class="visually-hidden">1st GrandeAmore ballon d'or</h2><img src="assets/ballon-dor.png" alt="1st GrandeAmore ballon d'or — golden football trophy"></div>
+      <div class="ballot-body"><p class="eyebrow">Tournament MVP · 11 October 2026</p><h2>Who deserves the Ballon d’Or?</h2><p>Choose your MVP from today’s four teams.</p><p>Please vote only once.</p><div id="ballot-teams" class="ballot-teams"></div><div id="ballot-results" hidden tabindex="-1" aria-labelledby="ballot-results-title"><h3 id="ballot-results-title">Preliminary results</h3><p id="ballot-results-summary"></p><div id="ballot-results-list"></div></div><button type="button" class="ballot-results-toggle" id="ballot-results-toggle">View preliminary results</button><p id="ballot-selection" aria-live="polite">Select one player for MVP.</p><button type="button" class="button" id="ballot-submit" disabled>Confirm MVP choice</button></div>
+    </section>
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
       <div class="arena" id="fight-arena"><div id="fight-options" class="fight-options"></div></div>
@@ -211,6 +239,7 @@
 <script src="players.js?v=20261011-hay"></script>
 <script src="matches.js?v=20261011-approved-teams"></script>
 <script src="memories.js"></script>
+<script src="ballot.js?v=20261011-online"></script>
 <script src="fight.js?v=20261010-duel-skip"></script>
 </body>
 </html>
