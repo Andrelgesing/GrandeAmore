@@ -1,5 +1,51 @@
-// Sunday recommendations use the current ratings and a repeatable tie-break.
-const sundayMatch = { date: '2026-10-11', unavailable: ['Shahrom'], squadOnly: ['Loay', 'Hay'] };
+// Approved Sunday lineups stay fixed; displayed stars and Elo follow live ratings.
+const sundayMatch = {
+  "date": "2026-10-11",
+  "unavailable": [
+    "Shahrom",
+    "Damien",
+    "@~❄️"
+  ],
+  "rankingRevision": 349,
+  "teams": [
+    [
+      "Hay",
+      "Omar",
+      "Daniel",
+      "Paolo (pac)",
+      "Jack",
+      "Takunda",
+      "AlexG"
+    ],
+    [
+      "Samu",
+      "Iacob",
+      "Levi",
+      "Nikita",
+      "Dejan",
+      "davideb",
+      "Andre"
+    ],
+    [
+      "Ali",
+      "Loay",
+      "Andreeas",
+      "Danilo",
+      "Darius",
+      "Enil",
+      "Milan"
+    ],
+    [
+      "Lucas",
+      "gabi",
+      "fabian",
+      "Mohamed",
+      "Baraa",
+      "Valentin",
+      "@Fabien Vjaceslavs"
+    ]
+  ]
+};
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 
 function positionCost(player, role) {
@@ -93,11 +139,16 @@ function matchPlayer({ player, role }) {
 
 let matchFingerprint = '';
 function renderMatches() {
-  const available = players.filter(player => !sundayMatch.unavailable.includes(player.name) && !sundayMatch.squadOnly.includes(player.name));
+  const byName = new Map(players.map(player => [player.name, player]));
+  const teams = sundayMatch.teams.map(names => names.map((name, index) => {
+    const player = byName.get(name);
+    if (!player) throw new Error(`Missing tournament player: ${name}`);
+    return { player, role: matchRoles[index] };
+  }));
+  const available = teams.flat().map(entry => entry.player);
   const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo]));
   if (fingerprint === matchFingerprint) return;
   matchFingerprint = fingerprint;
-  const teams = recommendTeams(available);
   const grid = document.querySelector('#match-teams');
   grid.replaceChildren();
   teams.forEach((team, index) => {
