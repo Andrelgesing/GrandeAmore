@@ -19,8 +19,8 @@ function recommendTeams(available) {
   const fillingOrder = slots.map((slot, index) => index).sort((a, b) => priority[slots[a].role] - priority[slots[b].role] || (a % 7) - (b % 7) || a - b);
   const compositionFits = assignment => [0, 1, 2, 3].every(team => {
     const members = assignment.slice(team * 7, team * 7 + 7);
-    return members.filter(player => player.position === 'CB').length >= 2
-      && members.filter(player => player.position.split('/').includes('ST')).length <= 1;
+    return members.filter(player => player.position.split('/').includes('CB')).length >= 2
+      && members.filter(player => player.position.split('/')[0] === 'ST').length <= 1;
   });
   const strength = assignment => {
     const totals = [0, 0, 0, 0];

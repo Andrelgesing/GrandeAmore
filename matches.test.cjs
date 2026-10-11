@@ -21,13 +21,13 @@ function check(pool) {
     assert.equal(team.length, 7);
     assert.deepEqual(Array.from(team.map(entry => entry.role)), ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK']);
     assert(team.filter(entry => entry.player.position === 'GK').length <= 1);
-    assert(team.filter(entry => entry.player.position === 'CB').length >= 2);
-    assert(team.filter(entry => entry.player.position.split('/').includes('ST')).length <= 1);
+    assert(team.filter(entry => entry.player.position.split('/').includes('CB')).length >= 2);
+    assert(team.filter(entry => entry.player.position.split('/')[0] === 'ST').length <= 1);
     for (const entry of team.filter(entry => entry.player.position === 'GK')) assert.equal(entry.role, 'GK');
   }
-  // Only the five unavoidable covering assignments: two GK, two ST, one CB.
-  assert.equal(teams.flat().filter(entry => !entry.player.position.split('/').includes(entry.role)).length, 5);
-  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 13);
+  // Preferred strikers fill all four ST slots; two GK and two CB need cover.
+  assert.equal(teams.flat().filter(entry => !entry.player.position.split('/').includes(entry.role)).length, 4);
+  assert.equal(teams.flat().reduce((sum, entry) => sum + cost(entry.player, entry.role), 0), 10);
   assert.equal(JSON.stringify(recommend([...pool].reverse())), JSON.stringify(teams));
   return teams;
 }

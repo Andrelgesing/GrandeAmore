@@ -75,7 +75,8 @@ The Matches tab shows four recommended seven-player teams for 11 October 2026.
 `matches.js` excludes Shahrom for this fixture, keeps AlexG and Andre in separate
 goals, and assigns one ST, two CM, three CB and one GK to each pitch. Position fit
 is optimized before Elo balance; each team retains at least two natural defenders
-and at most one natural striker. Midfielders cover the five unavoidable gaps.
+and at most one player whose preferred position is ST. Midfielders cover the
+four unavoidable gaps: two goalkeepers and two defenders.
 Loay is squad-only for this fixture. Preferred positions are favored over
 secondary positions when assigning roles.
 Players without photos show an initial; the available roster photos are connected
