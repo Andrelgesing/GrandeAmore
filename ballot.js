@@ -1,39 +1,39 @@
 const ballotTeams = [
   [
-    "Samu",
-    "@Fabien Vjaceslavs",
-    "Valentin",
-    "Baraa",
-    "Darius",
+    "Hay",
+    "Omar",
+    "Daniel",
     "Paolo (pac)",
+    "Jack",
+    "Takunda",
+    "AlexG"
+  ],
+  [
+    "Samu",
+    "Iacob",
+    "Levi",
+    "Nikita",
+    "Dejan",
+    "davideb",
     "Andre"
   ],
   [
     "Ali",
-    "Daniel",
-    "fabian",
-    "Dejan",
-    "Nikita",
-    "Milan",
-    "AlexG"
-  ],
-  [
-    "@~❄️",
+    "Loay",
     "Andreeas",
-    "Omar",
-    "Jack",
     "Danilo",
-    "davideb",
-    "Enil"
+    "Darius",
+    "Enil",
+    "Milan"
   ],
   [
     "Lucas",
-    "Iacob",
-    "Levi",
+    "gabi",
+    "fabian",
     "Mohamed",
-    "Damien",
-    "Takunda",
-    "gabi"
+    "Baraa",
+    "Valentin",
+    "@Fabien Vjaceslavs"
   ]
 ];
 
