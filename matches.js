@@ -1,5 +1,5 @@
 // Sunday recommendations use the current ratings and a repeatable tie-break.
-const sundayMatch = { date: '2026-10-11', unavailable: ['Shahrom'], squadOnly: ['Loay'] };
+const sundayMatch = { date: '2026-10-11', unavailable: ['Shahrom'], squadOnly: ['Loay', 'Hay'] };
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 
 function positionCost(player, role) {

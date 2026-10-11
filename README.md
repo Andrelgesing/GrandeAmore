@@ -4,7 +4,7 @@ A simple football team website. Layout and styling are in `index.html`; the play
 
 ## Players
 
-Open the Players tab to see all 30 players. Ratings are calculated from Elo;
+Open the Players tab to see all 31 players. Ratings are calculated from Elo;
 Shahrom has three stars until a different rating is provided.
 Update each player's Elo when match-based ratings are agreed. Card colors
 automatically follow the rating: below 2.5 bronze, 2.5–below 3.75 silver, 3.75–5 gold.
@@ -19,6 +19,7 @@ Match history and automatic rating calculations are not implemented yet.
 Positions are ordered: the first is preferred, and an optional second follows
 after `/`. Single-position entries have no secondary position. Daniel and Loay
 prefer CM and can also play ST. Loay starts at 1100 Elo (3.5 stars).
+Hay prefers ST, can also play CM, and starts at 1000 Elo (3 stars).
 
 ## View locally
 
@@ -77,7 +78,7 @@ goals, and assigns one ST, two CM, three CB and one GK to each pitch. Position f
 is optimized before Elo balance; each team retains at least two natural defenders
 and at most one player whose preferred position is ST. Midfielders cover the
 four unavoidable gaps: two goalkeepers and two defenders.
-Loay is squad-only for this fixture. Preferred positions are favored over
+Loay and Hay are squad-only for this fixture. Preferred positions are favored over
 secondary positions when assigning roles.
 Players without photos show an initial; the available roster photos are connected
 in `players.js`. Team averages use the seven players' displayed star ratings.

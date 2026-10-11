@@ -17,6 +17,7 @@ function check(pool) {
   assert.equal(new Set(names).size, 28);
   assert(!names.includes('Shahrom'));
   assert(!names.includes('Loay'));
+  assert(!names.includes('Hay'));
   for (const team of teams) {
     assert.equal(team.length, 7);
     assert.deepEqual(Array.from(team.map(entry => entry.role)), ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK']);
@@ -58,6 +59,7 @@ context.document = {
 context.players = available.map(player => ({ ...player, rating: Math.round(Math.max(1, Math.min(5, (player.elo - 400) / 200)) * 2) / 2 }));
 context.players.push({ name: 'Shahrom', position: 'ST', elo: 1400, rating: 5, rosterOrder: 28 });
 context.players.push({ name: 'Loay', position: 'CM/ST', elo: 1100, rating: 3.5, rosterOrder: 29 });
+context.players.push({ name: 'Hay', position: 'ST/CM', elo: 1000, rating: 3, rosterOrder: 30 });
 const playerSource = fs.readFileSync(path.join(__dirname, 'players.js'), 'utf8');
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 const matchSource = fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8');
