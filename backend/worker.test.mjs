@@ -28,8 +28,8 @@ const storage = {
   put: async (key, value) => data.set(key, structuredClone(value)),
   transaction(fn) { const result = chain.then(() => fn(storage)); chain = result.catch(() => {}); return result; }
 };
-const create = async () => {
-  const service = new Rankings({ storage, blockConcurrencyWhile(fn) { ready = fn(); } }, { ELO_K: '16' });
+const create = async (placement = false) => {
+  const service = new Rankings({ storage, blockConcurrencyWhile(fn) { ready = fn(); } }, { ELO_K: '16', APPLY_TOURNAMENT_20261011: String(placement) });
   await ready;
   return service;
 };
@@ -92,3 +92,19 @@ assert.deepEqual((await (await service.fetch(new Request('https://test/mvp?voter
 console.log('MVP tests passed: persistence, duplicate prevention, concurrent totals, valid candidates and Elo isolation.');
 
 Date.now = actualNow;
+
+// Apply approved placements once to existing live ratings, preserving all other records.
+const beforePlacement = await getRatings();
+service = await create(true);
+const afterPlacement = await getRatings();
+assert.equal(afterPlacement.revision, beforePlacement.revision + 1);
+assert.equal(Object.keys(afterPlacement.tournamentAdjustments).length, 28);
+assert.equal(Object.values(afterPlacement.tournamentAdjustments).reduce((sum, n) => sum + n, 0), 0);
+for (const [name, rating] of Object.entries(beforePlacement.ratings)) {
+ assert.equal(afterPlacement.ratings[name].elo, rating.elo + (afterPlacement.tournamentAdjustments[name] || 0));
+}
+assert.deepEqual(data.get('tournament:2026-10-11:placement').beforeRatings, beforePlacement.ratings);
+assert.equal(data.get('mvp:2026-10-11-official:totals').Andre, 2);
+service = await create(true);
+assert.deepEqual(await getRatings(), afterPlacement, 'Placement must not apply again on restart');
+console.log('Placement tests passed: 28 changes applied once, exact backup, zero sum, absent players and MVP poll preserved.');

@@ -4,6 +4,7 @@
   "compatibility_date": "2026-10-10",
   "vars": {
     "ELO_K": "16",
+    "APPLY_TOURNAMENT_20261011": "true",
     "ALLOWED_ORIGIN": "https://andrelgesing.github.io"
   },
   "durable_objects": {

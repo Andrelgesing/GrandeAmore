@@ -1,3 +1,5 @@
+const tournamentKey = 'tournament:2026-10-11:placement';
+const tournamentChanges = {"Hay": -20, "Omar": -20, "Daniel": -20, "Paolo (pac)": -20, "Jack": -20, "Takunda": -20, "AlexG": -20, "Samu": -40, "Iacob": -40, "Levi": -40, "Nikita": -40, "Dejan": -40, "davideb": -40, "Andre": -40, "Ali": 40, "Loay": 40, "Andreeas": 40, "Danilo": 40, "Darius": 40, "Enil": 40, "Milan": 40, "Lucas": 20, "gabi": 20, "fabian": 20, "Mohamed": 20, "Baraa": 20, "Valentin": 20, "@Fabien Vjaceslavs": 20};
 const mvpOpening = Date.parse('2026-10-11T18:30:00+02:00');
 const mvpPoll = '2026-10-11-official';
 const mvpCandidates = ["Hay", "Omar", "Daniel", "Paolo (pac)", "Jack", "Takunda", "AlexG", "Samu", "Iacob", "Levi", "Nikita", "Dejan", "davideb", "Andre", "Ali", "Loay", "Andreeas", "Danilo", "Darius", "Enil", "Milan", "Lucas", "gabi", "fabian", "Mohamed", "Baraa", "Valentin", "@Fabien Vjaceslavs"];
@@ -30,14 +32,26 @@ export class Rankings {
     for (const [name, initial] of Object.entries(seed)) {
      if (!Object.hasOwn(ratings, name)) { ratings[name] = { ...initial }; changed = true; }
     }
+    if (env.APPLY_TOURNAMENT_20261011 === 'true' && !await tx.get(tournamentKey)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const beforeRatings = structuredClone(ratings);
+     for (const [name, delta] of Object.entries(tournamentChanges)) {
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournamentKey, { adjustments: tournamentChanges, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
    });
   });
  }
  async fetch(request) {
   const path = new URL(request.url).pathname;
+  if (path === '/tournament-placement' && request.method === 'GET') return Response.json(await this.ctx.storage.get(tournamentKey) || null);
   if (path === '/mvp') return this.mvp(request);
-  if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0 }));
+  if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0, tournamentAdjustments: (await tx.get(tournamentKey))?.adjustments || {} }));
   if (path !== '/votes' || request.method !== 'POST') return new Response('Not found', { status: 404 });
   let vote;
   try { vote = JSON.parse(await request.text()); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }

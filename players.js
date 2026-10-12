@@ -18,6 +18,7 @@ const roster = [
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
+if (typeof placementPreview !== 'undefined' && placementPreview) ratingState = placementPreview.ratings;
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
 const customJokeStats = {
   Enil: [
@@ -162,6 +163,8 @@ dialog.addEventListener('click', event => {
 // Until match results are available, MVP standings use the current ratings.
 let rankedPlayers;
 const mvpList = document.querySelector('#mvp-list');
+const showingPlacementPreview = typeof placementPreview !== 'undefined' && Boolean(placementPreview);
+let tournamentEloAdjustments = showingPlacementPreview ? placementPreview.adjustments : {};
 let mvpLimit = 10;
 const mvpToggle = document.querySelector('#mvp-toggle');
 function renderMvp() {
@@ -206,6 +209,13 @@ function renderMvp() {
   rating.append(stars(player.rating));
   const elo = document.createElement('td');
   elo.textContent = player.elo;
+  if (tournamentEloAdjustments[player.name]) {
+    const delta = tournamentEloAdjustments[player.name];
+    const change = document.createElement('span');
+    change.className = `elo-adjustment ${delta > 0 ? 'elo-gain' : 'elo-loss'}`;
+    change.textContent = ` (${delta > 0 ? '+' : ''}${delta})`;
+    elo.append(change);
+  }
   row.append(rank, name, position, rating, elo);
   mvpList.append(row);
   });

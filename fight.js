@@ -96,6 +96,7 @@ let sharedRevision = -1;
 function applyShared(data) {
  if (data.revision < sharedRevision) return;
  sharedRevision = data.revision;
+ if (data.tournamentAdjustments) tournamentEloAdjustments = data.tournamentAdjustments;
  applyRatings(data.ratings);
 }
 function applyRatings(updates) {
@@ -187,7 +188,7 @@ refreshRatings();
 setInterval(() => { if (!document.hidden) refreshRatings(); }, 30000);
 window.addEventListener('hashchange', refreshRatings);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshRatings(); });
-if (!fightApi) {
+if (!fightApi && !(typeof placementPreview !== 'undefined' && placementPreview)) {
  try { applyRatings(JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}')); } catch (_) {}
 }
 nextFight();

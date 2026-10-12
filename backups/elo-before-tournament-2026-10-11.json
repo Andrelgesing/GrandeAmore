@@ -1,0 +1,131 @@
+{
+  "savedAt": "2026-10-12T20:03:33.165563+00:00",
+  "source": "https://grande-amore-ratings.andrelgesing.workers.dev/ratings",
+  "ratings": {
+    "AlexG": {
+      "elo": 1129,
+      "legendary": false
+    },
+    "Andre": {
+      "elo": 1283,
+      "legendary": false
+    },
+    "Darius": {
+      "elo": 1044,
+      "legendary": false
+    },
+    "fabian": {
+      "elo": 1239,
+      "legendary": false
+    },
+    "Enil": {
+      "elo": 1377,
+      "legendary": true
+    },
+    "gabi": {
+      "elo": 1038,
+      "legendary": false
+    },
+    "Daniel": {
+      "elo": 1343,
+      "legendary": false
+    },
+    "Levi": {
+      "elo": 1111,
+      "legendary": false
+    },
+    "Samu": {
+      "elo": 1209,
+      "legendary": false
+    },
+    "Dejan": {
+      "elo": 818,
+      "legendary": false
+    },
+    "Jack": {
+      "elo": 1011,
+      "legendary": false
+    },
+    "Ali": {
+      "elo": 1125,
+      "legendary": false
+    },
+    "Omar": {
+      "elo": 863,
+      "legendary": false
+    },
+    "Baraa": {
+      "elo": 815,
+      "legendary": false
+    },
+    "Takunda": {
+      "elo": 878,
+      "legendary": false
+    },
+    "Danilo": {
+      "elo": 1097,
+      "legendary": false
+    },
+    "Andreeas": {
+      "elo": 926,
+      "legendary": false
+    },
+    "davideb": {
+      "elo": 1076,
+      "legendary": false
+    },
+    "Nikita": {
+      "elo": 1207,
+      "legendary": false
+    },
+    "Iacob": {
+      "elo": 954,
+      "legendary": false
+    },
+    "Damien": {
+      "elo": 887,
+      "legendary": false
+    },
+    "Valentin": {
+      "elo": 905,
+      "legendary": false
+    },
+    "Milan": {
+      "elo": 831,
+      "legendary": false
+    },
+    "Mohamed": {
+      "elo": 1019,
+      "legendary": false
+    },
+    "Paolo (pac)": {
+      "elo": 749,
+      "legendary": false
+    },
+    "@Fabien Vjaceslavs": {
+      "elo": 888,
+      "legendary": false
+    },
+    "Lucas": {
+      "elo": 1227,
+      "legendary": false
+    },
+    "@~\u2744\ufe0f": {
+      "elo": 810,
+      "legendary": false
+    },
+    "Shahrom": {
+      "elo": 980,
+      "legendary": true
+    },
+    "Loay": {
+      "elo": 1168,
+      "legendary": false
+    },
+    "Hay": {
+      "elo": 1093,
+      "legendary": false
+    }
+  },
+  "revision": 898
+}
