@@ -33,7 +33,7 @@ On initialization, newly added roster members are merged into storage at their
 starting Elo. Existing scores, Legendary honors, vote records and revision are
 preserved; adding a player does not count as a vote.
 POST /votes takes an id, winner name, and loser name. The server uses its current
-Elo and K=32; it never accepts client-provided scores. Both updates and the vote
+Elo and K=16; it never accepts client-provided scores. Both updates and the vote
 record commit together. Retrying a vote with the same ID does not count twice.
 Concurrent requests are serialized by storage transactions. Vote records keep
 before-scores, point changes, time and K for future audits; no admin undo UI yet.

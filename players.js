@@ -163,12 +163,27 @@ function renderMvp() {
   rank.textContent = rankedPlayers.findIndex(candidate => candidate.elo === player.elo) + 1;
   const name = document.createElement('td');
   name.className = 'mvp-name';
-  name.textContent = player.name;
+  const identity = document.createElement('div');
+  identity.className = 'mvp-identity';
+  const portrait = document.createElement('span');
+  portrait.className = 'mvp-photo';
+  portrait.setAttribute('aria-hidden', 'true');
+  if (player.photo) {
+    const image = document.createElement('img');
+    image.src = player.photo;
+    image.alt = '';
+    image.loading = 'lazy';
+    portrait.append(image);
+  } else portrait.textContent = Array.from(player.name.replace(/^@/, ''))[0].toUpperCase();
+  const label = document.createElement('span');
+  label.textContent = player.name;
+  identity.append(portrait, label);
+  name.append(identity);
   if (player.status) {
     const badge = document.createElement('span');
     badge.className = 'legendary-badge';
     badge.textContent = `✦ ${player.status}`;
-    name.append(badge);
+    label.append(badge);
   }
   const position = document.createElement('td');
   position.textContent = player.position;

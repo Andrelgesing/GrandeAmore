@@ -29,7 +29,7 @@ const storage = {
   transaction(fn) { const result = chain.then(() => fn(storage)); chain = result.catch(() => {}); return result; }
 };
 const create = async () => {
-  const service = new Rankings({ storage, blockConcurrencyWhile(fn) { ready = fn(); } }, { ELO_K: '32' });
+  const service = new Rankings({ storage, blockConcurrencyWhile(fn) { ready = fn(); } }, { ELO_K: '16' });
   await ready;
   return service;
 };

@@ -58,7 +58,7 @@ Match-driven Elo updates and historical achievement storage are not yet implemen
 
 Cloudflare ratings API: https://grande-amore-ratings.andrelgesing.workers.dev
 
-Fight uses K=32. Anonymous votes update shared Elo; Players and the top 10/20
+Fight uses K=16. Anonymous votes update shared Elo; Players and the top 10/20
 standings refresh after voting and every 30 seconds while the page is visible.
 Local file previews cannot vote against the live API; use the GitHub Pages site.
 See backend/README.md for deployment and configuration details.
@@ -67,7 +67,7 @@ Fight chooses a random first player and uses a 70% Elo-weighted / 30% completely
 random opponent mix. Weighted opponents have weight `1 / (1 + Elo gap / 200)^2`,
 so closer ratings are favored while every opponent remains possible. Consecutive
 repeats of the same unordered pair are skipped. Current ratings are used; pairing
-never writes Elo or changes the existing K=32 vote scoring. Shahrom remains
+never writes Elo or changes the existing K=16 vote scoring. Shahrom remains
 eligible for Fight. Check the selection behavior with `node fight.test.cjs`.
 
 ## Sunday teams
