@@ -19,12 +19,25 @@ const roster = [
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
+const customJokeStats = {
+  Enil: [
+    { label: 'Left foot', rating: 5 },
+    { label: 'Right foot', rating: 0.5 },
+    { label: 'Form when drunk', rating: 5 },
+    { label: 'Form when hangover', rating: 2 }
+  ],
+  Shahrom: [
+    { label: 'Why always me?', rating: 5 },
+    { label: '85 minutes form', rating: 2 },
+    { label: 'Last 5 minutes form', rating: 5 }
+  ]
+};
 const players = roster.map(([name, position, elo, photo = null, status = null], index) => ({
   name, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
   elo: Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo, rating: starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo), photo,
   status: ratingState[name]?.legendary || starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo) === 5 ? 'Legendary' : status, rosterOrder: index,
   // Stable playful scores, chosen randomly once per page load.
-  stats: [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
+  stats: customJokeStats[name] || [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
 })).sort((a, b) => Number(Boolean(b.photo)) - Number(Boolean(a.photo)));
 const grid = document.querySelector('#player-grid');
 const photoPlayers = players.filter(player => player.photo);
