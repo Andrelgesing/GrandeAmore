@@ -68,6 +68,8 @@
     .pitch-row { display: flex; justify-content: space-evenly; align-items: flex-start; gap: 6px; }
     .pitch-player { width: 120px; min-width: 0; text-align: center; line-height: 1.25; }
     .match-portrait { display: grid; place-items: center; width: 48px; height: 48px; transform: translateY(-8px) scale(1.56); margin: 0 auto 7px; border: 3px solid var(--metal, #d8dfe3); border-radius: 50%; background: #173e32; font-weight: 800; }
+    .match-portrait { padding: 0; color: white; font-family: inherit; }
+    .match-portrait:focus-visible { outline: 2px solid white; outline-offset: 3px; }
     .match-portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .match-player-name { display: block; font-size: .8rem; font-weight: 700; overflow-wrap: anywhere; }
     .pitch-player .stars { margin: 5px 0; color: #ffe097; font-size: .75rem; letter-spacing: .03em; white-space: nowrap; }
@@ -251,8 +253,8 @@
   <dialog id="fight-result" aria-labelledby="fight-result-title"><h2 id="fight-result-title">Round complete</h2><p id="fight-result-text"></p><button class="button" id="fight-next">Close &amp; next pair</button></dialog>
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
 <script src="config.js"></script>
-<script src="players.js?v=20261011-hay"></script>
-<script src="matches.js?v=20261012-results"></script>
+<script src="players.js?v=20261012-danilo-card"></script>
+<script src="matches.js?v=20261012-player-cards"></script>
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261012-final"></script>
 <script src="fight.js?v=20261010-duel-skip"></script>

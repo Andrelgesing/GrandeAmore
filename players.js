@@ -8,7 +8,7 @@ const roster = [
   ['Daniel', 'CM/ST', 1200], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'ST/CM', 1000, 'players/samu.jpg'],
   ['Dejan', 'CB', 1000], ['Jack', 'CB', 1000, 'players/jack.jpg'], ['Ali', 'ST/CB', 1000, 'players/ali.jpg'],
   ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
-  ['Danilo', 'CB', 1000], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
+  ['Danilo', 'CB', 1000, 'players/danilo.jpg'], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
   ['Nikita', 'CB', 1000, 'players/nikita.jpg'], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000],
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000],
   ['Paolo (pac)', 'CB', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
@@ -111,16 +111,7 @@ function cardContent(player, full = false) {
   }
   return fragment;
 }
-function renderPlayerGrid() {
- grid.replaceChildren();
-for (const player of players) {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = `player-card ${cardStyle(player)}`;
-  button.setAttribute('aria-label', `View ${player.name}, ${player.position}, ${player.rating} out of 5 stars${player.status ? ', ' + player.status : ''}`);
-  button.setAttribute('aria-haspopup', 'dialog');
-  button.append(cardContent(player));
-  button.addEventListener('click', () => {
+function openPlayerCard(player) {
     const full = document.createElement('div');
     full.className = `player-card ${cardStyle(player)}`;
     const close = document.createElement('button');
@@ -133,7 +124,17 @@ for (const player of players) {
     detail.replaceChildren(full);
     document.body.classList.add('modal-open');
     dialog.showModal();
-  });
+}
+function renderPlayerGrid() {
+ grid.replaceChildren();
+for (const player of players) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = `player-card ${cardStyle(player)}`;
+  button.setAttribute('aria-label', `View ${player.name}, ${player.position}, ${player.rating} out of 5 stars${player.status ? ', ' + player.status : ''}`);
+  button.setAttribute('aria-haspopup', 'dialog');
+  button.append(cardContent(player));
+  button.addEventListener('click', () => openPlayerCard(player));
   grid.append(button);
 }
 }

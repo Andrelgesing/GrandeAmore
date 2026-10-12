@@ -124,7 +124,11 @@ function recommendTeams(available) {
 function matchPlayer({ player, role }) {
   const item = document.createElement('div');
   item.className = 'pitch-player';
-  const portrait = document.createElement('div');
+  const portrait = document.createElement('button');
+  portrait.type = 'button';
+  portrait.setAttribute('aria-haspopup', 'dialog');
+  portrait.setAttribute('aria-label', `View ${player.name} player card`);
+  portrait.addEventListener('click', () => openPlayerCard(player));
   portrait.className = `match-portrait ${cardStyle(player)}`;
   if (player.photo) {
     const image = document.createElement('img');
@@ -132,7 +136,7 @@ function matchPlayer({ player, role }) {
     portrait.append(image);
   } else {
     portrait.textContent = Array.from(player.name.replace(/^@/, ''))[0].toUpperCase();
-    portrait.setAttribute('aria-label', `${player.name}: photo coming soon`);
+    portrait.title = 'Photo coming soon';
   }
   const name = document.createElement('span');
   name.className = 'match-player-name'; name.textContent = player.name;

@@ -3,14 +3,17 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 class Element {
-  constructor(tag) { this.tag = tag; this.children = []; this.attributes = {}; }
+  constructor(tag) { this.tag = tag; this.children = []; this.attributes = {}; this.listeners = {}; }
+  addEventListener(name, listener) { this.listeners[name] = listener; }
   append(...items) { this.children.push(...items); }
   replaceChildren(...items) { this.children = items; }
   setAttribute(name, value) { this.attributes[name] = value; }
 }
 const grid = new Element('div');
 const listeners = {};
+let openedPlayer;
 const context = vm.createContext({
+  openPlayerCard: player => { openedPlayer = player.name; },
   document: {
     createElement: tag => new Element(tag),
     querySelector: selector => { assert.equal(selector, '#match-teams'); return grid; },
@@ -47,6 +50,12 @@ let rendered = descendants(grid);
 assert.equal(rendered.filter(e => e.className === 'stars').length, 32);
 assert.equal(rendered.filter(e => e.tag === 'img').length, players.filter(p => expected.flat().includes(p.name) && p.photo).length);
 for (const player of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname, player.photo)));
+const danilo = descendants(grid).find(e => e.className?.startsWith('match-portrait ') && e.attributes['aria-label'] === 'View Danilo player card');
+assert.equal(danilo.tag, 'button');
+assert.equal(danilo.attributes['aria-haspopup'], 'dialog');
+assert.equal(danilo.children[0].src, 'players/danilo.jpg');
+danilo.listeners.click();
+assert.equal(openedPlayer, 'Danilo');
 const originalCards = grid.children;
 listeners['ratings-updated']();
 assert.equal(grid.children, originalCards);
