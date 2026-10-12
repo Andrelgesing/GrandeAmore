@@ -47,6 +47,13 @@ const sundayMatch = {
   ]
 };
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
+// Results affect display order only; the approved team numbers and lineups stay fixed.
+const matchStandings = [
+  { team: 3, points: 7, champions: true },
+  { team: 4, points: 4 },
+  { team: 1, points: 3 },
+  { team: 2, points: 3 }
+];
 
 function positionCost(player, role) {
   const positions = player.position.split('/');
@@ -118,7 +125,7 @@ function matchPlayer({ player, role }) {
   const item = document.createElement('div');
   item.className = 'pitch-player';
   const portrait = document.createElement('div');
-  portrait.className = 'match-portrait';
+  portrait.className = `match-portrait ${cardStyle(player)}`;
   if (player.photo) {
     const image = document.createElement('img');
     image.src = player.photo; image.alt = player.name; image.loading = 'lazy';
@@ -146,23 +153,35 @@ function renderMatches() {
     return { player, role: matchRoles[index] };
   }));
   const available = teams.flat().map(entry => entry.player);
-  const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo]));
+  const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo, player.status]));
   if (fingerprint === matchFingerprint) return;
   matchFingerprint = fingerprint;
   const grid = document.querySelector('#match-teams');
   grid.replaceChildren();
-  teams.forEach((team, index) => {
+  matchStandings.forEach(standing => {
+    const index = standing.team - 1;
+    const team = teams[index];
     const averageStars = team.reduce((sum, entry) => sum + entry.player.rating, 0) / team.length;
     const averageElo = team.reduce((sum, entry) => sum + entry.player.elo, 0) / team.length;
     const card = document.createElement('article');
     card.className = `match-team match-team-${index + 1}`;
+    if (standing.champions) {
+      card.className += ' match-team-champions';
+      const banner = document.createElement('div'); banner.className = 'match-champions';
+      banner.textContent = 'Champions'; card.append(banner);
+    }
     const heading = document.createElement('div'); heading.className = 'match-team-heading';
     const name = document.createElement('h2'); name.id = `match-team-${index + 1}`; name.textContent = `Team ${index + 1}`;
     const average = document.createElement('div'); average.className = 'match-average';
     const value = document.createElement('strong'); value.textContent = `${averageStars.toFixed(2)} / 5`;
     const label = document.createElement('span'); label.textContent = `Average stars · ${averageElo.toFixed(1)} Elo`;
     average.append(stars(Math.round(averageStars * 2) / 2), value, label);
-    heading.append(name, average);
+    heading.append(name);
+    if (standing.points !== null) {
+      const points = document.createElement('strong'); points.className = 'match-points';
+      points.textContent = `${standing.points} pts`; heading.append(points);
+    }
+    heading.append(average);
     const pitch = document.createElement('div'); pitch.className = 'match-pitch';
     pitch.setAttribute('aria-labelledby', name.id);
     const center = document.createElement('div'); center.className = 'pitch-center'; center.setAttribute('aria-hidden', 'true');
