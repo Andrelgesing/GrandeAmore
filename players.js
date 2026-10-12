@@ -5,11 +5,11 @@ const starsFromElo = elo => Math.round(rawStars(elo) * 2) / 2;
 const roster = [
   ['AlexG', 'GK', 1200, 'players/alexg.jpg'], ['Andre', 'GK', 1200, 'players/andre.jpg'], ['Darius', 'CB', 1000],
   ['fabian', 'CM', 1000, 'players/fabian.jpg'], ['Enil', 'CM', 1200, 'players/enil.jpg'], ['gabi', 'CM', 1000, 'players/gabi.jpg'],
-  ['Daniel', 'CM/ST', 1200], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'ST/CM', 1000, 'players/samu.jpg'],
+  ['Daniel', 'CM/ST', 1200, 'players/daniel.jpg'], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'ST/CM', 1000, 'players/samu.jpg'],
   ['Dejan', 'CB', 1000], ['Jack', 'CB', 1000, 'players/jack.jpg'], ['Ali', 'ST/CB', 1000, 'players/ali.jpg'],
   ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
   ['Danilo', 'CB', 1000, 'players/danilo.jpg'], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
-  ['Nikita', 'CB', 1000, 'players/nikita.jpg'], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000],
+  ['Nikita', 'CB', 1000, 'players/nikita.jpg'], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000, 'players/damien.jpg'],
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000, 'players/mohamed.jpg'],
   ['Paolo (pac)', 'CB', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
   ['Lucas', 'ST/CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
