@@ -1,7 +1,9 @@
 // Goals scored in the 11 October 2026 tournament. Names match the player roster.
 const tournamentGoals = [
- ['Enil', 6], ['Daniel', 3], ['fabian', 2], ['davideb', 2], ['Jack', 2],
- ['gabi', 1], ['Iacob', 1], ['Loay', 1], ['Andreeas', 1], ['Mohamed', 1]
+ ['Enil', 6], ['Daniel', 3],
+ ['Andreeas', 2], ['Loay', 2], ['Mohamed', 2], ['Iacob', 2],
+ ['gabi', 2], ['Nikita', 2], ['Ali', 2], ['Takunda', 2],
+ ['Jack', 1], ['davideb', 1], ['fabian', 1]
 ];
 const tournamentAssists = [
  ['Enil', 2], ['Nikita', 2], ['gabi', 2], ['Ali', 1], ['Daniel', 1],
