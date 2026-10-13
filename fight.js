@@ -20,15 +20,19 @@ let previousArena = -1;
 function chooseDuel(pool, previous = '', random = Math.random) {
   if (pool.length < 2) throw new Error('A duel needs at least two players.');
   // Choose the mode once, so rejecting an immediate repeat preserves 70/30.
-  const newcomers = pool.flatMap((player, index) => (player.calibrationDuels ?? 10) < 10 ? [index] : []);
-  const featureNewcomer = newcomers.length > 0 && random() < 0.2;
+  const previousPlayers = new Set(previous ? previous.split(':').map(Number) : []);
+  let eligible = pool.map((_, index) => index).filter(index => !previousPlayers.has(index) || (pool[index].calibrationDuels ?? 10) >= 10);
+  // With fewer than two available players, consecutive appearances are unavoidable.
+  if (eligible.length < 2) eligible = pool.map((_, index) => index);
+  const newcomers = eligible.filter(index => (pool[index].calibrationDuels ?? 10) < 10);
+  const featureNewcomer = newcomers.length > 0 && random() < 0.28;
   const preferSimilar = random() < 0.7;
   let first, second, key;
   do {
-    first = featureNewcomer ? newcomers[Math.floor(random() * newcomers.length)] : Math.floor(random() * pool.length);
+    first = featureNewcomer ? newcomers[Math.floor(random() * newcomers.length)] : eligible[Math.floor(random() * eligible.length)];
     if (preferSimilar) {
-      const candidates = pool.flatMap((player, index) => index === first ? [] : [{
-        index, weight: 1 / (1 + Math.abs(player.elo - pool[first].elo) / 200) ** 2
+      const candidates = eligible.flatMap(index => index === first ? [] : [{
+        index, weight: 1 / (1 + Math.abs(pool[index].elo - pool[first].elo) / 200) ** 2
       }]);
       let draw = random() * candidates.reduce((sum, candidate) => sum + candidate.weight, 0);
       second = candidates[candidates.length - 1].index;
@@ -37,8 +41,8 @@ function chooseDuel(pool, previous = '', random = Math.random) {
         if (draw < 0) { second = candidate.index; break; }
       }
     } else {
-      second = Math.floor(random() * (pool.length - 1));
-      if (second >= first) second++;
+      const opponents = eligible.filter(index => index !== first);
+      second = opponents[Math.floor(random() * opponents.length)];
     }
     key = [first, second].sort((a, b) => a - b).join(':');
   } while (pool.length > 2 && key === previous);

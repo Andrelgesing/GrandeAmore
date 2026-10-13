@@ -94,7 +94,11 @@ is not reconstructed by this feature.
 
 Newcomer counters persist alongside ratings and appear in JSON archives. Vote
 records store both K values, both point changes and prior calibration counters.
-Fight reserves a random 20% branch for newcomers under 10 duels, shared uniformly.
-They also remain eligible in normal selection, so total exposure can exceed 20%.
+Fight reserves a random 28% branch for newcomers under 10 duels, shared uniformly.
+They also remain eligible in normal selection, so total exposure can exceed 28%.
 Skips and duplicate IDs do not change counters. Local previews use the same rule
 when calibration metadata is present; absent metadata defaults to established.
+
+Newcomers in the immediately preceding matchup are excluded from both selection
+branches. If fewer than two players remain, this cooldown is relaxed so a duel
+can still be shown. The 28% branch runs when an eligible newcomer is available.

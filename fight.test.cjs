@@ -53,17 +53,29 @@ assert.equal(JSON.stringify(pool), original, 'Pairing must not mutate Elo');
 console.log('Passed: 70/30 mix, closer Elo bias, distant opponents, no self-pairings or immediate repeats, Shahrom eligibility, and unchanged ratings.');
 console.log(`Average Elo gaps: random ${(randomGap / samples).toFixed(1)}, weighted ${(weightedGap / samples).toFixed(1)}, mixed ${(mixedGap / samples).toFixed(1)}.`);
 
-// The dedicated newcomer branch shares a 20% chance across all newcomers.
+// The dedicated newcomer branch shares a 28% chance across all newcomers.
 const newcomers = [{name:'NewA',elo:1000,calibrationDuels:0}, {name:'NewB',elo:1100,calibrationDuels:9}, {name:'OldA',elo:1200}, {name:'OldB',elo:1000,calibrationDuels:10}];
 let featured = 0; const newCounts = [0,0]; last = '';
 for (let i=0; i<samples; i++) {
  let initial = true, dedicated = false;
- const [a,b] = choose(newcomers,last,() => {const value=random(); if(initial) {initial=false; dedicated=value<.2;} return value;});
+ const [a,b] = choose(newcomers,'',() => {const value=random(); if(initial) {initial=false; dedicated=value<.28;} return value;});
  if(dedicated) {featured++; assert(a<2); newCounts[a]++;}
- assert.notEqual(a,b); const key=[a,b].sort((x,y)=>x-y).join(':'); assert.notEqual(key,last); last=key;
+ assert.notEqual(a,b);
 }
-assert(Math.abs(featured/samples-.2)<.01);
+assert(Math.abs(featured/samples-.28)<.01);
 assert(Math.abs(newCounts[0]/featured-.5)<.02);
 const graduated = newcomers.map(p=>({...p,calibrationDuels:10}));
 assert.deepEqual(Array.from(choose(graduated,'',sequence([.9,0,.99]))),[0,3], 'Graduates use original selection without extra newcomer draw');
-console.log('Passed: 20% shared newcomer allocation, uniform newcomer selection, no immediate repeats and graduation.');
+console.log('Passed: 28% shared newcomer allocation, uniform newcomer selection, no immediate repeats and graduation.');
+
+last = '';
+for (let i=0;i<10000;i++) {
+ const [a,b] = choose(newcomers,last,random);
+ const prior = last ? last.split(':').map(Number) : [];
+ for (const index of [a,b]) if(index<2) assert(!prior.includes(index), 'Newcomer cannot repeat even through normal selection');
+ last=[a,b].sort((x,y)=>x-y).join(':');
+}
+const singleNew=[newcomers[0],newcomers[2],newcomers[3]];
+for(let i=0;i<100;i++) assert(!choose(singleNew,'0:1',random).includes(0));
+assert.equal(choose(newcomers.slice(0,2),'0:1',random).length,2);
+console.log('Passed: no consecutive newcomer appearances in either selection mode, single newcomer cooldown and tiny-roster fallback.');
