@@ -49,6 +49,13 @@
     th { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
     th, td { padding: 14px 10px; border-bottom: 1px solid #dce2d9; }
     td .stars { white-space: nowrap; }
+    .season-panel { margin: 24px 0 50px; padding: 0 16px 16px; background: white; border: 1px solid #dce2d9; border-radius: 12px; }
+    .season-table { min-width: 540px; }
+    .season-table td:nth-child(n+3), .season-table th:nth-child(n+3) { text-align: center; font-variant-numeric: tabular-nums; }
+    .season-table td:nth-child(3) { font-weight: 800; }
+    .season-table tbody tr:first-child { background: #f6efd9; }
+    .season-player { display: flex; align-items: center; gap: 12px; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+    .season-player:hover { text-decoration: underline; text-underline-offset: 4px; }
     .elo-adjustment { white-space: nowrap; font-weight: 700; }
     .elo-gain { color: #18743c; }
     .elo-loss { color: #b83232; }
@@ -202,7 +209,7 @@
 <body>
   <header>
     <a class="brand" href="#home">GRANDE AMORE FC</a>
-    <nav aria-label="Main navigation"><a href="#home">Home</a><a href="#players">Players</a><a href="#matches">Matches</a><a href="#stats">Stats</a><a href="#memory-lane">Memory lane</a></nav>
+    <nav aria-label="Main navigation"><a href="#home">Home</a><a href="#players">Players</a><a href="#matches">Matches</a><a href="#stats">Stats</a><a href="#season-2026-2027">2026/2027 Season</a><a href="#memory-lane">Memory lane</a></nav>
   </header>
   <main>
     <div id="home-view"><span id="home"></span>
@@ -246,6 +253,10 @@
         <div class="memory-controls"><button type="button" id="memory-prev" aria-label="Previous photo">← Previous</button><button type="button" id="memory-pause">Pause slideshow</button><button type="button" id="memory-next" aria-label="Next photo">Next →</button></div>
       </figure>
     </section>
+    <section id="season-view" hidden aria-labelledby="season-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Season standings</div><h1 id="season-title">2026/2027 Season</h1><p>Every point. Every goal. Every assist.</p></div>
+      <div class="season-panel"><div class="table-wrap" tabindex="0" role="region" aria-label="Season standings" ><table class="season-table" aria-describedby="season-method"><thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Pts</th><th scope="col">Goals</th><th scope="col">Assists</th><th scope="col">MP</th></tr></thead><tbody id="season-list"></tbody></table></div><p class="small-note" id="season-method">Ordered by points, then goals, then assists. Players equal on all three share a rank. MP = matches played.</p></div>
+    </section>
     <section id="stats-view" hidden aria-labelledby="stats-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Stats</div><h1 id="stats-title">Every contribution counts.</h1><p>Goals, assists and the players making a difference.</p></div>
       <div class="stats-grid">
@@ -263,9 +274,10 @@
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
 <script src="config.js"></script>
 <script src="placement-preview.js"></script>
-<script src="players.js?v=20261012-placement-final"></script>
+<script src="players.js?v=20261013-season"></script>
 <script src="goals.js?v=20261012-corrected-goals"></script>
 <script src="matches.js?v=20261012-player-cards"></script>
+<script src="season.js?v=20261013-season"></script>
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261012-final"></script>
 <script src="fight.js?v=20261012-placement-final"></script>

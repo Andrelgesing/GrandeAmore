@@ -230,8 +230,10 @@ function showView() {
   const showPlayers = location.hash === '#players';
   const showStats = location.hash === '#stats';
   const showMatches = location.hash === '#matches';
+  const showSeason = location.hash === '#season-2026-2027';
+  document.querySelector('#season-view').hidden = !showSeason;
   const showMemories = location.hash === '#memory-lane';
-  document.querySelector('#home-view').hidden = showPlayers || showStats || showMatches || showMemories;
+  document.querySelector('#home-view').hidden = showPlayers || showStats || showMatches || showMemories || showSeason;
   document.querySelector('#memory-lane-view').hidden = !showMemories;
   document.querySelector('#matches-view').hidden = !showMatches;
   document.querySelector('#stats-view').hidden = !showStats;
@@ -241,7 +243,7 @@ function showView() {
     else link.removeAttribute('aria-current');
   });
   if (dialog.open) dialog.close();
-  if (showPlayers || showStats || showMatches || showMemories || location.hash === '#home' || !location.hash) window.scrollTo(0, 0);
+  if (showPlayers || showStats || showMatches || showMemories || showSeason || location.hash === '#home' || !location.hash) window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', showView);
 showView();
