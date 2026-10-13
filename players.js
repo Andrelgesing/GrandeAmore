@@ -27,6 +27,20 @@ const displayPlayerRecords = records => Object.fromEntries(Object.entries(record
 ratingState = displayPlayerRecords(ratingState);
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
 const customJokeStats = {
+  AlexG: [
+    { label: 'Lifting trophy', rating: 2 },
+    { label: "Lifting G'mischtes", rating: 5 }
+  ],
+  Danilo: [
+    { label: 'Juji Gatame', rating: 4 },
+    { label: 'Hadaka Jime', rating: 5 },
+    { label: 'Yoko Shiho Gatame', rating: 2 }
+  ],
+  Giorgios: [
+    { label: 'Ball control', rating: 5 },
+    { label: 'Running', rating: 0.5 },
+    { label: 'Walking', rating: 5 }
+  ],
   Enil: [
     { label: 'Left foot', rating: 5 },
     { label: 'Right foot', rating: 0.5 },
@@ -104,10 +118,7 @@ function cardContent(player, full = false) {
   name.className = 'player-name';
   name.textContent = player.name;
   if (full) name.id = 'detail-name';
-  const badge = document.createElement('span');
-  badge.className = 'tier';
-  badge.textContent = 'Grande Amore';
-  fragment.append(position, portrait, name, stars(player.rating), badge);
+  fragment.append(position, portrait, name, stars(player.rating));
   if (player.status) {
     const status = document.createElement('span');
     status.className = 'legendary-badge';
