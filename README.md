@@ -4,7 +4,7 @@ A simple football team website. Layout and styling are in `index.html`; the play
 
 ## Players
 
-Open the Players tab to see all 31 players. Ratings are calculated from Elo;
+Open the Players tab to see all 32 players. Ratings are calculated from Elo;
 Shahrom has three stars until a different rating is provided.
 Update each player's Elo when match-based ratings are agreed. Card colors
 automatically follow the rating: below 2.5 bronze, 2.5–below 3.75 silver, 3.75–5 gold.
@@ -52,6 +52,10 @@ are capped between 1 and 5. Thus 700/900/1100/1300 show 1.5/2.5/3.5/4.5.
 Colors use the unrounded equivalent: silver starts at 900 Elo (2.5),
 gold at 1150 Elo (3.75). Five displayed stars grant Legendary status.
 Shahrom retains his separately awarded Legendary status at 1000 Elo.
+Giorgios is a CB starting at 1100 Elo (3.5 stars), with a separate permanent
+Legendary honor and his squad photo. He participates in Fight. The snowflake
+player remains in Players and shared ratings storage, but is excluded from
+Fight selection and duel voting.
 Match-driven Elo updates and historical achievement storage are not yet implemented.
 
 ## Live shared ratings

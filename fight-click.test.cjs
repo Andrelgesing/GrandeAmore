@@ -2,13 +2,13 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync(__dirname + '/fight.js', 'utf8');
-function setup(protocol, fetch) {
+function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo: 1000 }))) {
  const element = () => ({ disabled: false, style: {}, children: [], append(...items) { this.children.push(...items); }, replaceChildren() { this.children = []; }, setAttribute() {}, listeners: {}, addEventListener(type, fn) { this.listeners[type] = fn; }, showModal() { this.open = true; }, close() { this.open = false; this.listeners.close?.(); }, querySelectorAll() { return this.children.filter(item => item.tag === 'button'); } });
  const nodes = Object.fromEntries(['fight-arena', 'fight-options', 'fight-skip', 'fight-selection', 'fight-confirm-dialog', 'fight-confirm-submit', 'fight-confirm-cancel', 'fight-confirm-text'].map(id => ['#' + id, element()]));
  const saved = new Map();
  const timers = [];
  const context = vm.createContext({
-  RATINGS_API: 'https://ratings.test', location: { protocol }, players: ['A', 'B', 'C'].map(name => ({ name, elo: 1000 })), ratingState: {},
+  RATINGS_API: 'https://ratings.test', location: { protocol }, players: squad, ratingState: {},
   document: { querySelector: id => nodes[id], createElement: tag => Object.assign(element(), { tag }), addEventListener() {}, hidden: false },
   localStorage: { getItem: key => saved.get(key), setItem: (key, value) => saved.set(key, value) },
   crypto: { randomUUID: (() => { let id = 0; return () => 'vote-' + ++id; })() },
@@ -20,6 +20,23 @@ function setup(protocol, fetch) {
  return { context, nodes, saved, timers, run: code => vm.runInContext(code, context) };
 }
 (async () => {
+ const rosterContext = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () => null } });
+ vm.runInContext(fs.readFileSync(__dirname + '/players.js', 'utf8').split('const grid =')[0], rosterContext);
+ const squad = vm.runInContext('players', rosterContext);
+ const rosterFight = setup('file:', () => { throw Error('No live votes in roster test'); }, squad);
+ assert(rosterFight.run("players.some(player => player.name === '@~❄️')"), 'Snowflake retains his player profile');
+ const seen = new Set();
+ for (let i = 0; i < 5000; i++) {
+  rosterFight.run('nextFight()');
+  for (const player of rosterFight.run('pair')) {
+   assert.notEqual(player.name, '@~❄️', 'Snowflake cannot be selected for either side');
+   seen.add(player.name);
+  }
+ }
+ assert(seen.has('Giorgios') && seen.has('Shahrom'), 'Both honorary Legendary players remain eligible');
+ rosterFight.run("applyRatings({ Giorgios: { elo: 950, legendary: true } })");
+ assert.equal(rosterFight.run("duelPlayers.find(player => player.name === 'Giorgios').elo"), 950, 'Duel pool uses current shared ratings');
+ assert.equal(rosterFight.run("players.find(player => player.name === 'Giorgios').status"), 'Legendary');
  const local = setup('file:', () => { throw Error('Local preview must not contact the live API'); });
  assert.equal(local.run('eloPoints(1000, 1000)'), 8, 'Equal-rated players exchange 8 Elo with K=16');
  const oldId = local.run('voteId');

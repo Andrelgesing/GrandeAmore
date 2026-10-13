@@ -6,6 +6,8 @@ const mvpCandidates = ["Hay", "Omar", "Daniel", "Paolo (pac)", "Jack", "Takunda"
 const seed = {"AlexG": {"elo": 1200, "legendary": false}, "Andre": {"elo": 1200, "legendary": false}, "Darius": {"elo": 1000, "legendary": false}, "fabian": {"elo": 1000, "legendary": false}, "Enil": {"elo": 1200, "legendary": false}, "gabi": {"elo": 1000, "legendary": false}, "Daniel": {"elo": 1200, "legendary": false}, "Levi": {"elo": 1000, "legendary": false}, "Samu": {"elo": 1000, "legendary": false}, "Dejan": {"elo": 1000, "legendary": false}, "Jack": {"elo": 1000, "legendary": false}, "Ali": {"elo": 1000, "legendary": false}, "Omar": {"elo": 1000, "legendary": false}, "Baraa": {"elo": 1000, "legendary": false}, "Takunda": {"elo": 1000, "legendary": false}, "Danilo": {"elo": 1000, "legendary": false}, "Andreeas": {"elo": 1000, "legendary": false}, "davideb": {"elo": 1000, "legendary": false}, "Nikita": {"elo": 1000, "legendary": false}, "Iacob": {"elo": 1000, "legendary": false}, "Damien": {"elo": 1000, "legendary": false}, "Valentin": {"elo": 1000, "legendary": false}, "Milan": {"elo": 1000, "legendary": false}, "Mohamed": {"elo": 1000, "legendary": false}, "Paolo (pac)": {"elo": 1000, "legendary": false}, "@Fabien Vjaceslavs": {"elo": 1000, "legendary": false}, "Lucas": {"elo": 1200, "legendary": false}, "@~\u2744\ufe0f": {"elo": 1000, "legendary": false}, "Shahrom": {"elo": 1000, "legendary": true}};
 seed.Loay = { elo: 1100, legendary: false };
 seed.Hay = { elo: 1000, legendary: false };
+seed.Giorgios = { elo: 1100, legendary: true };
+const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
 export default {
  async fetch(request, env) {
   const origin = request.headers.get('Origin');
@@ -56,7 +58,7 @@ export class Rankings {
   let vote;
   try { vote = JSON.parse(await request.text()); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }
   const { winner, loser, id } = vote;
-  if (!Object.hasOwn(seed, winner) || !Object.hasOwn(seed, loser) || winner === loser || typeof id !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(id)) return new Response('Invalid vote', { status: 400 });
+  if (!duelEligible(winner) || !duelEligible(loser) || winner === loser || typeof id !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(id)) return new Response('Invalid vote', { status: 400 });
   return this.ctx.storage.transaction(async tx => {
    const previous = await tx.get('vote:' + id);
    const ratings = await tx.get('ratings');

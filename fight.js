@@ -1,4 +1,5 @@
 const arenas = ['neon-city', 'sunset-rooftop', 'mountain-temple', 'moonlit-docks'];
+const duelPlayers = players.filter(player => player.name !== '@~❄️');
 const arena = document.querySelector('#fight-arena');
 const options = document.querySelector('#fight-options');
 const skipFight = document.querySelector('#fight-skip');
@@ -48,8 +49,8 @@ function nextFight() {
   submitted = false;
   skipFight.disabled = false;
   selection.textContent = 'Choose your fighter.';
-  const [first, second] = chooseDuel(players, previousPair);
-  pair = [players[first], players[second]];
+  const [first, second] = chooseDuel(duelPlayers, previousPair);
+  pair = [duelPlayers[first], duelPlayers[second]];
   previousPair = [first, second].sort((a, b) => a - b).join(':');
   const arenaIndex = (previousArena + 1 + Math.floor(Math.random() * 3)) % arenas.length;
   previousArena = arenaIndex;
