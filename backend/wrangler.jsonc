@@ -22,5 +22,17 @@
         "Rankings"
       ]
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "55 21 * * *",
+      "55 22 * * *"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  }
 }

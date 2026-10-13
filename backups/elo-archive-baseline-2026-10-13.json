@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "timezone": "Europe/Vienna",
+  "capturedAt": "2026-10-13T19:43:04.649Z",
+  "date": "2026-10-13",
+  "scheduledAt": null,
+  "revision": 950,
+  "ratings": {
+    "AlexG": {
+      "elo": 1131,
+      "legendary": false
+    },
+    "Andre": {
+      "elo": 1234,
+      "legendary": false
+    },
+    "Darius": {
+      "elo": 1083,
+      "legendary": false
+    },
+    "fabian": {
+      "elo": 1235,
+      "legendary": false
+    },
+    "Enil": {
+      "elo": 1421,
+      "legendary": true
+    },
+    "gabi": {
+      "elo": 1089,
+      "legendary": false
+    },
+    "Daniel": {
+      "elo": 1343,
+      "legendary": false
+    },
+    "Levi": {
+      "elo": 1067,
+      "legendary": false
+    },
+    "Samu": {
+      "elo": 1176,
+      "legendary": false
+    },
+    "Dejan": {
+      "elo": 774,
+      "legendary": false
+    },
+    "Jack": {
+      "elo": 1017,
+      "legendary": false
+    },
+    "Ali": {
+      "elo": 1157,
+      "legendary": false
+    },
+    "Omar": {
+      "elo": 826,
+      "legendary": false
+    },
+    "Baraa": {
+      "elo": 843,
+      "legendary": false
+    },
+    "Takunda": {
+      "elo": 868,
+      "legendary": false
+    },
+    "Danilo": {
+      "elo": 1146,
+      "legendary": false
+    },
+    "Andreeas": {
+      "elo": 980,
+      "legendary": false
+    },
+    "davideb": {
+      "elo": 1033,
+      "legendary": false
+    },
+    "Nikita": {
+      "elo": 1196,
+      "legendary": false
+    },
+    "Iacob": {
+      "elo": 898,
+      "legendary": false
+    },
+    "Damien": {
+      "elo": 893,
+      "legendary": false
+    },
+    "Valentin": {
+      "elo": 919,
+      "legendary": false
+    },
+    "Milan": {
+      "elo": 858,
+      "legendary": false
+    },
+    "Mohamed": {
+      "elo": 1026,
+      "legendary": false
+    },
+    "Paolo (pac)": {
+      "elo": 726,
+      "legendary": false
+    },
+    "@Fabien Vjaceslavs": {
+      "elo": 908,
+      "legendary": false
+    },
+    "Lucas": {
+      "elo": 1244,
+      "legendary": false
+    },
+    "@~\u2744\ufe0f": {
+      "elo": 798,
+      "legendary": false
+    },
+    "Shahrom": {
+      "elo": 969,
+      "legendary": true
+    },
+    "Loay": {
+      "elo": 1179,
+      "legendary": false
+    },
+    "Hay": {
+      "elo": 1063,
+      "legendary": false
+    }
+  },
+  "tournamentAdjustments": {
+    "Hay": -20,
+    "Omar": -20,
+    "Daniel": -20,
+    "Paolo (pac)": -20,
+    "Jack": -20,
+    "Takunda": -20,
+    "AlexG": -20,
+    "Samu": -40,
+    "Iacob": -40,
+    "Levi": -40,
+    "Nikita": -40,
+    "Dejan": -40,
+    "davideb": -40,
+    "Andre": -40,
+    "Ali": 40,
+    "Loay": 40,
+    "Andreeas": 40,
+    "Danilo": 40,
+    "Darius": 40,
+    "Enil": 40,
+    "Milan": 40,
+    "Lucas": 20,
+    "gabi": 20,
+    "fabian": 20,
+    "Mohamed": 20,
+    "Baraa": 20,
+    "Valentin": 20,
+    "@Fabien Vjaceslavs": 20
+  }
+}

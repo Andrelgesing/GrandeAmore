@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 const source = readFileSync(process.argv[2] || new URL('./worker.js', import.meta.url), 'utf8');
-const { Rankings } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
+const { Rankings, viennaDate, default: worker } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 const frontendSource = readFileSync(new URL('../players.js', import.meta.url), 'utf8');
 const { default: vm } = await import('node:vm');
 const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () => null } });
@@ -30,6 +30,7 @@ let ready, chain = Promise.resolve();
 const storage = {
   get: async key => structuredClone(data.get(key)),
   put: async (key, value) => data.set(key, structuredClone(value)),
+  list: async ({ prefix, startAfter = '', limit }) => new Map([...data].filter(([key]) => key.startsWith(prefix) && key > startAfter).sort(([a], [b]) => a.localeCompare(b)).slice(0, limit).map(([key, value]) => [key, structuredClone(value)])),
   transaction(fn) { const result = chain.then(() => fn(storage)); chain = result.catch(() => {}); return result; }
 };
 const create = async (placement = false) => {
@@ -125,3 +126,46 @@ assert.equal(data.get('mvp:2026-10-11-official:totals').Andre, 2);
 service = await create(true);
 assert.deepEqual(await getRatings(), afterPlacement, 'Placement must not apply again on restart');
 console.log('Placement tests passed: 28 changes applied once, exact backup, zero sum, absent players and MVP poll preserved.');
+
+// Daily archive: Vienna summer/winter time, immutability, persistence, downloads.
+assert.deepEqual(viennaDate(Date.parse('2026-10-13T21:55:00Z')), { date: '2026-10-13', time: '23:55' });
+assert.deepEqual(viennaDate(Date.parse('2026-12-13T22:55:00Z')), { date: '2026-12-13', time: '23:55' });
+assert.equal(viennaDate(Date.parse('2026-10-25T22:55:00Z')).time, '23:55');
+const archiveEnv = { RANKINGS: { idFromName: () => 'test', get: () => ({ fetch: request => service.fetch(request) }) } };
+const beforeArchive = await getRatings();
+const initialHistory = await (await service.fetch(new Request('https://test/elo-history'))).json();
+assert.equal(initialHistory.snapshots.length, 0);
+assert(initialHistory.baseline.ratings.Andre);
+await worker.scheduled({ scheduledTime: Date.parse('2026-10-13T22:55:00Z') }, archiveEnv);
+assert.equal(data.has('elo-snapshot:2026-10-13'), false, 'Inactive UTC trigger does nothing');
+await worker.scheduled({ scheduledTime: Date.parse('2026-10-13T21:55:00Z') }, archiveEnv);
+let history = await (await service.fetch(new Request('https://test/elo-history'))).json();
+assert.equal(history.snapshots.length, 1);
+assert.deepEqual(history.snapshots[0].ratings, beforeArchive.ratings);
+assert.equal(history.snapshots[0].revision, beforeArchive.revision);
+assert.deepEqual(await getRatings(), beforeArchive, 'Archiving never changes Elo or revision');
+const originalSnapshot = structuredClone(history.snapshots[0]);
+await service.fetch(new Request('https://test/votes', { method: 'POST', body: JSON.stringify({ id: 'archive-vote-1234567', winner: 'Andre', loser: 'AlexG' }) }));
+await worker.scheduled({ scheduledTime: Date.parse('2026-10-13T21:55:00Z') }, archiveEnv);
+assert.deepEqual(data.get('elo-snapshot:2026-10-13'), originalSnapshot, 'Retry cannot overwrite archive');
+await worker.scheduled({ scheduledTime: Date.parse('2026-12-13T22:55:00Z') }, archiveEnv);
+service = await create(true);
+history = await (await service.fetch(new Request('https://test/elo-history?after=2026-10-13'))).json();
+assert.equal(history.snapshots.length, 1);
+assert.equal(history.snapshots[0].date, '2026-12-13');
+const csvResponse = await service.fetch(new Request('https://test/elo-history?date=2026-10-13&format=csv'));
+assert.equal(csvResponse.headers.get('Content-Type'), 'text/csv; charset=utf-8');
+assert.equal((await csvResponse.text()).split('\r\n').length, 34);
+assert.equal((await service.fetch(new Request('https://test/elo-history?date=1999-01-01'))).status, 404);
+assert.equal((await service.fetch(new Request('https://test/elo-history?after=bad'))).status, 400);
+assert.equal((await worker.fetch(new Request('https://test/internal/elo-snapshot', {method:'POST'}), archiveEnv)).status, 404);
+assert.equal((await worker.fetch(new Request('https://test/internal/elo-snapshot'), archiveEnv)).status, 404);
+for (let day = 1; day <= 366; day++) {
+ const date = new Date(Date.UTC(2027, 0, day)).toISOString().slice(0, 10);
+ data.set('elo-snapshot:' + date, { ...originalSnapshot, date });
+}
+history = await (await service.fetch(new Request('https://test/elo-history?after=2026-12-31'))).json();
+assert.equal(history.snapshots.length, 366);
+assert.equal(history.nextAfter, history.snapshots.at(-1).date);
+assert.deepEqual((await (await service.fetch(new Request('https://test/elo-history?after=' + history.nextAfter))).json()).snapshots, []);
+console.log('Archive tests passed: summer/winter/DST, baseline, daily capture, no score changes, duplicate protection, restart, JSON/CSV, private write route and pagination.');

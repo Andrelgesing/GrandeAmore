@@ -40,6 +40,7 @@ const customJokeStats = {
   ]
 };
 const players = roster.map(([name, position, elo, photo = null, status = null], index) => ({
+  calibrationDuels: ratingState[name]?.calibrationDuels ?? 10,
   name, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
   elo: Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo, rating: starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo), photo,
   status: ratingState[name]?.legendary || starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo) === 5 ? 'Legendary' : status, rosterOrder: index,

@@ -20,10 +20,12 @@ let previousArena = -1;
 function chooseDuel(pool, previous = '', random = Math.random) {
   if (pool.length < 2) throw new Error('A duel needs at least two players.');
   // Choose the mode once, so rejecting an immediate repeat preserves 70/30.
+  const newcomers = pool.flatMap((player, index) => (player.calibrationDuels ?? 10) < 10 ? [index] : []);
+  const featureNewcomer = newcomers.length > 0 && random() < 0.2;
   const preferSimilar = random() < 0.7;
   let first, second, key;
   do {
-    first = Math.floor(random() * pool.length);
+    first = featureNewcomer ? newcomers[Math.floor(random() * newcomers.length)] : Math.floor(random() * pool.length);
     if (preferSimilar) {
       const candidates = pool.flatMap((player, index) => index === first ? [] : [{
         index, weight: 1 / (1 + Math.abs(player.elo - pool[first].elo) / 200) ** 2
@@ -90,9 +92,13 @@ function nextFight() {
     options.append(button);
   });
 }
-function eloPoints(winner, loser) {
+function calibrationK(player) {
+  const count = player.calibrationDuels ?? 10;
+  return count < 3 ? 64 : count < 10 ? 32 : 16;
+}
+function eloPoints(winner, loser, k = 16) {
   const expected = 1 / (1 + 10 ** ((loser - winner) / 400));
-  return Math.round(16 * (1 - expected));
+  return Math.round(k * (1 - expected));
 }
 let sharedRevision = -1;
 function applyShared(data) {
@@ -107,6 +113,7 @@ function applyRatings(updates) {
  for (const player of players) {
   if (!updates[player.name]) continue;
   player.elo = updates[player.name].elo;
+  player.calibrationDuels = updates[player.name].calibrationDuels ?? 10;
   player.rating = starsFromElo(player.elo);
   player.status = updates[player.name].legendary ? 'Legendary' : null;
  }
@@ -145,11 +152,12 @@ async function submitFight(index) {
    if (!response.ok) throw new Error();
    applyShared(await response.json());
   } else {
-   const points = eloPoints(winner.elo, loser.elo);
+   const winnerPoints = eloPoints(winner.elo, loser.elo, calibrationK(winner));
+   const loserPoints = eloPoints(winner.elo, loser.elo, calibrationK(loser));
    const updates = { ...ratingState };
-   for (const [player, delta] of [[winner, points], [loser, -points]]) {
+   for (const [player, delta] of [[winner, winnerPoints], [loser, -loserPoints]]) {
     const elo = player.elo + delta;
-    updates[player.name] = { elo, legendary: player.status === 'Legendary' || starsFromElo(elo) === 5 };
+    updates[player.name] = { elo, legendary: player.status === 'Legendary' || starsFromElo(elo) === 5, calibrationDuels: Math.min(10, (player.calibrationDuels ?? 10) + 1) };
    }
    localStorage.setItem('grande-amore-ratings', JSON.stringify(updates));
    applyRatings(updates);

@@ -8,8 +8,53 @@ seed.Loay = { elo: 1100, legendary: false };
 seed.Hay = { elo: 1000, legendary: false };
 seed.Giorgios = { elo: 1100, legendary: true };
 const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
+export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
+const calibrationMigration = 'elo-calibration:v1';
+const archivePrefix = 'elo-snapshot:';
+const archiveBaseline = 'elo-archive-baseline';
+export function viennaDate(timestamp) {
+ const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Vienna', year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+ }).formatToParts(new Date(timestamp)).map(part => [part.type, part.value]));
+ return { date: `${parts.year}-${parts.month}-${parts.day}`, time: `${parts.hour}:${parts.minute}` };
+}
+async function snapshot(tx, scheduledAt = null) {
+ const capturedAt = new Date().toISOString();
+ return {
+  schemaVersion: 1, timezone: 'Europe/Vienna', capturedAt,
+  date: viennaDate(scheduledAt ?? Date.now()).date,
+  scheduledAt: scheduledAt === null ? null : new Date(scheduledAt).toISOString(),
+  revision: await tx.get('revision') || 0,
+  ratings: await tx.get('ratings'),
+  tournamentAdjustments: (await tx.get(tournamentKey))?.adjustments || {}
+ };
+}
+function archiveResponse(data, format, filename) {
+ const headers = { 'Content-Disposition': `attachment; filename="${filename}.${format}"` };
+ if (format === 'csv') {
+  const quote = value => '"' + String(value).replaceAll('"', '""') + '"';
+  const snapshots = Array.isArray(data.snapshots) ? [data.baseline, ...data.snapshots].filter(Boolean) : [data];
+  const rows = [['date', 'captured_at', 'scheduled_at', 'revision', 'player', 'elo', 'legendary', 'tournament_adjustment']];
+  for (const item of snapshots) for (const [name, rating] of Object.entries(item.ratings)) {
+   rows.push([item.date, item.capturedAt, item.scheduledAt || '', item.revision, name, rating.elo, rating.legendary, item.tournamentAdjustments[name] || 0]);
+  }
+  return new Response(rows.map(row => row.map(quote).join(',')).join('\r\n') + '\r\n', { headers: { ...headers, 'Content-Type': 'text/csv; charset=utf-8' } });
+ }
+ return Response.json(data, { headers });
+}
 export default {
+ async scheduled(controller, env) {
+  if (viennaDate(controller.scheduledTime).time !== '23:55') return;
+  const id = env.RANKINGS.idFromName('grande-amore');
+  const response = await env.RANKINGS.get(id).fetch(new Request('https://internal/internal/elo-snapshot', {
+   method: 'POST', body: JSON.stringify({ scheduledAt: controller.scheduledTime })
+  }));
+  if (!response.ok) throw new Error(`Daily Elo export failed: ${response.status}`);
+  console.log(JSON.stringify({ event: 'daily-elo-export', date: viennaDate(controller.scheduledTime).date }));
+ },
  async fetch(request, env) {
+  if (new URL(request.url).pathname.startsWith('/internal/')) return new Response('Not found', { status: 404 });
   const origin = request.headers.get('Origin');
   const allowed = origin === env.ALLOWED_ORIGIN;
   const headers = { 'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Cache-Control': 'no-store', 'Vary': 'Origin' };
@@ -30,9 +75,10 @@ export class Rankings {
   ctx.blockConcurrencyWhile(async () => {
    await ctx.storage.transaction(async tx => {
     const ratings = await tx.get('ratings') || {};
+    const calibrationEnabled = await tx.get(calibrationMigration);
     let changed = false;
     for (const [name, initial] of Object.entries(seed)) {
-     if (!Object.hasOwn(ratings, name)) { ratings[name] = { ...initial }; changed = true; }
+     if (!Object.hasOwn(ratings, name)) { ratings[name] = { ...initial, ...(calibrationEnabled ? { calibrationDuels: 0 } : {}) }; changed = true; }
     }
     if (env.APPLY_TOURNAMENT_20261011 === 'true' && !await tx.get(tournamentKey)) {
      const beforeRevision = await tx.get('revision') || 0;
@@ -46,11 +92,40 @@ export class Rankings {
      changed = true;
     }
     if (changed) await tx.put('ratings', ratings);
+    if (!calibrationEnabled) await tx.put(calibrationMigration, true);
+    if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
    });
   });
  }
  async fetch(request) {
-  const path = new URL(request.url).pathname;
+  const url = new URL(request.url);
+  const path = url.pathname;
+  if (path === '/internal/elo-snapshot' && request.method === 'POST') {
+   const { scheduledAt } = await request.json();
+   if (!Number.isFinite(scheduledAt) || viennaDate(scheduledAt).time !== '23:55') return new Response('Invalid schedule', { status: 400 });
+   return this.ctx.storage.transaction(async tx => {
+    const key = archivePrefix + viennaDate(scheduledAt).date;
+    let saved = await tx.get(key);
+    if (!saved) { saved = await snapshot(tx, scheduledAt); await tx.put(key, saved); }
+    return Response.json(saved);
+   });
+  }
+  if (path === '/elo-history' && request.method === 'GET') {
+   const format = url.searchParams.get('format') || 'json';
+   const date = url.searchParams.get('date');
+   const after = url.searchParams.get('after');
+   if (!['json', 'csv'].includes(format) || [date, after].some(value => value !== null && !/^\d{4}-\d{2}-\d{2}$/.test(value))) return new Response('Invalid archive query', { status: 400 });
+   if (date) {
+    const saved = await this.ctx.storage.get(archivePrefix + date);
+    return saved ? archiveResponse(saved, format, `grande-amore-elo-${date}`) : new Response('Snapshot not found', { status: 404 });
+   }
+   const entries = await this.ctx.storage.list({ prefix: archivePrefix, limit: 366, ...(after ? { startAfter: archivePrefix + after } : {}) });
+   const snapshots = [...entries.values()];
+   return archiveResponse({ schemaVersion: 1, timezone: 'Europe/Vienna', scheduledTime: '23:55',
+    baseline: after ? null : await this.ctx.storage.get(archiveBaseline), snapshots,
+    nextAfter: snapshots.length === 366 ? snapshots.at(-1).date : null
+   }, format, 'grande-amore-elo-history');
+  }
   if (path === '/tournament-placement' && request.method === 'GET') return Response.json(await this.ctx.storage.get(tournamentKey) || null);
   if (path === '/mvp') return this.mvp(request);
   if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0, tournamentAdjustments: (await tx.get(tournamentKey))?.adjustments || {} }));
@@ -68,13 +143,20 @@ export class Rankings {
    }
    const k = Number(this.env.ELO_K || 16);
    const beforeWinner = ratings[winner].elo, beforeLoser = ratings[loser].elo;
-   const points = Math.round(k * (1 - 1 / (1 + 10 ** ((beforeLoser - beforeWinner) / 400))));
-   ratings[winner].elo += points; ratings[loser].elo -= points;
+   const winnerK = calibrationK(ratings[winner], k), loserK = calibrationK(ratings[loser], k);
+   const upset = 1 - 1 / (1 + 10 ** ((beforeLoser - beforeWinner) / 400));
+   const winnerPoints = Math.round(winnerK * upset), loserPoints = Math.round(loserK * upset);
+   const beforeWinnerCalibration = ratings[winner].calibrationDuels ?? 10;
+   const beforeLoserCalibration = ratings[loser].calibrationDuels ?? 10;
+   ratings[winner].elo += winnerPoints; ratings[loser].elo -= loserPoints;
+   for (const name of [winner, loser]) {
+    if ((ratings[name].calibrationDuels ?? 10) < 10) ratings[name].calibrationDuels++;
+   }
    for (const name of [winner, loser]) ratings[name].legendary ||= ratings[name].elo >= 1350;
    const revision = (await tx.get('revision') || 0) + 1;
    await tx.put('revision', revision);
    await tx.put('ratings', ratings);
-   await tx.put('vote:' + id, { winner, loser, points, beforeWinner, beforeLoser, k, at: Date.now() });
+   await tx.put('vote:' + id, { winner, loser, points: winnerPoints, winnerPoints, loserPoints, beforeWinner, beforeLoser, k, winnerK, loserK, beforeWinnerCalibration, beforeLoserCalibration, at: Date.now() });
    return Response.json({ ratings, revision });
   });
  }
