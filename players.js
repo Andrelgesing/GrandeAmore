@@ -11,7 +11,7 @@ const roster = [
   ['Danilo', 'CB', 1000, 'players/danilo.jpg'], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
   ['Nikita', 'CB', 1000, 'players/nikita.jpg'], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000, 'players/damien.jpg'],
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000, 'players/mohamed.jpg'],
-  ['Paolo (pac)', 'CB', 1000, 'players/paolo.jpg'], ['@Fabien Vjaceslavs', 'CM', 1000, 'players/fabien_v.jpg'],
+  ['Paolo', 'CB', 1000, 'players/paolo.jpg'], ['Fabien', 'CM', 1000, 'players/fabien_v.jpg'],
   ['Lucas', 'ST/CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
   ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary'],
   ['Loay', 'CM/ST', 1100], ['Hay', 'ST/CM', 1000]
@@ -19,6 +19,11 @@ const roster = [
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
 if (typeof placementPreview !== 'undefined' && placementPreview) ratingState = placementPreview.ratings;
+// Keep the existing service identity so the shorter name preserves ratings and votes.
+const servicePlayerName = name => name === 'Fabien' ? '@Fabien Vjaceslavs' : name === 'Paolo' ? 'Paolo (pac)' : name;
+const displayPlayerName = name => name === '@Fabien Vjaceslavs' ? 'Fabien' : name === 'Paolo (pac)' ? 'Paolo' : name;
+const displayPlayerRecords = records => Object.fromEntries(Object.entries(records).map(([name, value]) => [displayPlayerName(name), value]));
+ratingState = displayPlayerRecords(ratingState);
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
 const customJokeStats = {
   Enil: [

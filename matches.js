@@ -12,7 +12,7 @@ const sundayMatch = {
       "Hay",
       "Omar",
       "Daniel",
-      "Paolo (pac)",
+      "Paolo",
       "Jack",
       "Takunda",
       "AlexG"
@@ -42,7 +42,7 @@ const sundayMatch = {
       "Mohamed",
       "Baraa",
       "Valentin",
-      "@Fabien Vjaceslavs"
+      "Fabien"
     ]
   ]
 };

@@ -49,13 +49,27 @@
     th { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
     th, td { padding: 14px 10px; border-bottom: 1px solid #dce2d9; }
     td .stars { white-space: nowrap; }
-    .season-panel { margin: 24px 0 50px; padding: 0 16px 16px; background: white; border: 1px solid #dce2d9; border-radius: 12px; }
-    .season-table { min-width: 540px; }
+    .season-panel { max-width: 592px; margin: 24px 0 50px; padding: 0 12px 12px; background: white; border: 1px solid #dce2d9; border-radius: 12px; }
+    .season-table { table-layout: fixed; }
+    .season-table th, .season-table td { padding: 10px 6px; }
+    .season-table th:first-child { width: 48px; }
+    .season-table th:nth-child(2) { width: 192px; }
     .season-table td:nth-child(n+3), .season-table th:nth-child(n+3) { text-align: center; font-variant-numeric: tabular-nums; }
     .season-table td:nth-child(3) { font-weight: 800; }
     .season-table tbody tr:first-child { background: #f6efd9; }
-    .season-player { display: flex; align-items: center; gap: 12px; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+    .season-player { display: flex; align-items: center; gap: 8px; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
     .season-player:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .season-player { width: 100%; min-width: 0; }
+    .season-player > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+    @media (max-width: 650px) {
+      .season-panel { padding: 0 6px 10px; }
+      .season-table th, .season-table td { padding: 10px 3px; font-size: .75rem; letter-spacing: 0; }
+      .season-table th:first-child { width: 10%; }
+      .season-table th:nth-child(2) { width: 42%; }
+      .season-table th:nth-child(n+3) { width: 12%; }
+      .season-player { gap: 5px; }
+      .season-player .mvp-photo { width: 28px; height: 28px; }
+    }
     .elo-adjustment { white-space: nowrap; font-weight: 700; }
     .elo-gain { color: #18743c; }
     .elo-loss { color: #b83232; }
@@ -274,12 +288,12 @@
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
 <script src="config.js"></script>
 <script src="placement-preview.js"></script>
-<script src="players.js?v=20261013-season"></script>
+<script src="players.js?v=20261013-names-compact"></script>
 <script src="goals.js?v=20261012-corrected-goals"></script>
-<script src="matches.js?v=20261012-player-cards"></script>
+<script src="matches.js?v=20261013-names"></script>
 <script src="season.js?v=20261013-season"></script>
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261012-final"></script>
-<script src="fight.js?v=20261012-placement-final"></script>
+<script src="fight.js?v=20261013-names"></script>
 </body>
 </html>

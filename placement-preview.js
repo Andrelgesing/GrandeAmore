@@ -98,11 +98,11 @@ const placementPreview = typeof location !== 'undefined' && location.protocol ==
       "elo": 1019,
       "legendary": false
     },
-    "Paolo (pac)": {
+    "Paolo": {
       "elo": 749,
       "legendary": false
     },
-    "@Fabien Vjaceslavs": {
+    "Fabien": {
       "elo": 888,
       "legendary": false
     },
@@ -131,7 +131,7 @@ const placementPreview = typeof location !== 'undefined' && location.protocol ==
     "Hay": -20,
     "Omar": -20,
     "Daniel": -20,
-    "Paolo (pac)": -20,
+    "Paolo": -20,
     "Jack": -20,
     "Takunda": -20,
     "AlexG": -20,
@@ -155,7 +155,7 @@ const placementPreview = typeof location !== 'undefined' && location.protocol ==
     "Mohamed": 20,
     "Baraa": 20,
     "Valentin": 20,
-    "@Fabien Vjaceslavs": 20
+    "Fabien": 20
   }
 } : null;
 if (placementPreview) {

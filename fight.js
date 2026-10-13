@@ -96,10 +96,11 @@ let sharedRevision = -1;
 function applyShared(data) {
  if (data.revision < sharedRevision) return;
  sharedRevision = data.revision;
- if (data.tournamentAdjustments) tournamentEloAdjustments = data.tournamentAdjustments;
+ if (data.tournamentAdjustments) tournamentEloAdjustments = displayPlayerRecords(data.tournamentAdjustments);
  applyRatings(data.ratings);
 }
 function applyRatings(updates) {
+ updates = displayPlayerRecords(updates);
  ratingState = updates;
  for (const player of players) {
   if (!updates[player.name]) continue;
@@ -154,7 +155,7 @@ async function submitFight(index) {
  const winner = pair[selected], loser = pair[1 - selected];
  try {
   if (fightApi) {
-   const response = await fetch(fightApi + '/votes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: voteId, winner: winner.name, loser: loser.name }) });
+   const response = await fetch(fightApi + '/votes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: voteId, winner: servicePlayerName(winner.name), loser: servicePlayerName(loser.name) }) });
    if (!response.ok) throw new Error();
    applyShared(await response.json());
   } else {

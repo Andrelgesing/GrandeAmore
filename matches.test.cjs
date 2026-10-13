@@ -27,10 +27,10 @@ vm.runInContext(playerSource.slice(playerSource.indexOf('const tier ='), playerS
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8'), context);
 const expected = [
-  ['Hay', 'Omar', 'Daniel', 'Paolo (pac)', 'Jack', 'Takunda', 'AlexG'],
+  ['Hay', 'Omar', 'Daniel', 'Paolo', 'Jack', 'Takunda', 'AlexG'],
   ['Samu', 'Iacob', 'Levi', 'Nikita', 'Dejan', 'davideb', 'Andre'],
   ['Ali', 'Loay', 'Andreeas', 'Danilo', 'Darius', 'Enil', 'Milan'],
-  ['Lucas', 'gabi', 'fabian', 'Mohamed', 'Baraa', 'Valentin', '@Fabien Vjaceslavs']
+  ['Lucas', 'gabi', 'fabian', 'Mohamed', 'Baraa', 'Valentin', 'Fabien']
 ];
 const config = JSON.parse(vm.runInContext('JSON.stringify(sundayMatch)', context));
 assert.deepEqual(config.teams, expected);

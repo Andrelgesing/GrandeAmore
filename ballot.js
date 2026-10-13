@@ -3,7 +3,7 @@ const ballotTeams = [
     "Hay",
     "Omar",
     "Daniel",
-    "Paolo (pac)",
+    "Paolo",
     "Jack",
     "Takunda",
     "AlexG"
@@ -33,7 +33,7 @@ const ballotTeams = [
     "Mohamed",
     "Baraa",
     "Valentin",
-    "@Fabien Vjaceslavs"
+    "Fabien"
   ]
 ];
 
@@ -59,7 +59,7 @@ const ballotConfirmName = document.querySelector('#ballot-confirm-name');
 document.querySelector('#ballot-cancel').addEventListener('click', () => ballotDialog.close());
 let chosenMvp = null;
 let submittedMvp = null;
-try { submittedMvp = localStorage.getItem(ballotKey); } catch (_) {}
+try { submittedMvp = displayPlayerName(localStorage.getItem(ballotKey)); } catch (_) {}
 const ballotButtons = [];
 ballotTeams.forEach((team, index) => {
  const section = document.createElement('section');
@@ -114,7 +114,7 @@ ballotSubmit.addEventListener('click', async () => {
  if (!chosenMvp || submittedMvp || pollBusy || !pollReady || Date.now() < ballotOpening) return;
  pollBusy = true; updateBallotClock();
  try {
-  const response = await fetch(RATINGS_API + '/mvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voter: voterId, player: chosenMvp }) });
+  const response = await fetch(RATINGS_API + '/mvp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voter: voterId, player: servicePlayerName(chosenMvp) }) });
   if (!response.ok) throw new Error();
   applyPoll(await response.json());
   ballotDialog.close();
@@ -164,9 +164,9 @@ if (submittedMvp) showBallotResults(true, false);
 function applyPoll(data) {
  const total = Object.values(data.totals).reduce((sum, votes) => sum + votes, 0);
  if (total < pollTotal) return;
- pollTotal = total; pollTotals = data.totals; pollReady = true; pollError = '';
+ pollTotal = total; pollTotals = displayPlayerRecords(data.totals); pollReady = true; pollError = '';
  if (data.choice) {
-  submittedMvp = data.choice.player;
+  submittedMvp = displayPlayerName(data.choice.player);
   try { localStorage.setItem(ballotKey, submittedMvp); } catch (_) {}
  }
  updateBallotClock();
