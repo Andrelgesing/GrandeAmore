@@ -4,8 +4,6 @@ const options = document.querySelector('#fight-options');
 const skipFight = document.querySelector('#fight-skip');
 const selection = document.querySelector('#fight-selection');
 const fightConfirmDialog = document.querySelector('#fight-confirm-dialog');
-const fightConfirmButton = document.querySelector('#fight-confirm-submit');
-const fightCancelButton = document.querySelector('#fight-confirm-cancel');
 const fightConfirmText = document.querySelector('#fight-confirm-text');
 let voteAttempted = false;
 // File previews keep votes local; the published site uses the shared ratings service.
@@ -83,8 +81,11 @@ function nextFight() {
     const name = document.createElement('span');
     name.className = 'fighter-name';
     name.textContent = player.name;
-    button.append(portrait, name);
-    button.addEventListener('click', () => confirmFightChoice(index));
+    const reveal = document.createElement('div');
+    reveal.className = 'fighter-reveal';
+    reveal.append(portrait, name);
+    button.append(reveal);
+    button.addEventListener('click', () => submitFight(index));
     options.append(button);
   });
 }
@@ -125,31 +126,15 @@ async function refreshRatings() {
  } catch (_) { if (!sharedReady) selection.textContent = 'Connecting to ratings. Please try again shortly.'; }
  finally { syncing = false; }
 }
-function confirmFightChoice(index) {
- if (saving || submitted || !sharedReady || (voteAttempted && selected !== index)) return;
- selected = index;
- options.querySelectorAll('button').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
- fightConfirmText.textContent = `Vote for ${pair[index].name}?`;
- fightConfirmButton.disabled = false;
- fightCancelButton.disabled = false;
- if (!fightConfirmDialog.open) fightConfirmDialog.showModal();
-}
-fightConfirmButton.addEventListener('click', () => submitFight(selected));
-fightCancelButton.addEventListener('click', () => { if (!saving) fightConfirmDialog.close(); });
 fightConfirmDialog.addEventListener('cancel', event => { if (saving) event.preventDefault(); });
-fightConfirmDialog.addEventListener('close', () => {
- if (!voteAttempted) {
-  selected = null;
-  options.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', 'false'));
- }
-});
 async function submitFight(index) {
- if (index === null || !fightConfirmDialog.open || submitted || saving || !sharedReady || selected !== index) return;
+ if (index !== 0 && index !== 1) return;
+ if (submitted || saving || !sharedReady || (voteAttempted && selected !== index)) return;
  selected = index;
  voteAttempted = true;
  saving = true; skipFight.disabled = true;
- fightConfirmButton.disabled = true; fightCancelButton.disabled = true;
  fightConfirmText.textContent = 'Saving your vote…';
+ if (!fightConfirmDialog.open) fightConfirmDialog.showModal();
  options.querySelectorAll('button').forEach((button, i) => { button.disabled = true; button.setAttribute('aria-pressed', String(i === index)); });
  selection.textContent = 'Saving your vote…';
  const winner = pair[selected], loser = pair[1 - selected];
@@ -169,15 +154,15 @@ async function submitFight(index) {
    applyRatings(updates);
   }
   submitted = true;
+  await new Promise(resolve => setTimeout(resolve, 300));
   fightConfirmDialog.close();
 
  } catch (_) {
-  fightConfirmText.textContent = 'Your vote could not be saved. Please try again.';
+  fightConfirmDialog.close();
   selection.textContent = 'Your vote could not be saved. Retry your choice, or Next to skip.';
   options.querySelectorAll('button').forEach((button, i) => { button.disabled = i !== selected; });
  } finally {
   saving = false; skipFight.disabled = false;
-  fightConfirmButton.disabled = false; fightCancelButton.disabled = false;
   if (submitted) nextFight();
  }
 }
