@@ -53,20 +53,20 @@ assert.equal(JSON.stringify(pool), original, 'Pairing must not mutate Elo');
 console.log('Passed: 70/30 mix, closer Elo bias, distant opponents, no self-pairings or immediate repeats, Shahrom eligibility, and unchanged ratings.');
 console.log(`Average Elo gaps: random ${(randomGap / samples).toFixed(1)}, weighted ${(weightedGap / samples).toFixed(1)}, mixed ${(mixedGap / samples).toFixed(1)}.`);
 
-// The dedicated newcomer branch shares a 28% chance across all newcomers.
+// The dedicated newcomer branch shares a 60% chance across all newcomers.
 const newcomers = [{name:'NewA',elo:1000,calibrationDuels:0}, {name:'NewB',elo:1100,calibrationDuels:9}, {name:'OldA',elo:1200}, {name:'OldB',elo:1000,calibrationDuels:10}];
 let featured = 0; const newCounts = [0,0]; last = '';
 for (let i=0; i<samples; i++) {
  let initial = true, dedicated = false;
- const [a,b] = choose(newcomers,'',() => {const value=random(); if(initial) {initial=false; dedicated=value<.28;} return value;});
+ const [a,b] = choose(newcomers,'',() => {const value=random(); if(initial) {initial=false; dedicated=value<.60;} return value;});
  if(dedicated) {featured++; assert(a<2); newCounts[a]++;}
  assert.notEqual(a,b);
 }
-assert(Math.abs(featured/samples-.28)<.01);
+assert(Math.abs(featured/samples-.60)<.01);
 assert(Math.abs(newCounts[0]/featured-.5)<.02);
 const graduated = newcomers.map(p=>({...p,calibrationDuels:10}));
 assert.deepEqual(Array.from(choose(graduated,'',sequence([.9,0,.99]))),[0,3], 'Graduates use original selection without extra newcomer draw');
-console.log('Passed: 28% shared newcomer allocation, uniform newcomer selection, no immediate repeats and graduation.');
+console.log('Passed: 60% shared newcomer allocation, uniform newcomer selection, no immediate repeats and graduation.');
 
 last = '';
 for (let i=0;i<10000;i++) {

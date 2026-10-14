@@ -25,7 +25,7 @@ function chooseDuel(pool, previous = '', random = Math.random) {
   // With fewer than two available players, consecutive appearances are unavoidable.
   if (eligible.length < 2) eligible = pool.map((_, index) => index);
   const newcomers = eligible.filter(index => (pool[index].calibrationDuels ?? 10) < 10);
-  const featureNewcomer = newcomers.length > 0 && random() < 0.28;
+  const featureNewcomer = newcomers.length > 0 && random() < 0.60;
   const preferSimilar = random() < 0.7;
   let first, second, key;
   do {
