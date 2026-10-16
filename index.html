@@ -133,6 +133,21 @@
     .ballot { margin-bottom: 28px; border: 2px solid #c79d51; border-radius: 16px; overflow: hidden; background: #091a25; color: #f8ead0; }
     .award-card { display: block; width: 100%; padding: 0; border: 0; color: inherit; background: transparent; text-align: left; cursor: pointer; }
     .award-card img { display: block; width: 100%; }
+    .home-feature-stage { aspect-ratio: 2 / 1; position: relative; background: #091a25; }
+    .home-feature-stage > .award-card, .home-feature-stage > .feature-video-open { width: 100%; height: 100%; }
+    .home-feature-stage img, .home-feature-stage video { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .feature-video-open { border: 0; padding: 0; background: #091a25; position: relative; color: #fff; }
+    .feature-video-hint { position: absolute; bottom: 10px; left: 12px; background: #091a25dc; padding: 6px 10px; border-radius: 20px; font-size: .75rem; pointer-events: none; }
+    .feature-next { position: absolute; bottom: 10px; right: 12px; z-index: 1; border: 1px solid #c79d5160; border-radius: 20px; padding: 6px 12px; background: #091a25dc; color: #f8ead0; font: inherit; font-size: .75rem; }
+    .feature-next:hover { background: #173b35; }
+    .ballot button:focus-visible { outline: 3px solid #f3cd81; outline-offset: -4px; }
+    dialog.reveal-dialog { width: min(1100px, calc(100% - 24px)); max-width: 1100px; background: #091a25; padding: 48px 12px 12px; box-sizing: border-box; }
+    .reveal-dialog video { display: block; width: 100%; max-height: calc(100dvh - 100px); }
+    .reveal-dialog .close { color: #091a25; z-index: 1; }
+    @media (max-width: 650px) {
+      .home-feature-stage.showing-players { aspect-ratio: 9 / 16; }
+      dialog.reveal-dialog { width: min(calc(100% - 24px), calc((100dvh - 80px) * 9 / 16 + 24px)); }
+    }
     dialog.award-results-dialog { width: min(640px, calc(100% - 32px)); padding: 30px; box-sizing: border-box; background: #091a25; color: #f8ead0; }
     .award-results-dialog .close { color: #f8ead0; }
     @media (max-width: 650px) { dialog.award-results-dialog { padding: 24px 18px; } .award-results-dialog .ballot-result-row { gap: 8px; font-size: .85rem; } }
@@ -239,11 +254,20 @@
       <h1 id="welcome">One team.<br>One great love.</h1>
       <p class="intro">Simply Grande Amore</p>
     </section>
-    <section class="ballot" id="ballon-dor" aria-labelledby="ballot-title">
+    <section class="ballot" id="ballon-dor" aria-label="Team highlights" aria-roledescription="carousel">
+      <div class="home-feature-stage">
       <button type="button" class="award-card" id="award-results-open" aria-haspopup="dialog" aria-controls="award-results-dialog" aria-label="View final Ballon d’Or poll results">
         <span id="ballot-title" class="visually-hidden">1st GrandeAmore ballon d’or — Enil, tournament MVP</span>
         <img src="assets/ballon-dor-enil.png" alt="Enil holding the Ballon d’Or above the 1st GrandeAmore ballon d’or title">
       </button>
+      <button type="button" id="reveal-open" class="feature-video-open" hidden aria-haspopup="dialog" aria-controls="reveal-dialog" aria-label="Watch the new player reveals with sound in a larger view">
+        <video id="reveal-preview" muted playsinline preload="none" poster="assets/videos/new-players-poster.jpg" aria-label="Alexander, Momo, Manuel and legendary Giorgios card reveal">
+          <source src="assets/videos/new-players-reveal.mp4" type="video/mp4">
+        </video>
+        <span class="feature-video-hint">↗ Watch with sound</span>
+      </button>
+      <button type="button" class="feature-next" id="feature-next">Next</button>
+      </div>
     </section>
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
@@ -288,6 +312,7 @@
     </section>
   </main>
 <dialog id="memory-lightbox" aria-label="Enlarged team photo"><button class="close" id="memory-close" type="button" aria-label="Close enlarged photo">×</button><img id="memory-large" alt=""><p id="memory-large-date"></p></dialog>
+<dialog id="reveal-dialog" class="reveal-dialog" aria-label="New player card reveals"><button class="close" id="reveal-close" type="button" aria-label="Close player reveal">×</button><video id="reveal-large" controls playsinline preload="none" poster="assets/videos/new-players-poster.jpg"><source src="assets/videos/new-players-reveal.mp4" type="video/mp4">Your browser does not support video playback.</video></dialog>
 <dialog id="award-results-dialog" class="award-results-dialog" aria-labelledby="award-results-title"><button type="button" class="close" id="award-results-close" aria-label="Close final poll results">×</button><p class="eyebrow">11 October 2026 · Tournament MVP</p><h2 id="award-results-title">Final Ballon d’Or results</h2><p id="award-results-summary"></p><div id="award-results-list"></div></dialog>
   <dialog id="player-dialog" aria-labelledby="detail-name"><div id="player-detail"></div></dialog>
 
@@ -301,6 +326,7 @@
 <script src="season.js?v=20261013-season"></script>
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261012-final"></script>
+<script src="home-highlights.js?v=20261016-two-reveals"></script>
 <script src="fight.js?v=20261014-calibration60"></script>
 </body>
 </html>
