@@ -8,7 +8,7 @@ const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () 
 vm.runInContext(frontendSource.split('const grid =')[0], context);
 const players = vm.runInContext('players', context);
 const loay = players.find(player => player.name === 'Loay');
-assert.equal(players.length, 32);
+assert.equal(players.length, 45);
 const giorgios = players.find(player => player.name === 'Giorgios');
 assert.equal(giorgios.rating, 3.5);
 assert.equal(giorgios.primaryPosition, 'CB');
@@ -23,7 +23,7 @@ assert.equal(hay.secondaryPosition, 'CM');
 assert.equal(players.find(player => player.name === 'Daniel').secondaryPosition, 'ST');
 assert(players.filter(player => !player.position.includes('/')).every(player => player.secondaryPosition === null));
 
-const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios'].includes(player.name)).map(player => [player.name, { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
+const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios'].includes(player.name)).map(player => [vm.runInContext(`servicePlayerName(${JSON.stringify(player.name)})`, context), { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
 const savedVote = { winner: 'Andre', loser: 'AlexG', points: 16, at: 1 };
 const data = new Map([['ratings', structuredClone(existing)], ['revision', 487], ['vote:old-vote-1234567', savedVote]]);
 let ready, chain = Promise.resolve();
@@ -77,7 +77,7 @@ assert.deepEqual(await getRatings(), beforeExcludedVotes, 'Excluded votes and re
 data.clear();
 service = await create();
 response = await getRatings();
-assert.equal(Object.keys(response.ratings).length, 32);
+assert.equal(Object.keys(response.ratings).length, 45);
 assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);
 assert.equal(response.revision, 0);
@@ -155,7 +155,7 @@ assert.equal(history.snapshots.length, 1);
 assert.equal(history.snapshots[0].date, '2026-12-13');
 const csvResponse = await service.fetch(new Request('https://test/elo-history?date=2026-10-13&format=csv'));
 assert.equal(csvResponse.headers.get('Content-Type'), 'text/csv; charset=utf-8');
-assert.equal((await csvResponse.text()).split('\r\n').length, 34);
+assert.equal((await csvResponse.text()).split('\r\n').length, players.length + 2);
 assert.equal((await service.fetch(new Request('https://test/elo-history?date=1999-01-01'))).status, 404);
 assert.equal((await service.fetch(new Request('https://test/elo-history?after=bad'))).status, 400);
 assert.equal((await worker.fetch(new Request('https://test/internal/elo-snapshot', {method:'POST'}), archiveEnv)).status, 404);

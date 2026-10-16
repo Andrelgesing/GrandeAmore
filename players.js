@@ -15,18 +15,48 @@ const roster = [
   ['Lucas', 'ST/CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
   ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary'],
   ['Loay', 'CM/ST', 1100], ['Hay', 'ST/CM', 1000, 'players/hay.jpg'],
-  ['Giorgios', 'CB', 1100, 'players/giorgios.jpg', 'Legendary']
+  ['Giorgios', 'CB', 1100, 'players/giorgios.jpg', 'Legendary'],
+  ['Manuel', 'CM', 1100, 'players/manuel.jpg'],
+  ['Momo', 'CM', 1000, 'players/momo.jpg'],
+  ['Alexandre', 'CB/CM', 1100, 'players/alexander.jpg'],
+  ['Mostafa', 'CB', 1100, 'players/mostafa.jpg'],
+  ['Johny', 'CB', 1000, 'players/johny.jpg'],
+  ['Ronaldo', 'ST', 1000, 'players/ronaldo.jpg'],
+  ['Leandro', 'CM', 1000, 'players/leandro-cropped.jpg'],
+  ['Chris', 'CB', 1000], ['Marco', 'CB', 1000], ['Martin', 'CB', 1000],
+  ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
 if (typeof placementPreview !== 'undefined' && placementPreview) ratingState = placementPreview.ratings;
 // Keep the existing service identity so the shorter name preserves ratings and votes.
-const servicePlayerName = name => name === 'Fabien' ? '@Fabien Vjaceslavs' : name === 'Paolo' ? 'Paolo (pac)' : name;
-const displayPlayerName = name => name === '@Fabien Vjaceslavs' ? 'Fabien' : name === 'Paolo (pac)' ? 'Paolo' : name;
+const servicePlayerName = name => name === 'Fabien' ? '@Fabien Vjaceslavs' : name === 'Paolo' ? 'Paolo (pac)' : name === 'Alexandre' ? 'Alexander' : name;
+const displayPlayerName = name => name === '@Fabien Vjaceslavs' ? 'Fabien' : name === 'Paolo (pac)' ? 'Paolo' : name === 'Alexander' ? 'Alexandre' : name;
 const displayPlayerRecords = records => Object.fromEntries(Object.entries(records).map(([name, value]) => [displayPlayerName(name), value]));
 ratingState = displayPlayerRecords(ratingState);
-const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter'];
+const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter', 'Last-minute boot search', 'Offside appeal volume', 'Striker pocket capacity', 'Sliding tackle laundry bill'];
 const customJokeStats = {
+  Leandro: [
+    { label: 'Chasing sticks', rating: 4 },
+    { label: 'Who is a good boy?', rating: 5 }
+  ],
+  Ronaldo: [
+    { label: 'Shooting', rating: 5 },
+    { label: 'Shooting', rating: 5 },
+    { label: 'Shooting', rating: 5 }
+  ],
+  Alexandre: [
+    { label: 'Uphill', rating: 2 },
+    { label: 'Downhill', rating: 4 }
+  ],
+  Manuel: [
+    { label: 'Form with Shahrom', rating: 2 },
+    { label: 'Against Shahrom', rating: 5 }
+  ],
+  Momo: [
+    { label: 'Laser hunting', rating: 5 },
+    { label: 'Midnight Zoomies', rating: 5 }
+  ],
   AlexG: [
     { label: 'Lifting trophy', rating: 2 },
     { label: "Lifting G'mischtes", rating: 5 }
