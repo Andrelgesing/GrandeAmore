@@ -1,0 +1,1 @@
+Saved rotating homepage: award (6 seconds), first reveal, award (6 seconds), second reveal. Videos advance on ending; dialogs pause rotation. Assets remain in assets/. Restore index.html, home-highlights.js and ballot-results.js to restore this layout. Current squads are preserved in matches.js. No live deployment performed.

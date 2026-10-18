@@ -246,6 +246,11 @@
     nav { flex-wrap: wrap; }
     button:focus-visible { outline: 3px solid #b17f25; outline-offset: 4px; }
     @media (prefers-reduced-motion: reduce) { button.player-card { transition: none; } }
+    #ballot-preview { width: min(900px, calc(100% - 24px)); max-height: 85dvh; box-sizing: border-box; overflow: auto; padding: 32px; background: #091a25; color: #f8ead0; }
+    #ballot-preview .close { color: #f8ead0; }
+    #ballot-confirm-dialog { background: #10261e; color: #f8ead0; padding: 28px; max-width: calc(100% - 32px); box-sizing: border-box; }
+    #ballot-preview .ballot-candidate:disabled { opacity: .8; }
+    @media(max-width:650px) { #ballot-preview { padding: 24px 16px; } }
   </style>
 </head>
 <body>
@@ -260,20 +265,9 @@
       <h1 id="welcome">One team.<br>One great love.</h1>
       <p class="intro">Simply Grande Amore</p>
     </section>
-    <section class="ballot" id="ballon-dor" aria-label="Team highlights" aria-roledescription="carousel">
-      <div class="home-feature-stage">
-      <button type="button" class="award-card" id="award-results-open" aria-haspopup="dialog" aria-controls="award-results-dialog" aria-label="View final Ballon d’Or poll results">
-        <span id="ballot-title" class="visually-hidden">1st GrandeAmore ballon d’or — Enil, tournament MVP</span>
-        <img src="assets/ballon-dor-enil.png" alt="Enil holding the Ballon d’Or above the 1st GrandeAmore ballon d’or title">
-      </button>
-      <button type="button" id="reveal-open" class="feature-video-open" hidden aria-haspopup="dialog" aria-controls="reveal-dialog" aria-label="Watch the new player reveals with sound in a larger view">
-        <video id="reveal-preview" muted playsinline preload="none" poster="assets/videos/new-players-poster.jpg" aria-label="Alexander, Momo, Manuel and legendary Giorgios card reveal">
-          <source src="assets/videos/new-players-reveal.mp4" type="video/mp4">
-        </video>
-        <span class="feature-video-hint">↗ Watch with sound</span>
-      </button>
-      <button type="button" class="feature-next" id="feature-next">Next</button>
-      </div>
+    <section class="ballot" id="ballon-dor" aria-labelledby="ballot-title">
+      <button type="button" class="award-card" id="ballot-open" aria-haspopup="dialog" aria-controls="ballot-preview" aria-label="Preview Ballon d’Or voting options"><img src="assets/ballon-dor.png" alt="GrandeAmore Ballon d’Or — golden football trophy"></button>
+      <div class="ballot-body"><p class="eyebrow">Tournament MVP · 18 October 2026</p><h2 id="ballot-title">Who deserves the Ballon d’Or?</h2><div class="ballot-clock"><div id="ballot-countdown" role="timer"></div><p>Voting opens today at 18:30 · Vienna time</p></div><button type="button" class="button" id="ballot-preview-open">Preview today’s candidates</button><p class="small-note">Choose one tournament MVP. Please vote only once.</p></div>
     </section>
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
@@ -323,8 +317,8 @@
     </section>
   </main>
 <dialog id="memory-lightbox" aria-label="Enlarged team photo"><button class="close" id="memory-close" type="button" aria-label="Close enlarged photo">×</button><img id="memory-large" alt=""><p id="memory-large-date"></p></dialog>
-<dialog id="reveal-dialog" class="reveal-dialog" aria-label="New player card reveals"><button class="close" id="reveal-close" type="button" aria-label="Close player reveal">×</button><video id="reveal-large" controls playsinline preload="none" poster="assets/videos/new-players-poster.jpg"><source src="assets/videos/new-players-reveal.mp4" type="video/mp4">Your browser does not support video playback.</video></dialog>
-<dialog id="award-results-dialog" class="award-results-dialog" aria-labelledby="award-results-title"><button type="button" class="close" id="award-results-close" aria-label="Close final poll results">×</button><p class="eyebrow">11 October 2026 · Tournament MVP</p><h2 id="award-results-title">Final Ballon d’Or results</h2><p id="award-results-summary"></p><div id="award-results-list"></div></dialog>
+<dialog id="ballot-preview" aria-labelledby="ballot-preview-title"><button type="button" class="close" id="ballot-preview-close" aria-label="Close voting preview">×</button><p class="eyebrow">18 October 2026 · Tournament MVP</p><h2 id="ballot-preview-title">Today’s Ballon d’Or candidates</h2><p id="ballot-preview-status"></p><div id="ballot-teams" class="ballot-teams"></div><div id="ballot-results" hidden tabindex="-1" aria-labelledby="ballot-results-title"><h3 id="ballot-results-title">Preliminary results</h3><p id="ballot-results-summary"></p><div id="ballot-results-list"></div></div><button type="button" class="ballot-results-toggle" id="ballot-results-toggle">View preliminary results</button><p id="ballot-selection" aria-live="polite"></p></dialog>
+<dialog id="ballot-confirm-dialog" aria-labelledby="ballot-confirm-name"><h2 id="ballot-confirm-name"></h2><p>Choose one tournament MVP. Please vote only once.</p><button class="button" id="ballot-submit">Confirm vote</button> <button class="button" id="ballot-cancel">Cancel</button></dialog>
   <dialog id="player-dialog" aria-labelledby="detail-name"><div id="player-detail"></div></dialog>
 
   <dialog id="fight-confirm-dialog" aria-labelledby="fight-confirm-text" style="background:#17172b;color:white;padding:28px;border:2px solid #ffd968;text-align:center"><h2 id="fight-confirm-text" role="status">Saving your vote…</h2></dialog>
@@ -336,8 +330,8 @@
 <script src="matches.js?v=20261018-andreeas"></script>
 <script src="season.js?v=20261013-season"></script>
 <script src="memories.js"></script>
-<script src="ballot-results.js?v=20261012-final"></script>
-<script src="home-highlights.js?v=20261016-two-reveals"></script>
+<script src="ballot-online.js?v=20261018-official"></script>
+
 <script src="fight.js?v=20261014-calibration60"></script>
 </body>
 </html>

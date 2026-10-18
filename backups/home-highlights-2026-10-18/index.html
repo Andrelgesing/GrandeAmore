@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Grande Amore football team — our home for matches, player stats and team news.">
+  <title>Grande Amore | Football Team</title>
+  <style>
+    :root { color-scheme: light; --green: #173e32; --cream: #f6f4ed; --muted: #65736b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); color: var(--green); font-family: system-ui, sans-serif; line-height: 1.6; }
+    header, main, footer { max-width: 1060px; margin: auto; padding: 24px; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .brand { font-weight: 800; letter-spacing: .06em; text-decoration: none; }
+    nav { display: flex; gap: 24px; }
+    a { color: inherit; text-underline-offset: 5px; }
+    nav a { font-size: .9rem; }
+    .hero { padding: 70px 0 60px; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: .75rem; font-weight: 700; }
+    h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 1.05; letter-spacing: -.06em; margin: 20px 0; }
+    .intro { color: var(--muted); font-size: clamp(3rem, 8vw, 6rem); line-height: 1.05; letter-spacing: -.06em; font-weight: 700; margin: 20px 0; }
+    .button { display: inline-block; padding: 12px 22px; background: var(--green); color: white; border-radius: 6px; text-decoration: none; margin-top: 16px; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .home-player-photos { display: flex; gap: 10px; margin-top: 18px; }
+    .home-player-photos img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid var(--cream); }
+    article { padding: 26px; background: white; border: 1px solid #dce2d9; border-radius: 12px; scroll-margin-top: 24px; }
+    .card-link { display: block; padding: 26px; background: white; border: 1px solid #dce2d9; border-radius: 12px; text-decoration: none; }
+    .card-link:hover { border-color: var(--green); }
+    .card-link p { color: var(--muted); margin-bottom: 0; }
+    h2 { margin: 12px 0; font-size: 1.3rem; }
+    article p { color: var(--muted); margin-bottom: 0; }
+    .number { font-size: .8rem; font-weight: 700; color: var(--muted); }
+    .team { margin-top: 30px; padding: 30px 0; border-top: 1px solid #dce2d9; }
+    .team p { color: var(--muted); max-width: 650px; }
+    footer { font-size: .85rem; color: var(--muted); padding-top: 10px; padding-bottom: 35px; }
+    a:focus-visible { outline: 3px solid #b17f25; outline-offset: 5px; }
+    @media (max-width: 650px) { header { flex-direction: column; align-items: flex-start; } .hero { padding: 35px 0; } .cards { grid-template-columns: 1fr; } nav { gap: 20px; } }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 50px; }
+    .stats-grid > article { min-width: 0; }
+    .goals-list { display: grid; gap: 9px; }
+    .goal-row.player-card { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; text-align: left; }
+    .goal-photo { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #ffffff80; font-weight: 700; }
+    .goal-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .goal-name { min-width: 0; overflow-wrap: anywhere; font-weight: 700; }
+    .goal-count { margin-left: auto; white-space: nowrap; font-weight: 700; }
+    .mvp-panel { grid-column: 1 / -1; }
+    .table-wrap { overflow-x: auto; margin-top: 24px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+    th, td { padding: 14px 10px; border-bottom: 1px solid #dce2d9; }
+    td .stars { white-space: nowrap; }
+    .season-panel { max-width: 592px; margin: 24px 0 50px; padding: 0 12px 12px; background: white; border: 1px solid #dce2d9; border-radius: 12px; }
+    .season-table { table-layout: fixed; }
+    .season-table th, .season-table td { padding: 10px 6px; }
+    .season-table th:first-child { width: 48px; }
+    .season-table th:nth-child(2) { width: 192px; }
+    .season-table td:nth-child(n+3), .season-table th:nth-child(n+3) { text-align: center; font-variant-numeric: tabular-nums; }
+    .season-table td:nth-child(3) { font-weight: 800; }
+    .season-table tbody tr:first-child { background: #f6efd9; }
+    .season-player { display: flex; align-items: center; gap: 8px; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+    .season-player:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .season-player { width: 100%; min-width: 0; }
+    .season-player > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+    @media (max-width: 650px) {
+      .season-panel { padding: 0 6px 10px; }
+      .season-table th, .season-table td { padding: 10px 3px; font-size: .75rem; letter-spacing: 0; }
+      .season-table th { font-size: .5rem; padding-left: 1px; padding-right: 1px; }
+      .season-table th:first-child { width: 10%; }
+      .season-table th:nth-child(2) { width: 36%; }
+      .season-table th:nth-child(n+3) { width: 13%; }
+      .season-table th:nth-child(5) { width: 15%; }
+      .season-player { gap: 5px; }
+      .season-player .mvp-photo { width: 28px; height: 28px; }
+    }
+    .elo-adjustment { white-space: nowrap; font-weight: 700; }
+    .elo-gain { color: #18743c; }
+    .elo-loss { color: #b83232; }
+    .mvp-name { font-weight: 700; }
+    .mvp-identity { display: flex; align-items: center; gap: 12px; }
+    .mvp-photo { width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #d8dfe3; color: #233b34; }
+    .mvp-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .mvp-name .legendary-badge { margin: 0 0 0 8px; }
+    @media (max-width: 650px) { .stats-grid { grid-template-columns: 1fr; } }
+    .match-date { display: inline-block; padding: 8px 14px; border: 1px solid #dce2d9; border-radius: 30px; background: white; font-weight: 700; }
+    .match-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 30px 0 50px; }
+    .match-team { --team-color: #f5d478; padding: 0; overflow: hidden; }
+    .match-team-2 { --team-color: #a3d7ff; }
+    .match-team-3 { --team-color: #f5aaa7; }
+    .match-team-4 { --team-color: #d0b6ff; }
+    .match-team-heading { padding: 20px 24px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; border-top: 5px solid var(--team-color); }
+    .match-team-heading h2 { margin: 0; }
+    .match-points { grid-column: 2; text-align: center; font-size: 1.8rem; font-weight: 800; white-space: nowrap; }
+    .match-team-champions .match-team-heading { border-top: 0; }
+    .match-champions { padding: 14px 24px; background: var(--team-color); color: #39231f; text-align: center; font-size: 1.35rem; font-weight: 800; letter-spacing: .04em; }
+    .match-average { grid-column: 3; justify-self: end; min-width: 0; text-align: right; line-height: 1.4; }
+    .match-average .stars { display: inline; margin: 0 6px 0 0; color: #9a7023; }
+    .match-average > span:last-child { display: block; font-size: .7rem; color: var(--muted); margin-top: 5px; }
+    .match-pitch { position: relative; isolation: isolate; min-height: 560px; padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; color: white; background: repeating-linear-gradient(180deg, #265c43 0, #265c43 70px, #2b654a 70px, #2b654a 140px); }
+    .match-pitch::before { content: ''; position: absolute; inset: 12px; border: 1px solid #ffffff60; z-index: -1; }
+    .match-pitch::after { content: ''; position: absolute; bottom: 12px; left: 30%; width: 40%; height: 95px; border: 1px solid #ffffff60; border-bottom: 0; z-index: -1; }
+    .pitch-center { position: absolute; top: 50%; left: 12px; right: 12px; height: 1px; background: #ffffff60; z-index: -1; }
+    .pitch-center::after { content: ''; position: absolute; width: 100px; height: 100px; border: 1px solid #ffffff60; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .pitch-row { display: flex; justify-content: space-evenly; align-items: flex-start; gap: 6px; }
+    .pitch-player { width: 120px; min-width: 0; text-align: center; line-height: 1.25; }
+    .match-portrait { display: grid; place-items: center; width: 48px; height: 48px; transform: translateY(-8px) scale(1.56); margin: 0 auto 7px; border: 3px solid var(--metal, #d8dfe3); border-radius: 50%; background: #173e32; font-weight: 800; }
+    .match-portrait { padding: 0; color: white; font-family: inherit; }
+    .match-portrait:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .match-photo { position: relative; width: 48px; margin: 0 auto; }
+    .match-captain { position: absolute; top: 23px; right: -27px; z-index: 1; width: 23px; padding: 1px 0; border: 2px solid #b28b2c; border-radius: 5px; background: #ffe082; color: #302812; font-size: .7rem; font-weight: 800; line-height: 1.15; pointer-events: none; }
+    .match-archive { margin: 0 0 40px; }
+    .match-archive h2 { margin-bottom: 12px; }
+    .match-archive-figure { margin: 20px 0; overflow-x: auto; }
+    .match-archive-figure img { display: block; width: 100%; min-width: 760px; height: auto; border-radius: 12px; }
+    .match-portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .match-player-name { display: block; font-size: .8rem; font-weight: 700; overflow-wrap: anywhere; }
+    .pitch-player .stars { margin: 5px 0; color: #ffe097; font-size: .75rem; letter-spacing: .03em; white-space: nowrap; }
+    .match-position { display: block; color: #e0ece3; font-size: .62rem; }
+    @media (max-width: 760px) { .match-teams { grid-template-columns: 1fr; } }
+    @media (max-width: 380px) { .match-team-heading { padding: 16px 12px; } .match-average .stars { display: block; } .match-pitch { padding: 24px 10px; } }
+    @media (max-width: 650px) {
+      header, main, footer { padding-left: 16px; padding-right: 16px; }
+      nav { gap: 4px 16px; }
+      nav a { display: inline-flex; align-items: center; min-height: 44px; }
+      .squad-heading h1 { overflow-wrap: anywhere; }
+      .match-team-heading h2 { flex-shrink: 0; }
+      .match-average { min-width: 0; }
+      .match-average .stars { display: block; margin-right: 0; }
+      .pitch-player { flex: 0 1 120px; }
+    }
+    .memory-gallery { margin: 0 0 40px; background: white; border: 1px solid #dce2d9; border-radius: 16px; overflow: hidden; }
+    .memory-frame { width: 100%; border: 0; padding: 0; cursor: zoom-in; background: #10261e; height: clamp(260px, 55vw, 570px); display: flex; align-items: center; justify-content: center; }
+    .memory-frame img { width: 100%; height: 100%; object-fit: contain; }
+    .memory-gallery figcaption { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 24px; }
+    .memory-gallery time { font-weight: 700; }
+    .memory-source { display: block; color: var(--muted); }
+    .memory-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 0 16px 24px; }
+    .memory-controls button { border: 1px solid #dce2d9; border-radius: 6px; background: var(--cream); color: var(--green); padding: 10px 16px; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .ballot { margin-bottom: 28px; border: 2px solid #c79d51; border-radius: 16px; overflow: hidden; background: #091a25; color: #f8ead0; }
+    .award-card { display: block; width: 100%; padding: 0; border: 0; color: inherit; background: transparent; text-align: left; cursor: pointer; }
+    .award-card img { display: block; width: 100%; }
+    .home-feature-stage { aspect-ratio: 2 / 1; position: relative; background: #091a25; }
+    .home-feature-stage > .award-card, .home-feature-stage > .feature-video-open { width: 100%; height: 100%; }
+    .home-feature-stage img, .home-feature-stage video { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .feature-video-open { border: 0; padding: 0; background: #091a25; position: relative; color: #fff; }
+    .feature-video-hint { position: absolute; bottom: 10px; left: 12px; background: #091a25dc; padding: 6px 10px; border-radius: 20px; font-size: .75rem; pointer-events: none; }
+    .feature-next { position: absolute; bottom: 10px; right: 12px; z-index: 1; border: 1px solid #c79d5160; border-radius: 20px; padding: 6px 12px; background: #091a25dc; color: #f8ead0; font: inherit; font-size: .75rem; }
+    .feature-next:hover { background: #173b35; }
+    .ballot button:focus-visible { outline: 3px solid #f3cd81; outline-offset: -4px; }
+    dialog.reveal-dialog { width: min(1100px, calc(100% - 24px)); max-width: 1100px; background: #091a25; padding: 48px 12px 12px; box-sizing: border-box; }
+    .reveal-dialog video { display: block; width: 100%; max-height: calc(100dvh - 100px); }
+    .reveal-dialog .close { color: #091a25; z-index: 1; }
+    @media (max-width: 650px) {
+      .home-feature-stage.showing-players { aspect-ratio: 9 / 16; }
+      dialog.reveal-dialog { width: min(calc(100% - 24px), calc((100dvh - 80px) * 9 / 16 + 24px)); }
+    }
+    dialog.award-results-dialog { width: min(640px, calc(100% - 32px)); padding: 30px; box-sizing: border-box; background: #091a25; color: #f8ead0; }
+    .award-results-dialog .close { color: #f8ead0; }
+    @media (max-width: 650px) { dialog.award-results-dialog { padding: 24px 18px; } .award-results-dialog .ballot-result-row { gap: 8px; font-size: .85rem; } }
+    .ballot-banner img { width: 100%; display: block; }
+    .ballot-body { padding: 26px; text-align: center; }
+    .ballot-body h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+    .ballot-clock { padding: 16px; margin: 20px 0; background: #ffffff09; border: 1px solid #c79d5140; border-radius: 10px; }
+    #ballot-countdown { font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800; font-variant-numeric: tabular-nums; color: #f3cd81; }
+    .ballot-clock p { margin: 8px 0 0; font-size: .85rem; }
+    .ballot-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; text-align: left; }
+    .ballot-team { border: 1px solid #ffffff25; padding: 16px; border-radius: 12px; }
+    .ballot-team h3 { margin: 0 0 14px; border-bottom: 3px solid var(--ballot-color); padding-bottom: 8px; }
+    .ballot-candidates { display: grid; gap: 8px; }
+    .ballot-candidate { display: flex; align-items: center; gap: 12px; padding: 8px 12px; width: 100%; border: 2px solid transparent; border-radius: 8px; color: inherit; background: #ffffff09; text-align: left; }
+    .ballot-candidate[aria-pressed="true"] { border-color: #f3cd81; background: #c79d5125; }
+    .ballot-avatar { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: #ffffff18; overflow: hidden; }
+    .ballot-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ballot-candidate:disabled { cursor: default; }
+    .ballot-results-toggle { display: block; margin: 20px auto; padding: 10px 16px; border: 1px solid #c79d51; border-radius: 8px; background: transparent; color: #f8ead0; }
+    .ballot-result-row { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px; text-align: left; padding: 12px 0; border-bottom: 1px solid #ffffff18; }
+    .ballot-result-bar { display: block; height: 6px; background: #ffffff18; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+    .ballot-result-fill { display: block; height: 100%; background: #f3cd81; }
+    .ballot .button { background: #f3cd81; color: #091a25; border: 0; }
+    .ballot .button:disabled { opacity: .45; cursor: default; }
+    @media (max-width: 650px) { .ballot-teams { grid-template-columns: 1fr; } .ballot-body { padding: 18px; } }
+    .fight { margin: 0 0 28px; border-radius: 16px; overflow: hidden; background: #161626; color: #fff; border: 2px solid #eabc53; }
+    .fight-header, .fight-actions { padding: 22px 26px; text-align: center; }
+    .fight-header h2 { font-size: clamp(1.7rem, 5vw, 2.5rem); text-transform: uppercase; font-style: italic; color: #ffd968; text-shadow: 3px 3px #bd3546; }
+    .fight-header p { margin-bottom: 0; }
+    .arena { background-size: cover; background-position: center; padding: 30px 20px; }
+    .fight-options { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; max-width: 650px; margin: auto; }
+    .fighter { border: 3px solid #fff8; border-radius: 10px; background: #0c102bd9; color: white; padding: 16px; min-width: 0; }
+    .fighter[aria-pressed="true"] { border-color: #ffd968; box-shadow: 0 0 25px #ffcc4670; }
+    .fighter .portrait { width: min(182px, 100%); height: auto; aspect-ratio: 1; color: white; background: #50516d; }
+    .fighter img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .fighter-reveal { animation: fighter-reveal 0.5s ease-out both; }
+    @keyframes fighter-reveal { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+    @media (prefers-reduced-motion: reduce) { .fighter-reveal { animation: none; } }
+    .fighter-name { display: block; font-weight: 800; overflow-wrap: anywhere; }
+    .versus { font-size: 1.8rem; font-weight: 900; font-style: italic; color: #ffdd61; text-shadow: 2px 2px #ad2937; }
+    .fight .button { border: 1px solid #fbd267; background: #fbd267; color: #20182f; margin-top: 0; }
+    .fight-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .fight .fight-skip { background: transparent; color: #fbd267; }
+    .fight button:disabled { opacity: .5; cursor: default; }
+    #fight-result { background: #17172b; color: white; padding: 28px; border: 2px solid #ffd968; text-align: center; }
+    #fight-result::backdrop { background: #10261e80; backdrop-filter: blur(8px); }
+    [hidden] { display: none !important; }
+    button { font: inherit; cursor: pointer; }
+    .squad-heading { margin: 38px 0 24px; }
+    .squad-heading h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+    .squad-heading p { color: var(--muted); }
+    .player-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-bottom: 50px; }
+    .player-card { --metal: #d8dfe3; --shine: #f6f8fa; --edge: #b0bec5; background: linear-gradient(135deg, var(--shine), var(--metal)); border: 1px solid var(--edge); border-radius: 18px; padding: 22px 16px; text-align: center; color: #233b34; position: relative; overflow: hidden; }
+    button.player-card { transition: transform .18s, box-shadow .18s; }
+    button.player-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px #173e3218; }
+    .gold { --metal: #e6c467; --shine: #fff4cc; --edge: #c3a04b; }
+    .legendary { --metal: #b296dc; --shine: #e9ddfa; --edge: #8964b9; color: #35204e; }
+    .legendary .stars { color: #573487; }
+    .bronze { --metal: #cd9b79; --shine: #f5ded0; --edge: #ae7956; }
+    .player-card .position { font-size: .75rem; font-weight: 800; letter-spacing: .12em; }
+    .secondary-position { display: block; font-weight: 500; margin-top: 3px; }
+    .portrait { width: 86px; height: 86px; border-radius: 50%; background: #ffffff80; border: 1px solid #ffffff; display: grid; place-items: center; margin: 18px auto; font-size: 1.7rem; font-weight: 800; }
+    #player-grid .portrait { width: 111.8px; height: 111.8px; }
+    .portrait, .match-portrait { overflow: hidden; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+    .portrait img, .match-portrait img { display: block; min-width: 0; min-height: 0; }
+    img[src="players/lucas.jpg"] { object-fit: contain !important; background: white; }
+    img[src="players/momo.jpg"] { object-position: 50% 70%; }
+    .player-name { display: block; font-size: 1.1rem; font-weight: 800; overflow-wrap: anywhere; }
+    .stars { display: block; color: #385749; letter-spacing: .13em; margin: 8px 0; }
+    .star { position: relative; display: inline-block; }
+    .star.full::after, .star.half::after { content: '★'; position: absolute; left: 0; top: 0; overflow: hidden; width: 100%; }
+    .star.half::after { width: 50%; }
+    .tier { display: block; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+    .legendary-badge { display: inline-block; margin-top: 12px; padding: 4px 12px; border: 1px solid #7959ad; border-radius: 20px; background: #eee5ff; color: #573487; font-size: .72rem; font-weight: 800; letter-spacing: .07em; }
+    dialog { border: 0; padding: 0; border-radius: 22px; width: min(420px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; background: transparent; box-shadow: 0 25px 90px #0005; }
+    dialog::backdrop { background: #10261e80; backdrop-filter: blur(8px); }
+    #memory-lightbox { width: calc(100% - 32px); max-width: 1500px; background: #10261e; color: white; padding: 48px 12px 12px; }
+    #memory-large { display: block; width: 100%; height: calc(100dvh - 150px); object-fit: contain; }
+    #memory-large-date { margin: 12px 0 0; text-align: center; }
+    #memory-close { color: #10261e; }
+    dialog .player-card { padding: 35px 28px; }
+    dialog .portrait { width: 180px; height: 180px; font-size: 2.4rem; }
+    dialog .player-name { font-size: 1.7rem; }
+    .close { position: absolute; right: 14px; top: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #ffffff90; font-size: 1.3rem; }
+    .fun-stats { border-top: 1px solid #233b3425; margin-top: 24px; padding-top: 16px; }
+    .stat { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: .9rem; text-align: left; }
+    .stat .stars { white-space: nowrap; font-size: .85rem; letter-spacing: .03em; }
+    .small-note { font-size: .75rem; opacity: .7; }
+    body.modal-open { overflow: hidden; }
+    nav { flex-wrap: wrap; }
+    button:focus-visible { outline: 3px solid #b17f25; outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) { button.player-card { transition: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="#home">GRANDE AMORE FC</a>
+    <nav aria-label="Main navigation"><a href="#home">Home</a><a href="#players">Players</a><a href="#matches">Matches</a><a href="#stats">Stats</a><a href="#season-2026-2027">2026/2027 Season</a><a href="#memory-lane">Memory lane</a></nav>
+  </header>
+  <main>
+    <div id="home-view"><span id="home"></span>
+    <section class="hero" aria-labelledby="welcome">
+      <div class="eyebrow">Football. Friends. Grande Amore.</div>
+      <h1 id="welcome">One team.<br>One great love.</h1>
+      <p class="intro">Simply Grande Amore</p>
+    </section>
+    <section class="ballot" id="ballon-dor" aria-label="Team highlights" aria-roledescription="carousel">
+      <div class="home-feature-stage">
+      <button type="button" class="award-card" id="award-results-open" aria-haspopup="dialog" aria-controls="award-results-dialog" aria-label="View final Ballon d’Or poll results">
+        <span id="ballot-title" class="visually-hidden">1st GrandeAmore ballon d’or — Enil, tournament MVP</span>
+        <img src="assets/ballon-dor-enil.png" alt="Enil holding the Ballon d’Or above the 1st GrandeAmore ballon d’or title">
+      </button>
+      <button type="button" id="reveal-open" class="feature-video-open" hidden aria-haspopup="dialog" aria-controls="reveal-dialog" aria-label="Watch the new player reveals with sound in a larger view">
+        <video id="reveal-preview" muted playsinline preload="none" poster="assets/videos/new-players-poster.jpg" aria-label="Alexander, Momo, Manuel and legendary Giorgios card reveal">
+          <source src="assets/videos/new-players-reveal.mp4" type="video/mp4">
+        </video>
+        <span class="feature-video-hint">↗ Watch with sound</span>
+      </button>
+      <button type="button" class="feature-next" id="feature-next">Next</button>
+      </div>
+    </section>
+    <section class="fight" aria-labelledby="fight-title">
+      <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
+      <div class="arena" id="fight-arena"><div id="fight-options" class="fight-options"></div></div>
+      <div class="fight-actions"><p id="fight-selection" aria-live="polite">Choose your fighter.</p><div class="fight-buttons"><button class="button fight-skip" id="fight-skip" type="button">Next</button></div></div>
+    </section>
+    <div class="cards">
+      <a class="card-link" href="#players"><span class="number">THE SQUAD / PLAYERS</span><h2>Meet the team</h2><p>The faces behind Grande Amore. Explore our players and their cards.</p><div class="home-player-photos" id="home-player-photos"></div></a>
+      <a class="card-link" href="#matches"><span class="number">01 / MATCHES</span><h2>The next kick-off</h2><p>See the teams that will play this Sunday!</p></a>
+      <a class="card-link" href="#stats"><span class="number">02 / STATS</span><h2>The team in numbers</h2><p>Top scorers, assists and our top 10 players.</p></a>
+      <a class="card-link" href="#memory-lane"><span class="number">03 / MEMORY LANE</span><h2>A look back</h2><p>A look back at our matches, shared moments and memories on and off the pitch.</p></a>
+    </div>
+    <section class="team" id="team" aria-labelledby="about"><h2 id="about">Our team</h2><p>Grande Amore is about enjoying football together.</p></section>
+    </div>
+    <section id="players-view" hidden aria-labelledby="players-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / The squad</div><h1 id="players-title">Meet the players.</h1><p id="squad-summary">Our players. One team.</p><p class="small-note">Bronze: below 2.5★ · Silver: 2.5–below 3.75★ · Gold: 3.75–5★<br>✦ Reaching 5★ earns Legendary status. Existing Legendary honors remain.</p></div>
+      <div class="player-grid" id="player-grid"></div>
+    </section>
+    <section id="matches-view" hidden aria-labelledby="matches-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament</h1><time class="match-date" datetime="2026-10-18">Sunday · 18 October 2026</time></div>
+      <div id="match-teams" class="match-teams"></div>
+      <section class="match-archive" aria-labelledby="match-archive-title">
+        <h2 id="match-archive-title">Previous tournament</h2>
+        <time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time>
+        <figure class="match-archive-figure"><img src="assets/tournament-2026-10-11.png" width="1600" height="650" loading="lazy" alt="11 October lineups, ordered by finish: Champions Team 3, 7 points; Team 4, 4 points; Team 1, 3 points; Team 2, 3 points."></figure>
+      </section>
+    </section>
+    <section id="memory-lane-view" hidden aria-labelledby="memory-lane-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Memory lane</div><h1 id="memory-lane-title">A look back.</h1><p>Our matches, shared moments and memories on and off the pitch.</p></div>
+      <figure class="memory-gallery" aria-label="Team memories slideshow">
+        <button type="button" class="memory-frame" id="memory-open" aria-label="Enlarge this photo" aria-haspopup="dialog"><img id="memory-image" alt="Grande Amore team memory"></button>
+        <figcaption><div><time id="memory-date"></time><span class="small-note memory-source">Date from filename</span></div><span id="memory-count"></span></figcaption>
+        <div class="memory-controls"><button type="button" id="memory-prev" aria-label="Previous photo">← Previous</button><button type="button" id="memory-pause">Pause slideshow</button><button type="button" id="memory-next" aria-label="Next photo">Next →</button></div>
+      </figure>
+    </section>
+    <section id="season-view" hidden aria-labelledby="season-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Season standings</div><h1 id="season-title">2026/2027 Season</h1><p>Every point. Every goal. Every assist.</p></div>
+      <div class="season-panel"><div class="table-wrap" tabindex="0" role="region" aria-label="Season standings" ><table class="season-table" aria-describedby="season-method"><thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Pts</th><th scope="col">Goals</th><th scope="col">Assists</th><th scope="col">MP</th></tr></thead><tbody id="season-list"></tbody></table></div><p class="small-note" id="season-method">Ordered by points, then goals, then assists. Players equal on all three share a rank. MP = matches played.</p></div>
+    </section>
+    <section id="stats-view" hidden aria-labelledby="stats-title">
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Stats</div><h1 id="stats-title">Every contribution counts.</h1><p>Goals, assists and the players making a difference.</p></div>
+      <div class="stats-grid">
+        <article><span class="number">01 / GOALS</span><h2>Top Scorer</h2><div id="goals-list" class="goals-list" aria-label="Goals leaderboard"></div></article>
+        <article><span class="number">02 / PLAYMAKERS</span><h2>Assists</h2><div id="assists-list" class="goals-list" aria-label="Assists leaderboard"></div></article>
+        <article class="mvp-panel"><span class="number">03 / MVP</span><h2 id="mvp-title">Grande Amore top 10</h2><p class="small-note" id="mvp-method">Based on current Elo. Equal Elo scores share a rank; ties use original roster order. 11 October tournament placement adjustments appear beside Elo. Legendary status does not affect ranking.</p><div class="table-wrap"><table aria-describedby="mvp-method"><thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Position</th><th scope="col">Rating</th><th scope="col">Elo</th></tr></thead><tbody id="mvp-list"></tbody></table></div><button class="button" id="mvp-toggle" type="button" aria-controls="mvp-list" aria-expanded="false">Show top 20</button></article>
+      </div>
+    </section>
+  </main>
+<dialog id="memory-lightbox" aria-label="Enlarged team photo"><button class="close" id="memory-close" type="button" aria-label="Close enlarged photo">×</button><img id="memory-large" alt=""><p id="memory-large-date"></p></dialog>
+<dialog id="reveal-dialog" class="reveal-dialog" aria-label="New player card reveals"><button class="close" id="reveal-close" type="button" aria-label="Close player reveal">×</button><video id="reveal-large" controls playsinline preload="none" poster="assets/videos/new-players-poster.jpg"><source src="assets/videos/new-players-reveal.mp4" type="video/mp4">Your browser does not support video playback.</video></dialog>
+<dialog id="award-results-dialog" class="award-results-dialog" aria-labelledby="award-results-title"><button type="button" class="close" id="award-results-close" aria-label="Close final poll results">×</button><p class="eyebrow">11 October 2026 · Tournament MVP</p><h2 id="award-results-title">Final Ballon d’Or results</h2><p id="award-results-summary"></p><div id="award-results-list"></div></dialog>
+  <dialog id="player-dialog" aria-labelledby="detail-name"><div id="player-detail"></div></dialog>
+
+  <dialog id="fight-confirm-dialog" aria-labelledby="fight-confirm-text" style="background:#17172b;color:white;padding:28px;border:2px solid #ffd968;text-align:center"><h2 id="fight-confirm-text" role="status">Saving your vote…</h2></dialog>
+  <footer>Grande Amore FC · Together on and off the pitch.</footer>
+<script src="config.js"></script>
+<script src="placement-preview.js"></script>
+<script src="players.js?v=20261018-ronaldo2"></script>
+<script src="goals.js?v=20261012-corrected-goals"></script>
+<script src="matches.js?v=20261018-teams"></script>
+<script src="season.js?v=20261013-season"></script>
+<script src="memories.js"></script>
+<script src="ballot-results.js?v=20261012-final"></script>
+<script src="home-highlights.js?v=20261016-two-reveals"></script>
+<script src="fight.js?v=20261014-calibration60"></script>
+</body>
+</html>
