@@ -26,56 +26,52 @@ vm.runInContext('const players = roster.map(([name, position, elo, photo], roste
 vm.runInContext(playerSource.slice(playerSource.indexOf('const tier ='), playerSource.indexOf('function stars')), context);
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8'), context);
-const expected = [
-  ['Hay', 'Omar', 'Daniel', 'Paolo', 'Jack', 'Takunda', 'AlexG'],
-  ['Samu', 'Iacob', 'Levi', 'Nikita', 'Dejan', 'davideb', 'Andre'],
-  ['Ali', 'Loay', 'Andreeas', 'Danilo', 'Darius', 'Enil', 'Milan'],
-  ['Lucas', 'gabi', 'fabian', 'Mohamed', 'Baraa', 'Valentin', 'Fabien']
-];
-const config = JSON.parse(vm.runInContext('JSON.stringify(sundayMatch)', context));
+const expected = [["Vasilis", "fabian", "Iacob", "Giorgios", "Alexandre", "Mostafa", "Leandro"], ["Ronaldo", "Manuel", "Levi", "Jack", "Nikita", "Yahya", "gabi"], ["Shahrom", "Raul", "Momo", "Ali", "Paolo", "davideb", "Lucas"], ["Hay", "Loay", "David", "Martin", "Marco", "Johny", "Chris"]];
+const config = JSON.parse(vm.runInContext('JSON.stringify(currentMatch)', context));
 assert.deepEqual(config.teams, expected);
+assert.equal(config.date, '2026-10-18');
+assert.deepEqual(config.captains, ['Giorgios', 'Jack', 'Shahrom', 'Loay']);
 assert.equal(new Set(config.teams.flat()).size, 28);
-assert.deepEqual(config.unavailable, ['Shahrom', 'Damien', '@~❄️']);
+assert(!config.teams.flat().includes('Dejan'));
+assert(config.teams[2].includes('Raul'));
+assert(config.teams[0].includes('Giorgios') && config.teams[0].includes('Vasilis'));
+assert.deepEqual([...config.teams[3]].sort(), ['Loay','Martin','Chris','Hay','Marco','Johny','David'].sort());
 const descendants = element => [element, ...element.children.flatMap(descendants)];
 const lineups = () => grid.children.map(card => descendants(card).filter(e => e.className === 'match-player-name').map(e => e.textContent));
-// The pitch orders players by formation. All names are unique and assigned as approved.
-assert.deepEqual(lineups(), [expected[2], expected[3], expected[0], expected[1]]);
+assert.deepEqual(lineups(), expected);
 const players = vm.runInContext('players', context);
-for (const team of expected) {
-  assert.equal(team.length, 7);
-  if (team.includes('Andre')) for (const other of ['AlexG', 'Ali', 'Lucas']) assert(!team.includes(other));
-  assert(team.slice(3, 6).filter(name => players.find(p => p.name === name).position.split('/').includes('CB')).length >= 2);
-}
-let rendered = descendants(grid);
-assert.equal(rendered.filter(e => e.className === 'stars').length, 32);
-assert.equal(rendered.filter(e => e.tag === 'img').length, players.filter(p => expected.flat().includes(p.name) && p.photo).length);
-for (const player of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname, player.photo)));
-const danilo = descendants(grid).find(e => e.className?.startsWith('match-portrait ') && e.attributes['aria-label'] === 'View Danilo player card');
-assert.equal(danilo.tag, 'button');
-assert.equal(danilo.attributes['aria-haspopup'], 'dialog');
-assert.equal(danilo.children[0].src, 'players/danilo.jpg');
-danilo.listeners.click();
-assert.equal(openedPlayer, 'Danilo');
+const before = JSON.stringify(players);
 const originalCards = grid.children;
 listeners['ratings-updated']();
 assert.equal(grid.children, originalCards);
+assert.equal(JSON.stringify(players), before);
+for (const [i, card] of grid.children.entries()) {
+ const all = descendants(card);
+ assert.equal(all.filter(e => e.className === 'match-captain').length, 1);
+ const photo = all.find(e => e.className === 'match-photo' && e.children.some(c => c.className === 'match-captain'));
+ assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[i]} player card`);
+ assert.equal(all.filter(e => e.className === 'match-points').length, 0);
+ assert.equal(all.filter(e => e.className === 'match-champions').length, 0);
+}
+const raul = descendants(grid).find(e => e.attributes['aria-label'] === 'View Raul player card');
+assert.equal(raul.tag, 'button');
+raul.listeners.click(); assert.equal(openedPlayer, 'Raul');
 vm.runInContext("players.find(p => p.name === 'Hay').elo += 400; players.find(p => p.name === 'Hay').rating = 5;", context);
 listeners['ratings-updated']();
 assert.notEqual(grid.children, originalCards);
-assert.deepEqual(lineups(), [expected[2], expected[3], expected[0], expected[1]]); // Voting must never reshuffle approved lineups.
-rendered = descendants(grid.children[2]);
-assert(rendered.some(e => e.className === 'stars' && e.attributes['aria-label'] === '5 out of 5 stars'));
-const averageElo = expected[0].reduce((sum, name) => sum + players.find(p => p.name === name).elo, 0) / 7;
-assert(rendered.some(e => e.textContent === `Average stars · ${averageElo.toFixed(1)} Elo`));
-assert(rendered.some(e => e.textContent === 'GK'));
-assert(descendants(grid.children[0]).some(e => e.textContent === 'GK · covering (CM)'));
-assert.deepEqual(grid.children.map(card => descendants(card).find(e => e.tag === 'h2').textContent), ['Team 3', 'Team 4', 'Team 1', 'Team 2']);
-assert.equal(descendants(grid).filter(e => e.className === 'match-champions').length, 1);
-assert.equal(descendants(grid.children[0]).find(e => e.className === 'match-champions').textContent, 'Champions');
-assert.deepEqual(grid.children.map(card => descendants(card).find(e => e.className === 'match-points').textContent), ['7 pts', '4 pts', '3 pts', '3 pts']);
-for (const [elo, status, color] of [[800, null, 'bronze'], [1000, null, 'silver'], [1200, null, 'gold'], [1000, 'Legendary', 'legendary']]) {
-  const entry = { player: {name: 'Border check', position: 'CM', elo, rating: 3, status}, role: 'CM' };
-  const portrait = vm.runInContext('matchPlayer', context)(entry).children[0];
-  assert.equal(portrait.className, `match-portrait ${color}`);
+assert.deepEqual(lineups(), expected);
+for (const p of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname,p.photo)));
+// The completed fixture still supplies the season table, never today's new players.
+vm.runInContext('const tournamentGoals = []; const tournamentAssists = [];', context);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'season.js'),'utf8').split('function buildSeasonStandings')[0],context);
+const old = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[0])', context));
+assert.equal(old.date, '2026-10-11');
+assert(old.teams[1].includes('Dejan'));
+assert(!old.teams.flat().includes('Raul'));
+assert.deepEqual(old.standings.map(s=>s.team), [3,4,1,2]);
+assert.deepEqual(old.standings.map(s=>s.points), [7,4,3,3]);
+for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200,null,'gold'],[1000,'Legendary','legendary']]) {
+ const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'});
+ assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);
 }
-console.log('Passed: approved lineups, attendance, separation rules, defender coverage, portraits, live rating refresh without reshuffling, and covering labels.');
+console.log('Passed: current lineups, fixed team, paired players, captains, cards, read-only ratings, live refresh, and preserved historical season record.');

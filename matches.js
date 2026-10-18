@@ -46,6 +46,55 @@ const sundayMatch = {
     ]
   ]
 };
+// Current preview approved for 18 October. Historical constants above remain the season record.
+const currentMatch = {
+  "date": "2026-10-18",
+  "rankingRevision": 1302,
+  "teams": [
+    [
+      "Vasilis",
+      "fabian",
+      "Iacob",
+      "Giorgios",
+      "Alexandre",
+      "Mostafa",
+      "Leandro"
+    ],
+    [
+      "Ronaldo",
+      "Manuel",
+      "Levi",
+      "Jack",
+      "Nikita",
+      "Yahya",
+      "gabi"
+    ],
+    [
+      "Shahrom",
+      "Raul",
+      "Momo",
+      "Ali",
+      "Paolo",
+      "davideb",
+      "Lucas"
+    ],
+    [
+      "Hay",
+      "Loay",
+      "David",
+      "Martin",
+      "Marco",
+      "Johny",
+      "Chris"
+    ]
+  ],
+  "captains": [
+    "Giorgios",
+    "Jack",
+    "Shahrom",
+    "Loay"
+  ]
+};
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
@@ -144,14 +193,20 @@ function matchPlayer({ player, role }) {
   position.className = 'match-position';
   const covering = !player.position.split('/').includes(role);
   position.textContent = covering ? `${role} · covering (${player.position})` : role;
-  item.append(portrait, name, stars(player.rating), position);
+  const photo = document.createElement('div'); photo.className = 'match-photo';
+  photo.append(portrait);
+  if (currentMatch.captains.includes(player.name)) {
+    const captain = document.createElement('span'); captain.className = 'match-captain';
+    captain.textContent = 'C'; captain.setAttribute('aria-label', 'Captain'); photo.append(captain);
+  }
+  item.append(photo, name, stars(player.rating), position);
   return item;
 }
 
 let matchFingerprint = '';
 function renderMatches() {
   const byName = new Map(players.map(player => [player.name, player]));
-  const teams = sundayMatch.teams.map(names => names.map((name, index) => {
+  const teams = currentMatch.teams.map(names => names.map((name, index) => {
     const player = byName.get(name);
     if (!player) throw new Error(`Missing tournament player: ${name}`);
     return { player, role: matchRoles[index] };
@@ -162,7 +217,8 @@ function renderMatches() {
   matchFingerprint = fingerprint;
   const grid = document.querySelector('#match-teams');
   grid.replaceChildren();
-  matchStandings.forEach(standing => {
+  currentMatch.teams.forEach((_, teamIndex) => {
+    const standing = { team: teamIndex + 1, points: null };
     const index = standing.team - 1;
     const team = teams[index];
     const averageStars = team.reduce((sum, entry) => sum + entry.player.rating, 0) / team.length;

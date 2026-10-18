@@ -105,6 +105,12 @@
     .match-portrait { display: grid; place-items: center; width: 48px; height: 48px; transform: translateY(-8px) scale(1.56); margin: 0 auto 7px; border: 3px solid var(--metal, #d8dfe3); border-radius: 50%; background: #173e32; font-weight: 800; }
     .match-portrait { padding: 0; color: white; font-family: inherit; }
     .match-portrait:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .match-photo { position: relative; width: 48px; margin: 0 auto; }
+    .match-captain { position: absolute; top: 23px; right: -27px; z-index: 1; width: 23px; padding: 1px 0; border: 2px solid #b28b2c; border-radius: 5px; background: #ffe082; color: #302812; font-size: .7rem; font-weight: 800; line-height: 1.15; pointer-events: none; }
+    .match-archive { margin: 0 0 40px; }
+    .match-archive h2 { margin-bottom: 12px; }
+    .match-archive-figure { margin: 20px 0; overflow-x: auto; }
+    .match-archive-figure img { display: block; width: 100%; min-width: 760px; height: auto; border-radius: 12px; }
     .match-portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .match-player-name { display: block; font-size: .8rem; font-weight: 700; overflow-wrap: anywhere; }
     .pitch-player .stars { margin: 5px 0; color: #ffe097; font-size: .75rem; letter-spacing: .03em; white-space: nowrap; }
@@ -287,8 +293,13 @@
       <div class="player-grid" id="player-grid"></div>
     </section>
     <section id="matches-view" hidden aria-labelledby="matches-title">
-      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament!!!!</h1><time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time></div>
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament</h1><time class="match-date" datetime="2026-10-18">Sunday · 18 October 2026</time></div>
       <div id="match-teams" class="match-teams"></div>
+      <section class="match-archive" aria-labelledby="match-archive-title">
+        <h2 id="match-archive-title">Previous tournament</h2>
+        <time class="match-date" datetime="2026-10-11">Sunday · 11 October 2026</time>
+        <figure class="match-archive-figure"><img src="assets/tournament-2026-10-11.png" width="1600" height="650" loading="lazy" alt="11 October lineups, ordered by finish: Champions Team 3, 7 points; Team 4, 4 points; Team 1, 3 points; Team 2, 3 points."></figure>
+      </section>
     </section>
     <section id="memory-lane-view" hidden aria-labelledby="memory-lane-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Memory lane</div><h1 id="memory-lane-title">A look back.</h1><p>Our matches, shared moments and memories on and off the pitch.</p></div>
@@ -322,7 +333,7 @@
 <script src="placement-preview.js"></script>
 <script src="players.js?v=20261018-ronaldo2"></script>
 <script src="goals.js?v=20261012-corrected-goals"></script>
-<script src="matches.js?v=20261013-names"></script>
+<script src="matches.js?v=20261018-teams"></script>
 <script src="season.js?v=20261013-season"></script>
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261012-final"></script>
