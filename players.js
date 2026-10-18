@@ -24,7 +24,8 @@ const roster = [
   ['Ronaldo', 'ST', 1000, 'players/ronaldo.jpg'],
   ['Leandro', 'CM', 1000, 'players/leandro-cropped.jpg'],
   ['Chris', 'CB', 1000], ['Marco', 'CB', 1000], ['Martin', 'CB', 1000],
-  ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000]
+  ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000],
+  ['Raul', 'CM/ST', 1200]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}

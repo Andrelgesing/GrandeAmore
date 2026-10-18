@@ -20,6 +20,7 @@ seed.Martin = { elo: 1000, legendary: false };
 seed.David = { elo: 1000, legendary: false };
 seed.Yahya = { elo: 1000, legendary: false };
 seed.Vasilis = { elo: 1000, legendary: false };
+seed.Raul = { elo: 1200, legendary: false };
 const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
 export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
 const calibrationMigration = 'elo-calibration:v1';
