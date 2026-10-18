@@ -12,7 +12,7 @@ seed.Momo = { elo: 1000, legendary: false };
 seed.Alexander = { elo: 1100, legendary: false };
 seed.Mostafa = { elo: 1100, legendary: false };
 seed.Johny = { elo: 1000, legendary: false };
-seed.Ronaldo = { elo: 1000, legendary: false };
+seed.Ronaldo = { elo: 900, legendary: false };
 seed.Leandro = { elo: 1000, legendary: false };
 seed.Chris = { elo: 1000, legendary: false };
 seed.Marco = { elo: 1000, legendary: false };
@@ -102,6 +102,16 @@ export class Rankings {
       ratings[name].legendary ||= ratings[name].elo >= 1350;
      }
      await tx.put(tournamentKey, { adjustments: tournamentChanges, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Apply the requested Ronaldo correction once, preserving every other record.
+    const ronaldoCorrectionKey = 'elo-correction:ronaldo:2026-10-18';
+    if (env.APPLY_RONALDO_20261018 === 'true' && !await tx.get(ronaldoCorrectionKey)) {
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     ratings.Ronaldo.elo = 900;
+     await tx.put(ronaldoCorrectionKey, { beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }

@@ -21,7 +21,7 @@ const roster = [
   ['Alexandre', 'CB/CM', 1100, 'players/alexander.jpg'],
   ['Mostafa', 'CB', 1100, 'players/mostafa.jpg'],
   ['Johny', 'CB', 1000, 'players/johny.jpg'],
-  ['Ronaldo', 'ST', 1000, 'players/ronaldo.jpg'],
+  ['Ronaldo', 'ST', 900, 'players/ronaldo_2.jpg'],
   ['Leandro', 'CM', 1000, 'players/leandro-cropped.jpg'],
   ['Chris', 'CB', 1000], ['Marco', 'CB', 1000], ['Martin', 'CB', 1000],
   ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000],
