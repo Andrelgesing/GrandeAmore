@@ -58,7 +58,7 @@ const currentMatch = {
       "Giorgios",
       "Alexandre",
       "Mostafa",
-      "Leandro"
+      "Andreeas"
     ],
     [
       "Ronaldo",
