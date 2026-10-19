@@ -9,6 +9,24 @@ const tournamentAssists = [
  ['Enil', 2], ['Nikita', 2], ['gabi', 2], ['Ali', 1], ['Daniel', 1],
  ['fabian', 3], ['Andreeas', 4], ['Loay', 5]
 ];
+// Contributions from 18 October 2026.
+const currentTournamentGoals = [
+    ['Shahrom', 1], ['Nikita', 1], ['davideb', 1], ['Ali', 1],
+    ['fabian', 1], ['Jack', 1], ['Chris', 1],
+    ['Iacob', 3], ['Raul', 3], ['Andreeas', 3], ['David', 3],
+    ['Ronaldo', 4], ['Loay', 4], ['gabi', 4], ['Mostafa', 2], ['Yahya', 5]
+  ];
+const currentTournamentAssists = [
+    ['Mostafa', 1], ['Iacob', 1], ['davideb', 1], ['Chris', 1],
+    ['Raul', 1], ['Andreeas', 1],
+    ['Ronaldo', 2], ['Levi', 2], ['gabi', 2], ['Jack', 2], ['Shahrom', 2],
+    ['Loay', 3], ['Nikita', 3], ['Yahya', 3]
+  ];
+function combinedContributions(...fixtures) {
+ const totals = new Map();
+ for (const entries of fixtures) for (const [name, count] of entries) totals.set(name, (totals.get(name) || 0) + count);
+ return [...totals];
+}
 function renderContributions(selector, contributions, unit) {
  const list = document.querySelector(selector);
  list.replaceChildren();
@@ -26,8 +44,8 @@ function renderContributions(selector, contributions, unit) {
  }
 }
 function renderGoals() {
- renderContributions('#goals-list', tournamentGoals, 'goal');
- renderContributions('#assists-list', tournamentAssists, 'assist');
+ renderContributions('#goals-list', combinedContributions(tournamentGoals, currentTournamentGoals), 'goal');
+ renderContributions('#assists-list', combinedContributions(tournamentAssists, currentTournamentAssists), 'assist');
 }
 renderGoals();
 document.addEventListener('ratings-updated', renderGoals);

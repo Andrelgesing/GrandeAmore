@@ -38,7 +38,7 @@ assert(config.teams[0].includes('Giorgios') && config.teams[0].includes('Vasilis
 assert.deepEqual([...config.teams[3]].sort(), ['Loay','Martin','Chris','Hay','Marco','Johny','David'].sort());
 const descendants = element => [element, ...element.children.flatMap(descendants)];
 const lineups = () => grid.children.map(card => descendants(card).filter(e => e.className === 'match-player-name').map(e => e.textContent));
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [expected[3], expected[1], expected[0], expected[2]]);
 const players = vm.runInContext('players', context);
 const before = JSON.stringify(players);
 const originalCards = grid.children;
@@ -49,9 +49,9 @@ for (const [i, card] of grid.children.entries()) {
  const all = descendants(card);
  assert.equal(all.filter(e => e.className === 'match-captain').length, 1);
  const photo = all.find(e => e.className === 'match-photo' && e.children.some(c => c.className === 'match-captain'));
- assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[i]} player card`);
- assert.equal(all.filter(e => e.className === 'match-points').length, 0);
- assert.equal(all.filter(e => e.className === 'match-champions').length, 0);
+ assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[[3, 1, 0, 2][i]]} player card`);
+ assert.equal(all.find(e => e.className === 'match-points').textContent, `${[7, 4, 3, 3][i]} pts`);
+ assert.equal(all.filter(e => e.className === 'match-champions').length, i === 0 ? 1 : 0);
 }
 const raul = descendants(grid).find(e => e.attributes['aria-label'] === 'View Raul player card');
 assert.equal(raul.tag, 'button');
@@ -59,10 +59,10 @@ raul.listeners.click(); assert.equal(openedPlayer, 'Raul');
 vm.runInContext("players.find(p => p.name === 'Hay').elo += 400; players.find(p => p.name === 'Hay').rating = 5;", context);
 listeners['ratings-updated']();
 assert.notEqual(grid.children, originalCards);
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [expected[3], expected[1], expected[0], expected[2]]);
 for (const p of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname,p.photo)));
-// The completed fixture still supplies the season table, never today's new players.
-vm.runInContext('const tournamentGoals = []; const tournamentAssists = [];', context);
+// The first fixture keeps its historical participants and points.
+vm.runInContext('const tournamentGoals = []; const tournamentAssists = []; const currentTournamentGoals = []; const currentTournamentAssists = [];', context);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'season.js'),'utf8').split('function buildSeasonStandings')[0],context);
 const old = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[0])', context));
 assert.equal(old.date, '2026-10-11');

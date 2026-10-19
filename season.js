@@ -6,6 +6,13 @@ const seasonFixtures = [{
   goals: tournamentGoals,
   assists: tournamentAssists,
   matchesPlayed: 3
+}, {
+  date: currentMatch.date,
+  teams: currentMatch.teams,
+  standings: currentMatchStandings,
+  goals: currentTournamentGoals,
+  assists: currentTournamentAssists,
+  matchesPlayed: 3
 }];
 
 function buildSeasonStandings(fixtures, rosterPlayers) {

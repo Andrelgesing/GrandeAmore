@@ -1,165 +1,239 @@
-// Local-only preview based on an online snapshot. No ratings are sent to the server.
+// Local preview from an online backup. Existing scores already include 11 October.
 const placementPreview = typeof location !== 'undefined' && location.protocol === 'file:' ? {
-  "revision": 900,
+  "date": "2026-10-18",
+  "revision": 1517,
   "ratings": {
     "AlexG": {
-      "elo": 1129,
+      "elo": 1095,
       "legendary": false
     },
     "Andre": {
-      "elo": 1283,
+      "elo": 1267,
       "legendary": false
     },
     "Darius": {
-      "elo": 1044,
+      "elo": 1011,
       "legendary": false
     },
     "fabian": {
-      "elo": 1239,
+      "elo": 1250,
       "legendary": false
     },
     "Enil": {
-      "elo": 1377,
+      "elo": 1430,
       "legendary": true
     },
     "gabi": {
-      "elo": 1038,
+      "elo": 1094,
       "legendary": false
     },
     "Daniel": {
-      "elo": 1343,
-      "legendary": false
+      "elo": 1365,
+      "legendary": true
     },
     "Levi": {
-      "elo": 1111,
+      "elo": 1051,
       "legendary": false
     },
     "Samu": {
-      "elo": 1209,
+      "elo": 1177,
       "legendary": false
     },
     "Dejan": {
-      "elo": 818,
+      "elo": 746,
       "legendary": false
     },
     "Jack": {
-      "elo": 1025,
+      "elo": 1042,
       "legendary": false
     },
     "Ali": {
-      "elo": 1125,
+      "elo": 1123,
       "legendary": false
     },
     "Omar": {
-      "elo": 863,
+      "elo": 797,
       "legendary": false
     },
     "Baraa": {
-      "elo": 815,
+      "elo": 890,
       "legendary": false
     },
     "Takunda": {
-      "elo": 878,
+      "elo": 956,
       "legendary": false
     },
     "Danilo": {
-      "elo": 1097,
+      "elo": 1171,
       "legendary": false
     },
     "Andreeas": {
-      "elo": 926,
+      "elo": 967,
       "legendary": false
     },
     "davideb": {
-      "elo": 1076,
+      "elo": 1144,
       "legendary": false
     },
     "Nikita": {
-      "elo": 1207,
+      "elo": 1233,
       "legendary": false
     },
     "Iacob": {
-      "elo": 947,
+      "elo": 989,
       "legendary": false
     },
     "Damien": {
-      "elo": 887,
+      "elo": 971,
       "legendary": false
     },
     "Valentin": {
-      "elo": 905,
+      "elo": 860,
       "legendary": false
     },
     "Milan": {
-      "elo": 831,
+      "elo": 807,
       "legendary": false
     },
     "Mohamed": {
-      "elo": 1019,
+      "elo": 979,
       "legendary": false
     },
     "Paolo": {
-      "elo": 749,
+      "elo": 741,
       "legendary": false
     },
     "Fabien": {
-      "elo": 888,
+      "elo": 879,
       "legendary": false
     },
     "Lucas": {
-      "elo": 1227,
+      "elo": 1303,
       "legendary": false
     },
-    "@~\u2744\ufe0f": {
-      "elo": 810,
+    "@~❄️": {
+      "elo": 798,
       "legendary": false
     },
     "Shahrom": {
-      "elo": 973,
+      "elo": 1021,
       "legendary": true
     },
     "Loay": {
-      "elo": 1168,
+      "elo": 1193,
       "legendary": false
     },
     "Hay": {
-      "elo": 1093,
+      "elo": 1107,
       "legendary": false
+    },
+    "Giorgios": {
+      "elo": 1178,
+      "legendary": true
+    },
+    "Manuel": {
+      "elo": 995,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Momo": {
+      "elo": 871,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Alexandre": {
+      "elo": 1108,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Mostafa": {
+      "elo": 1110,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Johny": {
+      "elo": 887,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Ronaldo": {
+      "elo": 912,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Leandro": {
+      "elo": 896,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Chris": {
+      "elo": 947,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Marco": {
+      "elo": 1018,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Martin": {
+      "elo": 949,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "David": {
+      "elo": 974,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Yahya": {
+      "elo": 983,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Vasilis": {
+      "elo": 915,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Raul": {
+      "elo": 1100,
+      "legendary": false,
+      "calibrationDuels": 10
     }
   },
   "adjustments": {
-    "Hay": -20,
-    "Omar": -20,
-    "Daniel": -20,
-    "Paolo": -20,
-    "Jack": -20,
-    "Takunda": -20,
-    "AlexG": -20,
-    "Samu": -40,
-    "Iacob": -40,
-    "Levi": -40,
-    "Nikita": -40,
-    "Dejan": -40,
-    "davideb": -40,
-    "Andre": -40,
-    "Ali": 40,
-    "Loay": 40,
-    "Andreeas": 40,
-    "Danilo": 40,
-    "Darius": 40,
-    "Enil": 40,
-    "Milan": 40,
-    "Lucas": 20,
+    "Vasilis": -30,
+    "fabian": -30,
+    "Iacob": -30,
+    "Giorgios": -30,
+    "Alexandre": -30,
+    "Mostafa": -30,
+    "Andreeas": -30,
+    "Ronaldo": 20,
+    "Manuel": 20,
+    "Levi": 20,
+    "Jack": 20,
+    "Nikita": 20,
+    "Yahya": 20,
     "gabi": 20,
-    "fabian": 20,
-    "Mohamed": 20,
-    "Baraa": 20,
-    "Valentin": 20,
-    "Fabien": 20
+    "Shahrom": -30,
+    "Raul": -30,
+    "Momo": -30,
+    "Ali": -30,
+    "Paolo": -30,
+    "davideb": -30,
+    "Lucas": -30,
+    "Hay": 40,
+    "Loay": 40,
+    "David": 40,
+    "Martin": 40,
+    "Marco": 40,
+    "Johny": 40,
+    "Chris": 40
   }
 } : null;
 if (placementPreview) {
- placementPreview.ratings = structuredClone(placementPreview.ratings);
  for (const [name, delta] of Object.entries(placementPreview.adjustments)) {
   const rating = placementPreview.ratings[name];
   rating.elo += delta;

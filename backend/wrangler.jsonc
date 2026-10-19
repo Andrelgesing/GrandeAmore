@@ -6,6 +6,7 @@
     "ELO_K": "16",
     "APPLY_RONALDO_20261018": "true",
     "APPLY_TOURNAMENT_20261011": "true",
+    "APPLY_TOURNAMENT_20261018": "true",
     "ALLOWED_ORIGIN": "https://andrelgesing.github.io"
   },
   "durable_objects": {

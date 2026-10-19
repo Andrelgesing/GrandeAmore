@@ -1,5 +1,8 @@
 const tournamentKey = 'tournament:2026-10-11:placement';
 const tournamentChanges = {"Hay": -20, "Omar": -20, "Daniel": -20, "Paolo (pac)": -20, "Jack": -20, "Takunda": -20, "AlexG": -20, "Samu": -40, "Iacob": -40, "Levi": -40, "Nikita": -40, "Dejan": -40, "davideb": -40, "Andre": -40, "Ali": 40, "Loay": 40, "Andreeas": 40, "Danilo": 40, "Darius": 40, "Enil": 40, "Milan": 40, "Lucas": 20, "gabi": 20, "fabian": 20, "Mohamed": 20, "Baraa": 20, "Valentin": 20, "@Fabien Vjaceslavs": 20};
+const tournament18Key = 'tournament:2026-10-18:placement';
+const tournament18Changes = {"Vasilis": -30, "fabian": -30, "Iacob": -30, "Giorgios": -30, "Alexander": -30, "Mostafa": -30, "Andreeas": -30, "Ronaldo": 20, "Manuel": 20, "Levi": 20, "Jack": 20, "Nikita": 20, "Yahya": 20, "gabi": 20, "Shahrom": -30, "Raul": -30, "Momo": -30, "Ali": -30, "Paolo (pac)": -30, "davideb": -30, "Lucas": -30, "Hay": 40, "Loay": 40, "David": 40, "Martin": 40, "Marco": 40, "Johny": 40, "Chris": 40};
+const latestTournamentPlacement = async storage => await storage.get(tournament18Key) || await storage.get(tournamentKey);
 const mvpOpening = Date.parse('2026-10-18T18:30:00+02:00');
 const mvpPoll = '2026-10-18-official';
 const mvpCandidates = ["Vasilis", "fabian", "Iacob", "Giorgios", "Alexander", "Mostafa", "Andreeas", "Ronaldo", "Manuel", "Levi", "Jack", "Nikita", "Yahya", "gabi", "Shahrom", "Raul", "Momo", "Ali", "Paolo (pac)", "davideb", "Lucas", "Hay", "Loay", "David", "Martin", "Marco", "Johny", "Chris"];
@@ -41,7 +44,7 @@ async function snapshot(tx, scheduledAt = null) {
   scheduledAt: scheduledAt === null ? null : new Date(scheduledAt).toISOString(),
   revision: await tx.get('revision') || 0,
   ratings: await tx.get('ratings'),
-  tournamentAdjustments: (await tx.get(tournamentKey))?.adjustments || {}
+  tournamentAdjustments: (await latestTournamentPlacement(tx))?.adjustments || {}
  };
 }
 function archiveResponse(data, format, filename) {
@@ -115,6 +118,19 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    // Apply placement deltas to current scores once, preserving subsequent duels.
+    if (env.APPLY_TOURNAMENT_20261018 === 'true' && !await tx.get(tournament18Key)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const beforeRatings = structuredClone(ratings);
+     for (const [name, delta] of Object.entries(tournament18Changes)) {
+      if (!ratings[name]) throw new Error(`Missing tournament player: ${name}`);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournament18Key, { adjustments: tournament18Changes, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
@@ -150,9 +166,13 @@ export class Rankings {
     nextAfter: snapshots.length === 366 ? snapshots.at(-1).date : null
    }, format, 'grande-amore-elo-history');
   }
-  if (path === '/tournament-placement' && request.method === 'GET') return Response.json(await this.ctx.storage.get(tournamentKey) || null);
+  if (path === '/tournament-placement' && request.method === 'GET') {
+   const date = url.searchParams.get('date');
+   if (date && !['2026-10-11', '2026-10-18'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
+  }
   if (path === '/mvp') return this.mvp(request);
-  if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0, tournamentAdjustments: (await tx.get(tournamentKey))?.adjustments || {} }));
+  if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0, tournamentAdjustments: (await latestTournamentPlacement(tx))?.adjustments || {} }));
   if (path !== '/votes' || request.method !== 'POST') return new Response('Not found', { status: 404 });
   let vote;
   try { vote = JSON.parse(await request.text()); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }

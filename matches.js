@@ -95,6 +95,13 @@ const currentMatch = {
     "Loay"
   ]
 };
+// Final points for 18 October; equal points share the same placing.
+const currentMatchStandings = [
+  { team: 4, points: 7, champions: true },
+  { team: 2, points: 4 },
+  { team: 1, points: 3 },
+  { team: 3, points: 3 }
+];
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
@@ -217,8 +224,7 @@ function renderMatches() {
   matchFingerprint = fingerprint;
   const grid = document.querySelector('#match-teams');
   grid.replaceChildren();
-  currentMatch.teams.forEach((_, teamIndex) => {
-    const standing = { team: teamIndex + 1, points: null };
+  currentMatchStandings.forEach(standing => {
     const index = standing.team - 1;
     const team = teams[index];
     const averageStars = team.reduce((sum, entry) => sum + entry.player.rating, 0) / team.length;
