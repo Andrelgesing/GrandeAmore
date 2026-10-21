@@ -1,20 +1,20 @@
 // Final results snapshot for the completed tournament. Voting template remains in templates/mvp-voting.html and ballot.js.
 const finalMvpPoll = {
-  "poll": "2026-10-11-official",
+  "poll": "2026-10-18-official",
   "totals": {
-    "Enil": 11,
-    "gabi": 2,
-    "Andre": 2,
-    "Nikita": 1,
-    "Daniel": 1,
-    "Hay": 1
+    "Loay": 8,
+    "gabi": 1,
+    "Ronaldo": 1,
+    "Giorgios": 1,
+    "Hay": 2,
+    "Raul": 1
   },
   "choice": null
 };
 const awardDialog = document.querySelector('#award-results-dialog');
 const finalCandidates = Object.entries(finalMvpPoll.totals).filter(([, votes]) => votes > 0).sort((a, b) => b[1] - a[1]);
 const finalVoteTotal = finalCandidates.reduce((sum, [, votes]) => sum + votes, 0);
-document.querySelector('#award-results-summary').textContent = `Enil wins the 1st GrandeAmore Ballon d’Or! ${finalVoteTotal} votes cast.`;
+document.querySelector('#award-results-summary').textContent = `Loay wins the 2nd GrandeAmore Ballon d’Or! ${finalVoteTotal} votes cast.`;
 const finalResultsList = document.querySelector('#award-results-list');
 let previousVotes = null, rank = 0;
 finalCandidates.forEach(([name, votes], index) => {
@@ -39,3 +39,5 @@ awardDialog.addEventListener('click', event => {
  const bounds = awardDialog.getBoundingClientRect();
  if (event.target === awardDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) awardDialog.close();
 });
+
+document.querySelector('#winner-results-open').addEventListener('click', () => awardDialog.showModal());

@@ -8,7 +8,12 @@ const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () 
 vm.runInContext(frontendSource.split('const grid =')[0], context);
 const players = vm.runInContext('players', context);
 const loay = players.find(player => player.name === 'Loay');
-assert.equal(players.length, 46);
+assert.equal(players.length, 47);
+const inca = players.find(player => player.name === 'Inca');
+assert.equal(inca.rating, 4);
+assert.equal(inca.primaryPosition, 'CM');
+assert.equal(inca.status, 'Legendary');
+assert.equal(inca.title, 'The last dance');
 const giorgios = players.find(player => player.name === 'Giorgios');
 assert.equal(giorgios.rating, 3.5);
 assert.equal(giorgios.primaryPosition, 'CB');
@@ -77,7 +82,8 @@ assert.deepEqual(await getRatings(), beforeExcludedVotes, 'Excluded votes and re
 data.clear();
 service = await create();
 response = await getRatings();
-assert.equal(Object.keys(response.ratings).length, 46);
+assert.equal(Object.keys(response.ratings).length, 47);
+assert.deepEqual(response.ratings.Inca, { elo: 1200, legendary: true });
 assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);
 assert.equal(response.revision, 0);
@@ -169,3 +175,12 @@ assert.equal(history.snapshots.length, 366);
 assert.equal(history.nextAfter, history.snapshots.at(-1).date);
 assert.deepEqual((await (await service.fetch(new Request('https://test/elo-history?after=' + history.nextAfter))).json()).snapshots, []);
 console.log('Archive tests passed: summer/winter/DST, baseline, daily capture, no score changes, duplicate protection, restart, JSON/CSV, private write route and pagination.');
+
+const closedService = new Rankings({ storage, blockConcurrencyWhile(fn) { ready = fn(); } }, { ELO_K: '16', MVP_CLOSED: 'true' });
+await ready;
+const beforeClosed = structuredClone([...data]);
+const rejected = await closedService.fetch(new Request('https://test/mvp', { method: 'POST', body: JSON.stringify({ voter: 'closed-test-12345678', player: 'Loay' }) }));
+assert.equal(rejected.status, 403);
+assert.deepEqual([...data], beforeClosed);
+assert.equal((await (await closedService.fetch(new Request('https://test/mvp'))).json()).closed, true);
+console.log('Closed poll rejects votes without changing stored totals.');

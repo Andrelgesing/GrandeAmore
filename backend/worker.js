@@ -24,6 +24,7 @@ seed.David = { elo: 1000, legendary: false };
 seed.Yahya = { elo: 1000, legendary: false };
 seed.Vasilis = { elo: 1000, legendary: false };
 seed.Raul = { elo: 1200, legendary: false };
+seed.Inca = { elo: 1200, legendary: true };
 const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
 export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
 const calibrationMigration = 'elo-calibration:v1';
@@ -211,11 +212,12 @@ export class Rankings {
    const voter = new URL(request.url).searchParams.get('voter');
    if (voter && !voterPattern.test(voter)) return new Response('Invalid voter', { status: 400 });
    return this.ctx.storage.transaction(async tx => Response.json({
-    poll: mvpPoll, totals: await tx.get(totalsKey) || {},
+    poll: mvpPoll, closed: this.env.MVP_CLOSED === 'true', totals: await tx.get(totalsKey) || {},
     choice: voter ? await tx.get(`mvp:${mvpPoll}:voter:` + voter) || null : null
    }));
   }
   if (request.method !== 'POST') return new Response('Method not allowed', { status: 405 });
+  if (this.env.MVP_CLOSED === 'true') return Response.json({ error: 'Voting is closed' }, { status: 403 });
   if (Date.now() < mvpOpening) return Response.json({ error: 'Voting opens at 18:30 Vienna time' }, { status: 403 });
   let body;
   try { body = await request.json(); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }
