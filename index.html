@@ -189,7 +189,7 @@
     .fighter[aria-pressed="true"] { border-color: #ffd968; box-shadow: 0 0 25px #ffcc4670; }
     .fighter .portrait { width: min(182px, 100%); height: auto; aspect-ratio: 1; color: white; background: #50516d; }
     .fighter img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .fighter-reveal { animation: fighter-reveal 0.45s ease-out both; }
+    .fighter-reveal { animation: fighter-reveal 0.4s ease-out both; }
     @keyframes fighter-reveal { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
     @media (prefers-reduced-motion: reduce) { .fighter-reveal { animation: none; } }
     .fighter-name { display: block; font-weight: 800; overflow-wrap: anywhere; }
@@ -333,6 +333,6 @@
 <script src="memories.js"></script>
 <script src="ballot-results.js?v=20261021-loay"></script>
 
-<script src="fight.js?v=20261021-timing"></script>
+<script src="fight.js?v=20261021-timing100"></script>
 </body>
 </html>
