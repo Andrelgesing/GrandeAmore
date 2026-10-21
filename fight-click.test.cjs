@@ -44,7 +44,7 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  assert(local.saved.has('grande-amore-ratings'), 'A player click saves immediately');
  assert(local.nodes['#fight-confirm-dialog'].open);
  assert.equal(local.nodes['#fight-confirm-text'].textContent, 'Saving your vote…');
- assert.equal(local.timers[0].ms, 300, 'Success keeps saving visible 300ms longer');
+ assert.equal(local.timers[0].ms, 150, 'Success keeps saving visible 150ms longer');
  assert.equal(local.run('voteId'), oldId, 'Next duel waits for the extra display time');
  await local.run('submitFight(1)');
  local.timers[0].fn(); await localPending;
@@ -72,10 +72,10 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  assert.equal(posts[1].id, posts[0].id, 'Retry must reuse ID for server deduplication');
  complete({ ok: true, json: async () => ({ revision: 1, ratings: {} }) });
  await new Promise(resolve => setImmediate(resolve));
- assert.equal(online.timers[0].ms, 300);
+ assert.equal(online.timers[0].ms, 150);
  assert.equal(online.run('voteId'), firstId);
  online.timers[0].fn(); await retry;
  assert.notEqual(online.run('voteId'), firstId);
  assert.equal(online.run('selected'), null);
- console.log('Passed: local-only votes, Elo conservation, rapid-click lock, failure retry with same ID, immediate submission, extra 300ms saving display, reveal wrappers, and automatic next matchup.');
+ console.log('Passed: local-only votes, Elo conservation, rapid-click lock, failure retry with same ID, immediate submission, extra 150ms saving display, reveal wrappers, and automatic next matchup.');
 })();
