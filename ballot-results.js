@@ -22,7 +22,7 @@ finalCandidates.forEach(([name, votes], index) => {
  previousVotes = votes;
  const row = document.createElement('div'); row.className = 'ballot-result-row';
  const portrait = document.createElement('span'); portrait.className = 'ballot-avatar';
- const player = players.find(player => player.name === name);
+ const player = name === 'Loay' ? { photo: 'players/loay.jpg' } : players.find(player => player.name === name);
  if (player && player.photo) {
   const img = document.createElement('img'); img.src = player.photo; img.alt = ''; portrait.append(img);
  } else portrait.textContent = name[0].toUpperCase();
