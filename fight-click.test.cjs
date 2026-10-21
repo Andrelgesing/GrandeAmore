@@ -7,7 +7,9 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  const nodes = Object.fromEntries(['fight-arena', 'fight-options', 'fight-skip', 'fight-selection', 'fight-confirm-dialog', 'fight-confirm-submit', 'fight-confirm-cancel', 'fight-confirm-text'].map(id => ['#' + id, element()]));
  const saved = new Map();
  const timers = [];
+ let now = 0;
  const context = vm.createContext({
+  performance: { now: () => now },
   RATINGS_API: 'https://ratings.test', location: { protocol }, players: squad, ratingState: {},
   document: { querySelector: id => nodes[id], createElement: tag => Object.assign(element(), { tag }), addEventListener() {}, hidden: false },
   localStorage: { getItem: key => saved.get(key), setItem: (key, value) => saved.set(key, value) },
@@ -17,7 +19,7 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
   starsFromElo: elo => Math.round((elo - 400) / 100) / 2, renderPlayerGrid() {}, renderMvp() {}
  });
  vm.runInContext(source, context);
- return { context, nodes, saved, timers, run: code => vm.runInContext(code, context) };
+ return { context, nodes, saved, timers, advance: ms => { now += ms; }, run: code => vm.runInContext(code, context) };
 }
 (async () => {
  const rosterContext = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () => null } });
@@ -44,7 +46,7 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  assert(local.saved.has('grande-amore-ratings'), 'A player click saves immediately');
  assert(local.nodes['#fight-confirm-dialog'].open);
  assert.equal(local.nodes['#fight-confirm-text'].textContent, 'Saving your vote…');
- assert.equal(local.timers[0].ms, 100, 'Success keeps saving visible 100ms longer');
+ assert.equal(local.timers[0].ms, 200, 'An instant save waits for the 200ms minimum');
  assert.equal(local.run('voteId'), oldId, 'Next duel waits for the extra display time');
  await local.run('submitFight(1)');
  local.timers[0].fn(); await localPending;
@@ -70,12 +72,26 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  await online.run('submitFight(1)'); assert.equal(posts.length, 1);
  const retry = online.run('submitFight(0)');
  assert.equal(posts[1].id, posts[0].id, 'Retry must reuse ID for server deduplication');
+ online.advance(80);
  complete({ ok: true, json: async () => ({ revision: 1, ratings: {} }) });
  await new Promise(resolve => setImmediate(resolve));
- assert.equal(online.timers[0].ms, 100);
+ assert.equal(online.timers[0].ms, 120);
  assert.equal(online.run('voteId'), firstId);
  online.timers[0].fn(); await retry;
  assert.notEqual(online.run('voteId'), firstId);
  assert.equal(online.run('selected'), null);
- console.log('Passed: local-only votes, Elo conservation, rapid-click lock, failure retry with same ID, immediate submission, extra 100ms saving display, reveal wrappers, and automatic next matchup.');
+ let finishSlow;
+ const slow = setup('https:', async (url, options) => {
+  if (!options.method) return {ok:true,json:async()=>({revision:0,ratings:{}})};
+  return new Promise(resolve => { finishSlow = resolve; });
+ });
+ await new Promise(resolve => setImmediate(resolve));
+ const slowId = slow.run('voteId');
+ const slowPending = slow.run('submitFight(0)');
+ slow.advance(350);
+ finishSlow({ok:true,json:async()=>({revision:1,ratings:{}})});
+ await slowPending;
+ assert.equal(slow.timers.length,0,'A save over 200ms adds no timer');
+ assert.notEqual(slow.run('voteId'),slowId);
+ console.log('Passed: local-only votes, Elo conservation, rapid-click lock, failure retry with same ID, immediate submission, 200ms total minimum with fast/slow response checks, reveal wrappers, and automatic next matchup.');
 })();

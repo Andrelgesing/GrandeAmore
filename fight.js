@@ -144,6 +144,7 @@ async function submitFight(index) {
  if (submitted || saving || !sharedReady || (voteAttempted && selected !== index)) return;
  selected = index;
  voteAttempted = true;
+ const savingStartedAt = performance.now();
  saving = true; skipFight.disabled = true;
  fightConfirmText.textContent = 'Saving your vote…';
  if (!fightConfirmDialog.open) fightConfirmDialog.showModal();
@@ -167,7 +168,8 @@ async function submitFight(index) {
    applyRatings(updates);
   }
   submitted = true;
-  await new Promise(resolve => setTimeout(resolve, 100));
+  const remaining = 200 - (performance.now() - savingStartedAt);
+  if (remaining > 0) await new Promise(resolve => setTimeout(resolve, remaining));
   fightConfirmDialog.close();
 
  } catch (_) {
