@@ -14,7 +14,7 @@ const roster = [
   ['Paolo', 'CB', 1000, 'players/paolo.jpg'], ['Fabien', 'CM', 1000, 'players/fabien_v.jpg'],
   ['Lucas', 'ST/CM', 1200, 'players/lucas.jpg'], ['@~❄️', 'ST', 1000, 'players/snow.jpg'],
   ['Shahrom', 'ST', 1000, 'players/shahrom.jpg', 'Legendary'],
-  ['Loay', 'CM/ST', 1100], ['Hay', 'ST/CM', 1000, 'players/hay.jpg'],
+  ['Loay', 'CM/ST', 1100, 'players/loay.jpg'], ['Hay', 'ST/CM', 1000, 'players/hay.jpg'],
   ['Giorgios', 'CB', 1100, 'players/giorgios.jpg', 'Legendary'],
   ['Manuel', 'CM', 1100, 'players/manuel.jpg'],
   ['Momo', 'CM', 1000, 'players/momo.jpg'],
@@ -25,7 +25,8 @@ const roster = [
   ['Leandro', 'CM', 1000, 'players/leandro-cropped.jpg'],
   ['Chris', 'CB', 1000], ['Marco', 'CB', 1000], ['Martin', 'CB', 1000],
   ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000],
-  ['Raul', 'CM/ST', 1200]
+  ['Raul', 'CM/ST', 1200],
+  ['Inca', 'CM', 1200, 'players/inca.jpg', 'Legendary', 'The last dance']
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
@@ -37,6 +38,11 @@ const displayPlayerRecords = records => Object.fromEntries(Object.entries(record
 ratingState = displayPlayerRecords(ratingState);
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter', 'Last-minute boot search', 'Offside appeal volume', 'Striker pocket capacity', 'Sliding tackle laundry bill'];
 const customJokeStats = {
+  Inca: [
+    { label: 'Tango', rating: 3 },
+    { label: 'Salsa', rating: 2 },
+    { label: 'Wiener Walzer', rating: 5 }
+  ],
   Leandro: [
     { label: 'Chasing sticks', rating: 4 },
     { label: 'Who is a good boy?', rating: 5 }
@@ -84,9 +90,9 @@ const customJokeStats = {
     { label: 'Last 5 minutes form', rating: 5 }
   ]
 };
-const players = roster.map(([name, position, elo, photo = null, status = null], index) => ({
+const players = roster.map(([name, position, elo, photo = null, status = null, title = null], index) => ({
   calibrationDuels: ratingState[name]?.calibrationDuels ?? 10,
-  name, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
+  name, title, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
   elo: Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo, rating: starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo), photo,
   status: ratingState[name]?.legendary || starsFromElo(Number.isFinite(ratingState[name]?.elo) ? ratingState[name].elo : elo) === 5 ? 'Legendary' : status, rosterOrder: index,
   // Stable playful scores, chosen randomly once per page load.
@@ -149,7 +155,14 @@ function cardContent(player, full = false) {
   name.className = 'player-name';
   name.textContent = player.name;
   if (full) name.id = 'detail-name';
-  fragment.append(position, portrait, name, stars(player.rating));
+  fragment.append(position, portrait, name);
+  if (player.title) {
+    const title = document.createElement('span');
+    title.className = 'player-title';
+    title.textContent = player.title;
+    fragment.append(title);
+  }
+  fragment.append(stars(player.rating));
   if (player.status) {
     const status = document.createElement('span');
     status.className = 'legendary-badge';
