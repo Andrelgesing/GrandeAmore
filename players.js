@@ -7,7 +7,7 @@ const roster = [
   ['fabian', 'CM', 1000, 'players/fabian.jpg'], ['Enil', 'CM', 1200, 'players/enil.jpg'], ['gabi', 'CM', 1000, 'players/gabi.jpg'],
   ['Daniel', 'CM/ST', 1200, 'players/daniel.jpg'], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'ST/CM', 1000, 'players/samu.jpg'],
   ['Dejan', 'CB', 1000], ['Jack', 'CB', 1000, 'players/jack.jpg'], ['Ali', 'ST/CB', 1000, 'players/ali.jpg'],
-  ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000], ['Takunda', 'CB', 1000],
+  ['Omar', 'CM', 1000, 'players/omar.jpg'], ['Baraa', 'CB', 1000, 'players/baraa.jpg'], ['Takunda', 'CB', 1000],
   ['Danilo', 'CB', 1000, 'players/danilo.jpg'], ['Andreeas', 'CM', 1000], ['davideb', 'CM', 1000, 'players/davideb.jpg'],
   ['Nikita', 'CB', 1000, 'players/nikita.jpg'], ['Iacob', 'CM', 1000], ['Damien', 'CB', 1000, 'players/damien.jpg'],
   ['Valentin', 'CM', 1000], ['Milan', 'CM', 1000, 'players/Milan.jpeg'], ['Mohamed', 'CB', 1000, 'players/mohamed.jpg'],
@@ -26,7 +26,10 @@ const roster = [
   ['Chris', 'CB', 1000], ['Marco', 'CB', 1000], ['Martin', 'CB', 1000],
   ['David', 'CM', 1000], ['Yahya', 'CM', 1000], ['Vasilis', 'ST', 1000],
   ['Raul', 'CM/ST', 1200],
-  ['Inca', 'CM', 1200, 'players/inca.jpg', 'Legendary', 'The last dance']
+  ['Inca', 'CM', 1200, 'players/inca.jpg', 'Legendary', 'The last dance'],
+  ['Carlo', 'CM', 1000, 'players/carlo.jpg'],
+  ['Leo', 'CB', 1000, 'players/leo.jpg'],
+  ['Obaida', 'ST', 1000], ['Ahmad', 'ST', 1000], ['Mauro', 'CM', 1000]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}

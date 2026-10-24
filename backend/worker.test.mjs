@@ -8,7 +8,7 @@ const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () 
 vm.runInContext(frontendSource.split('const grid =')[0], context);
 const players = vm.runInContext('players', context);
 const loay = players.find(player => player.name === 'Loay');
-assert.equal(players.length, 47);
+assert.equal(players.length, 52);
 const inca = players.find(player => player.name === 'Inca');
 assert.equal(inca.rating, 4);
 assert.equal(inca.primaryPosition, 'CM');
@@ -82,7 +82,7 @@ assert.deepEqual(await getRatings(), beforeExcludedVotes, 'Excluded votes and re
 data.clear();
 service = await create();
 response = await getRatings();
-assert.equal(Object.keys(response.ratings).length, 47);
+assert.equal(Object.keys(response.ratings).length, 52);
 assert.deepEqual(response.ratings.Inca, { elo: 1200, legendary: true });
 assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);
