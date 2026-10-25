@@ -36,20 +36,21 @@ assert.equal(new Set(['Inca','Enil','Loay'].map(n=>config.teams.findIndex(t=>t.i
 assert.equal(config.teams.filter(t=>t.includes('Andre') && t.includes('Ali')).length, 0);
 const descendants = element => [element, ...element.children.flatMap(descendants)];
 const lineups = () => grid.children.map(card => descendants(card).filter(e => e.className === 'match-player-name').map(e => e.textContent));
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [expected[0], expected[3], expected[2], expected[1]]);
 const players = vm.runInContext('players', context);
 const before = JSON.stringify(players);
 const originalCards = grid.children;
 listeners['ratings-updated']();
 assert.equal(grid.children, originalCards);
 assert.equal(JSON.stringify(players), before);
-for (const [i, card] of grid.children.entries()) {
+for (const [displayIndex, card] of grid.children.entries()) {
+ const i = [0, 3, 2, 1][displayIndex];
  const all = descendants(card);
  assert.equal(all.filter(e => e.className === 'match-captain').length, config.captains[i] ? 1 : 0);
  const photo = all.find(e => e.className === 'match-photo' && e.children.some(c => c.className === 'match-captain'));
  if (config.captains[i]) assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[i]} player card`);
- assert.equal(all.filter(e => e.className === 'match-points').length, 0);
- assert.equal(all.filter(e => e.className === 'match-champions').length, 0);
+ assert.equal(all.find(e => e.className === 'match-points').textContent, `${[7, 0, 4, 6][i]} pts`);
+ assert.equal(all.filter(e => e.className === 'match-champions').length, i === 0 ? 1 : 0);
 }
 const raul = descendants(grid).find(e => e.attributes['aria-label'] === 'View Inca player card');
 assert.equal(raul.tag, 'button');
@@ -57,7 +58,7 @@ raul.listeners.click(); assert.equal(openedPlayer, 'Inca');
 vm.runInContext("players.find(p => p.name === 'Hay').elo += 400; players.find(p => p.name === 'Hay').rating = 5;", context);
 listeners['ratings-updated']();
 assert.notEqual(grid.children, originalCards);
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [expected[0], expected[3], expected[2], expected[1]]);
 for (const p of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname,p.photo)));
 // The first fixture keeps its historical participants and points.
 vm.runInContext('const tournamentGoals = []; const tournamentAssists = []; const currentTournamentGoals = []; const currentTournamentAssists = [];', context);
@@ -74,6 +75,24 @@ assert(previous.teams[0].includes('Andreeas'));
 assert(!previous.teams.flat().includes('Inca'));
 assert.deepEqual(previous.standings.map(s=>s.team), [4,2,1,3]);
 assert.deepEqual(previous.standings.map(s=>s.points), [7,4,3,3]);
+const today = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[2])', context));
+assert.equal(today.date, '2026-10-25');
+assert.deepEqual(today.teams, expected);
+assert.deepEqual(today.standings.map(s => [s.team, s.points]), [[1,7],[4,6],[3,4],[2,0]]);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'season.js'), 'utf8').split('function renderSeason')[0].split('function buildSeasonStandings')[1].replace(/^/, 'function buildSeasonStandings'), context);
+const build = vm.runInContext('buildSeasonStandings', context);
+const fixtures = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)', context));
+const beforeSeason = new Map(build(fixtures.slice(0, 2), players).map(e => [e.player.name, e]));
+const afterSeason = new Map(build(fixtures, players).map(e => [e.player.name, e]));
+for (const [teamIndex, team] of expected.entries()) for (const name of team) {
+ const before = beforeSeason.get(name) || { points: 0, mp: 0, goals: 0, assists: 0 };
+ const after = afterSeason.get(name);
+ assert.equal(after.points, before.points + [7,0,4,6][teamIndex]);
+ assert.equal(after.mp, before.mp + 3);
+ assert.equal(after.goals, before.goals);
+ assert.equal(after.assists, before.assists);
+}
+for (const [name, before] of beforeSeason) if (!expected.flat().includes(name)) assert.deepEqual(afterSeason.get(name), before);
 for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200,null,'gold'],[1000,'Legendary','legendary']]) {
  const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'});
  assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);

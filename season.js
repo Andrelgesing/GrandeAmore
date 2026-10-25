@@ -13,6 +13,14 @@ const seasonFixtures = [{
   goals: currentTournamentGoals,
   assists: currentTournamentAssists,
   matchesPlayed: 3
+}, {
+  date: currentMatch.date,
+  teams: currentMatch.teams,
+  standings: currentMatchStandings,
+  // Goal and assist scorers for 25 October have not been supplied yet.
+  goals: [],
+  assists: [],
+  matchesPlayed: 3
 }];
 
 function buildSeasonStandings(fixtures, rosterPlayers) {

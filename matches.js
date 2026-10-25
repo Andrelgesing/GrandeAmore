@@ -150,7 +150,13 @@ const currentMatch = {
     "Loay"
   ]
 };
-const currentMatchStandings = [1, 2, 3, 4].map(team => ({ team, points: null }));
+// Final results for 25 October 2026; team numbers and players stay fixed.
+const currentMatchStandings = [
+  { team: 1, points: 7, champions: true },
+  { team: 4, points: 6 },
+  { team: 3, points: 4 },
+  { team: 2, points: 0 }
+];
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
