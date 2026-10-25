@@ -30,7 +30,7 @@ const expected = [["Ahmad", "Inca", "Levi", "Samu", "Baraa", "Ali", "3rd GK"], [
 const config = JSON.parse(vm.runInContext('JSON.stringify(currentMatch)', context));
 assert.deepEqual(config.teams, expected);
 assert.equal(config.date, '2026-10-25');
-assert.deepEqual(config.captains, ['Inca', null, 'AlexG', 'Loay']);
+assert.deepEqual(config.captains, ['Inca', 'Andre', 'AlexG', 'Loay']);
 assert.equal(new Set(config.teams.flat()).size, 28);
 assert.equal(new Set(['Inca','Enil','Loay'].map(n=>config.teams.findIndex(t=>t.includes(n)))).size, 3);
 assert.equal(config.teams.filter(t=>t.includes('Andre') && t.includes('Ali')).length, 0);

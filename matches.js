@@ -145,7 +145,7 @@ const currentMatch = {
   ],
   "captains": [
     "Inca",
-    null,
+    "Andre",
     "AlexG",
     "Loay"
   ]
