@@ -26,11 +26,11 @@ vm.runInContext('const players = roster.map(([name, position, elo, photo], roste
 vm.runInContext(playerSource.slice(playerSource.indexOf('const tier ='), playerSource.indexOf('function stars')), context);
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8'), context);
-const expected = [["Ahmad", "Inca", "Levi", "Leo", "Baraa", "Ali", "3rd GK"], ["Hay", "Carlo", "Omar Johny", "Steve Alex", "Johny", "Samu", "Andre"], ["Ronaldo", "davideb", "Enil", "Paolo", "Darius", "Mauro", "AlexG"], ["Obaida", "Omar", "gabi", "Alexandre", "Takunda", "Danilo", "Loay"]];
+const expected = [["Ahmad", "Inca", "Levi", "Samu", "Baraa", "Ali", "3rd GK"], ["Hay", "Carlo", "Omar Johny", "Steve Alex", "Johny", "Leo", "Andre"], ["Ronaldo", "davideb", "Enil", "Paolo", "Darius", "Mauro", "AlexG"], ["Obaida", "Omar", "gabi", "Alexandre", "Takunda", "Danilo", "Loay"]];
 const config = JSON.parse(vm.runInContext('JSON.stringify(currentMatch)', context));
 assert.deepEqual(config.teams, expected);
 assert.equal(config.date, '2026-10-25');
-assert.deepEqual(config.captains, ['Inca', 'Samu', 'AlexG', 'Loay']);
+assert.deepEqual(config.captains, ['Inca', null, 'AlexG', 'Loay']);
 assert.equal(new Set(config.teams.flat()).size, 28);
 assert.equal(new Set(['Inca','Enil','Loay'].map(n=>config.teams.findIndex(t=>t.includes(n)))).size, 3);
 assert.equal(config.teams.filter(t=>t.includes('Andre') && t.includes('Ali')).length, 0);
@@ -45,9 +45,9 @@ assert.equal(grid.children, originalCards);
 assert.equal(JSON.stringify(players), before);
 for (const [i, card] of grid.children.entries()) {
  const all = descendants(card);
- assert.equal(all.filter(e => e.className === 'match-captain').length, 1);
+ assert.equal(all.filter(e => e.className === 'match-captain').length, config.captains[i] ? 1 : 0);
  const photo = all.find(e => e.className === 'match-photo' && e.children.some(c => c.className === 'match-captain'));
- assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[i]} player card`);
+ if (config.captains[i]) assert.equal(photo.children[0].attributes['aria-label'], `View ${config.captains[i]} player card`);
  assert.equal(all.filter(e => e.className === 'match-points').length, 0);
  assert.equal(all.filter(e => e.className === 'match-champions').length, 0);
 }

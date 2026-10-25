@@ -110,7 +110,7 @@ const currentMatch = {
       "Ahmad",
       "Inca",
       "Levi",
-      "Leo",
+      "Samu",
       "Baraa",
       "Ali",
       "3rd GK"
@@ -121,7 +121,7 @@ const currentMatch = {
       "Omar Johny",
       "Steve Alex",
       "Johny",
-      "Samu",
+      "Leo",
       "Andre"
     ],
     [
@@ -145,7 +145,7 @@ const currentMatch = {
   ],
   "captains": [
     "Inca",
-    "Samu",
+    null,
     "AlexG",
     "Loay"
   ]
