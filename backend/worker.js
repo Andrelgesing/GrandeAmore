@@ -30,6 +30,7 @@ seed.Leo = { elo: 1000, legendary: false };
 seed.Obaida = { elo: 1000, legendary: false };
 seed.Ahmad = { elo: 1000, legendary: false };
 seed.Mauro = { elo: 1000, legendary: false };
+seed['3rd GK'] = { elo: 1100, legendary: false };
 const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
 export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
 const calibrationMigration = 'elo-calibration:v1';
