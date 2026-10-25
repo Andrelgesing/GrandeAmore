@@ -5,7 +5,7 @@ const source = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
 const { Rankings } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 const fixtureContext = vm.createContext({});
 vm.runInContext(readFileSync(new URL('../matches.js', import.meta.url), 'utf8').split('function positionCost')[0], fixtureContext);
-const teams = JSON.parse(vm.runInContext('JSON.stringify(currentMatch.teams)', fixtureContext));
+const teams = JSON.parse(vm.runInContext('JSON.stringify(october18Match.teams)', fixtureContext));
 const serviceName = name => ({ Alexandre: 'Alexander', Paolo: 'Paolo (pac)' }[name] || name);
 const deltas = Object.fromEntries(teams.flatMap((team, index) => team.map(name => [serviceName(name), [-30, 20, -30, 40][index]])));
 let data = new Map();

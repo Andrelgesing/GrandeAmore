@@ -46,8 +46,8 @@ const sundayMatch = {
     ]
   ]
 };
-// Current preview approved for 18 October. Historical constants above remain the season record.
-const currentMatch = {
+// Completed tournaments remain the source for season points and historical lineups.
+const october18Match = {
   "date": "2026-10-18",
   "rankingRevision": 1302,
   "teams": [
@@ -96,12 +96,61 @@ const currentMatch = {
   ]
 };
 // Final points for 18 October; equal points share the same placing.
-const currentMatchStandings = [
+const october18Standings = [
   { team: 4, points: 7, champions: true },
   { team: 2, points: 4 },
   { team: 1, points: 3 },
   { team: 3, points: 3 }
 ];
+const currentMatch = {
+  "date": "2026-10-25",
+  "rankingRevision": 1608,
+  "teams": [
+    [
+      "Ahmad",
+      "Inca",
+      "Levi",
+      "Leo",
+      "Baraa",
+      "Ali",
+      "3rd GK"
+    ],
+    [
+      "Hay",
+      "Carlo",
+      "Omar Johny",
+      "Steve Alex",
+      "Johny",
+      "Samu",
+      "Andre"
+    ],
+    [
+      "Ronaldo",
+      "davideb",
+      "Enil",
+      "Paolo",
+      "Darius",
+      "Mauro",
+      "AlexG"
+    ],
+    [
+      "Obaida",
+      "Omar",
+      "gabi",
+      "Alexandre",
+      "Takunda",
+      "Danilo",
+      "Loay"
+    ]
+  ],
+  "captains": [
+    "Inca",
+    "Samu",
+    "AlexG",
+    "Loay"
+  ]
+};
+const currentMatchStandings = [1, 2, 3, 4].map(team => ({ team, points: null }));
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
