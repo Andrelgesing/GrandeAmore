@@ -102,3 +102,14 @@ when calibration metadata is present; absent metadata defaults to established.
 Newcomers in the immediately preceding matchup are excluded from both selection
 branches. If fewer than two players remain, this cooldown is relaxed so a duel
 can still be shown. The 60% branch runs when an eligible newcomer is available.
+
+## Main squad and substitutes
+
+The explicit `substituteNames` sets in players.js (display names) and worker.js
+(service names) define the 23 substitutes selected on 25 October. Substitutes
+remain in the roster, historical fixtures, rankings and rating storage, but
+cannot enter duels. The Players page hides their section until Show substitutes.
+To promote a returning regular, remove their name from both sets and publish
+the frontend and Worker. Membership does not change automatically with Elo.
+Run substitutes.test.cjs to verify visibility, eligibility alignment and ratings
+preservation. Snowflake keeps the existing independent duel exclusion.

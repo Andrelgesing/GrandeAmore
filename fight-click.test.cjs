@@ -10,6 +10,7 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
  let now = 0;
  const context = vm.createContext({
   performance: { now: () => now },
+  substituteNames: new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro"]),
   RATINGS_API: 'https://ratings.test', location: { protocol }, players: squad, ratingState: {},
   document: { querySelector: id => nodes[id], createElement: tag => Object.assign(element(), { tag }), addEventListener() {}, hidden: false },
   localStorage: { getItem: key => saved.get(key), setItem: (key, value) => saved.set(key, value) },
@@ -32,6 +33,7 @@ function setup(protocol, fetch, squad = ['A', 'B', 'C'].map(name => ({ name, elo
   rosterFight.run('nextFight()');
   for (const player of rosterFight.run('pair')) {
    assert.notEqual(player.name, '@~❄️', 'Snowflake cannot be selected for either side');
+   assert(!rosterFight.context.substituteNames.has(player.name), 'Substitutes cannot appear in duels');
    seen.add(player.name);
   }
  }

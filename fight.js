@@ -1,5 +1,5 @@
 const arenas = ['neon-city', 'sunset-rooftop', 'mountain-temple', 'moonlit-docks'];
-const duelPlayers = players.filter(player => player.name !== '@~❄️');
+const duelPlayers = players.filter(player => player.name !== '@~❄️' && !substituteNames.has(player.name));
 const arena = document.querySelector('#fight-arena');
 const options = document.querySelector('#fight-options');
 const skipFight = document.querySelector('#fight-skip');

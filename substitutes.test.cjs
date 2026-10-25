@@ -1,0 +1,36 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const element = () => ({children:[], hidden:true, attrs:{}, listeners:{}, style:{}, append(...items){this.children.push(...items)}, replaceChildren(...items){this.children=items}, setAttribute(k,v){this.attrs[k]=v},addEventListener(k,fn){this.listeners[k]=fn}});
+const nodes = new Map();
+const context = vm.createContext({RATINGS_API:'',localStorage:{getItem:()=>null},document:{querySelector(id){if(!nodes.has(id))nodes.set(id,element());return nodes.get(id)},createElement:element}});
+const source=fs.readFileSync(__dirname+'/players.js','utf8');
+vm.runInContext(source.split('renderPlayerGrid();')[0],context);
+vm.runInContext('cardContent = player => player.name; renderPlayerGrid();',context);
+const names=vm.runInContext('[...substituteNames]',context);
+assert.equal(names.length,23);
+assert.equal(nodes.get('#substitutes-grid').children.length,23);
+assert.equal(nodes.get('#player-grid').children.length,vm.runInContext('players.length',context)-23);
+for(const name of ['Darius','Takunda','Iacob','Steve Alex','Shahrom'])assert(!names.includes(name));
+assert(nodes.get('#substitutes-section')?.hidden ?? true);
+nodes.get('#substitutes-toggle').listeners.click();
+assert.equal(nodes.get('#substitutes-section').hidden,false);
+assert.equal(nodes.get('#substitutes-toggle').attrs['aria-expanded'],'true');
+vm.runInContext('renderPlayerGrid()',context);
+assert.equal(nodes.get('#substitutes-section').hidden,false,'Rating refresh preserves expanded section');
+nodes.get('#substitutes-toggle').listeners.click();
+assert.equal(nodes.get('#substitutes-section').hidden,true);
+(async()=>{
+ const worker=fs.readFileSync(__dirname+'/backend/worker.js','utf8');
+ const {duelEligible,Rankings}=await import('data:text/javascript;base64,'+Buffer.from(worker).toString('base64'));
+ const before={ratings:JSON.parse(vm.runInNewContext(worker.split('// Keep membership')[0]+'JSON.stringify(seed)')),revision:123};
+ before.ratings.Andre.elo=1273;
+ const data=new Map([['ratings',structuredClone(before.ratings)],['revision',before.revision],['elo-calibration:v1',true]]);
+ const storage={get:async k=>structuredClone(data.get(k)),put:async(k,v)=>data.set(k,structuredClone(v)),transaction:async fn=>fn(storage)};
+ let ready;const service=new Rankings({storage,blockConcurrencyWhile(fn){ready=fn()}},{});await ready;
+ for(const name of names){const id=name==='Fabien'?'@Fabien Vjaceslavs':name;assert(!duelEligible(id));assert.equal((await service.fetch(new Request('https://test/votes',{method:'POST',body:JSON.stringify({id:'excluded-test-123456',winner:id,loser:'Andre'})}))).status,400)}
+ for(const name of ['Darius','Takunda','Iacob','Steve Alex','Shahrom'])assert(duelEligible(name));
+ assert.deepEqual(data.get('ratings'),before.ratings,'Eligibility migration leaves all Elo/honors/counters intact');
+ assert.equal(data.get('revision'),before.revision);
+ console.log('Passed: 23 substitutes, main squad exceptions, toggle and refresh behavior, frontend/backend membership alignment, rejected votes and exact Elo preservation.');
+})();

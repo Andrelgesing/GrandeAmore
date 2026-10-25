@@ -13,7 +13,7 @@ let ready;
 const start = async Class => { const service = new Class({storage, blockConcurrencyWhile(fn) { ready = fn(); }}, {ELO_K:'16'}); await ready; return service; };
 let service = await start(Rankings);
 const before = structuredClone(data.get('ratings'));
-const expanded = await load(source.replace('const duelEligible =', "seed.NewA = {elo:1000, legendary:false}; seed.NewB = {elo:1000, legendary:false};\nconst duelEligible ="));
+const expanded = await load(source.replace('export const duelEligible =', "seed.NewA = {elo:1000, legendary:false}; seed.NewB = {elo:1000, legendary:false};\nexport const duelEligible ="));
 service = await start(expanded.Rankings);
 for (const [name, rating] of Object.entries(before)) assert.deepEqual(data.get('ratings')[name], rating, 'Existing ratings/honors preserved exactly');
 assert.equal(data.get('ratings').NewA.calibrationDuels, 0);

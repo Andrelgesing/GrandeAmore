@@ -104,8 +104,10 @@ const players = roster.map(([name, position, elo, photo = null, status = null, t
   // Stable playful scores, chosen randomly once per page load.
   stats: customJokeStats[name] || [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
 })).sort((a, b) => Number(Boolean(b.photo)) - Number(Boolean(a.photo)));
+// Explicit squad membership: remove a name here and in the backend policy to promote them.
+const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro"]);
 const grid = document.querySelector('#player-grid');
-const photoPlayers = players.filter(player => player.photo);
+const photoPlayers = players.filter(player => player.photo && !substituteNames.has(player.name));
 for (let i = photoPlayers.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
   [photoPlayers[i], photoPlayers[j]] = [photoPlayers[j], photoPlayers[i]];
@@ -118,7 +120,7 @@ for (const player of photoPlayers.slice(0, 2)) {
 }
 const dialog = document.querySelector('#player-dialog');
 const detail = document.querySelector('#player-detail');
-document.querySelector('#squad-summary').textContent = `${players.length} players. One team.`;
+document.querySelector('#squad-summary').textContent = `${players.length - substituteNames.size} main squad · ${substituteNames.size} substitutes. One team.`;
 const tier = rating => rating >= 3.75 ? 'gold' : rating >= 2.5 ? 'silver' : 'bronze';
 const cardStyle = player => player.status === 'Legendary' ? 'legendary' : tier(rawStars(player.elo));
 function stars(rating) {
@@ -209,6 +211,8 @@ function openPlayerCard(player) {
 }
 function renderPlayerGrid() {
  grid.replaceChildren();
+ const substitutesGrid = document.querySelector('#substitutes-grid');
+ substitutesGrid.replaceChildren();
 for (const player of players) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -217,9 +221,16 @@ for (const player of players) {
   button.setAttribute('aria-haspopup', 'dialog');
   button.append(cardContent(player));
   button.addEventListener('click', () => openPlayerCard(player));
-  grid.append(button);
+  (substituteNames.has(player.name) ? substitutesGrid : grid).append(button);
 }
 }
+const substitutesToggle = document.querySelector('#substitutes-toggle');
+substitutesToggle.addEventListener('click', () => {
+ const section = document.querySelector('#substitutes-section');
+ section.hidden = !section.hidden;
+ substitutesToggle.setAttribute('aria-expanded', String(!section.hidden));
+ substitutesToggle.textContent = section.hidden ? 'Show substitutes' : 'Hide substitutes';
+});
 renderPlayerGrid();
 dialog.addEventListener('close', () => document.body.classList.remove('modal-open'));
 dialog.addEventListener('click', event => {

@@ -218,7 +218,7 @@
     .player-card .position { font-size: .75rem; font-weight: 800; letter-spacing: .12em; }
     .secondary-position { display: block; font-weight: 500; margin-top: 3px; }
     .portrait { width: 86px; height: 86px; border-radius: 50%; background: #ffffff80; border: 1px solid #ffffff; display: grid; place-items: center; margin: 18px auto; font-size: 1.7rem; font-weight: 800; }
-    #player-grid .portrait { width: 111.8px; height: 111.8px; }
+    #player-grid .portrait, #substitutes-grid .portrait { width: 111.8px; height: 111.8px; }
     .portrait, .match-portrait { overflow: hidden; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
     .portrait img, .match-portrait img { display: block; min-width: 0; min-height: 0; }
     img[src="players/lucas.jpg"] { object-fit: contain !important; background: white; }
@@ -286,6 +286,8 @@
     <section id="players-view" hidden aria-labelledby="players-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / The squad</div><h1 id="players-title">Meet the players.</h1><p id="squad-summary">Our players. One team.</p><p class="small-note">Bronze: below 2.5★ · Silver: 2.5–below 3.75★ · Gold: 3.75–5★<br>✦ Reaching 5★ earns Legendary status. Existing Legendary honors remain.</p></div>
       <div class="player-grid" id="player-grid"></div>
+      <button class="button" id="substitutes-toggle" type="button" aria-expanded="false" aria-controls="substitutes-section">Show substitutes</button>
+      <div id="substitutes-section" hidden><h2>Substitutes</h2><div class="player-grid" id="substitutes-grid"></div></div>
     </section>
     <section id="matches-view" hidden aria-labelledby="matches-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament</h1><time class="match-date" datetime="2026-10-25">Sunday · 25 October 2026 · 17:00</time></div>
@@ -329,12 +331,12 @@
   <footer>Grande Amore FC · Together on and off the pitch.</footer>
 <script src="config.js"></script>
 <script src="placement-preview.js"></script>
-<script src="players.js?v=20261025-omar-johny"></script>
+<script src="players.js?v=20261025-substitutes"></script>
 <script src="goals.js?v=20261019-season-results"></script>
 <script src="matches.js?v=20261025-results-andre-captain"></script>
 <script src="season.js?v=20261025-results"></script>
 <script src="memories.js"></script>
 
-<script src="fight.js?v=20261021-minimum200"></script>
+<script src="fight.js?v=20261025-substitutes"></script>
 </body>
 </html>

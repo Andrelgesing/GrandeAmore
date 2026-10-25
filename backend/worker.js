@@ -33,7 +33,9 @@ seed.Mauro = { elo: 1000, legendary: false };
 seed['3rd GK'] = { elo: 1100, legendary: false };
 seed['Steve Alex'] = { elo: 800, legendary: false };
 seed['Omar Johny'] = { elo: 1000, legendary: false };
-const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️';
+// Keep membership aligned with players.js; ratings and history stay stored.
+const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "@Fabien Vjaceslavs", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro"]);
+export const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️' && !substituteNames.has(name);
 export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
 const calibrationMigration = 'elo-calibration:v1';
 const archivePrefix = 'elo-snapshot:';
