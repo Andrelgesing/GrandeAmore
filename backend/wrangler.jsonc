@@ -4,6 +4,7 @@
   "compatibility_date": "2026-10-10",
   "vars": {
     "ELO_K": "16",
+    "APPLY_TOURNAMENT_20261025": "true",
     "MVP_CLOSED": "true",
     "APPLY_RONALDO_20261018": "true",
     "APPLY_TOURNAMENT_20261011": "true",

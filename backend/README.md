@@ -113,3 +113,10 @@ To promote a returning regular, remove their name from both sets and publish
 the frontend and Worker. Membership does not change automatically with Elo.
 Run substitutes.test.cjs to verify visibility, eligibility alignment and ratings
 preservation. Snowflake keeps the existing independent duel exclusion.
+
+## Tournament Elo
+
+New tournaments use the [saved tournament Elo routine](tournament-elo.md), starting
+with sensitivity divisor 200. The reusable calculation, frozen 25 October input,
+exactly-once application and before/after audit are in `worker.js`. The dated audit
+is available from `/tournament-placement?date=2026-10-25`.

@@ -2,7 +2,136 @@ const tournamentKey = 'tournament:2026-10-11:placement';
 const tournamentChanges = {"Hay": -20, "Omar": -20, "Daniel": -20, "Paolo (pac)": -20, "Jack": -20, "Takunda": -20, "AlexG": -20, "Samu": -40, "Iacob": -40, "Levi": -40, "Nikita": -40, "Dejan": -40, "davideb": -40, "Andre": -40, "Ali": 40, "Loay": 40, "Andreeas": 40, "Danilo": 40, "Darius": 40, "Enil": 40, "Milan": 40, "Lucas": 20, "gabi": 20, "fabian": 20, "Mohamed": 20, "Baraa": 20, "Valentin": 20, "@Fabien Vjaceslavs": 20};
 const tournament18Key = 'tournament:2026-10-18:placement';
 const tournament18Changes = {"Vasilis": -30, "fabian": -30, "Iacob": -30, "Giorgios": -30, "Alexander": -30, "Mostafa": -30, "Andreeas": -30, "Ronaldo": 20, "Manuel": 20, "Levi": 20, "Jack": 20, "Nikita": 20, "Yahya": 20, "gabi": 20, "Shahrom": -30, "Raul": -30, "Momo": -30, "Ali": -30, "Paolo (pac)": -30, "davideb": -30, "Lucas": -30, "Hay": 40, "Loay": 40, "David": 40, "Martin": 40, "Marco": 40, "Johny": 40, "Chris": 40};
-const latestTournamentPlacement = async storage => await storage.get(tournament18Key) || await storage.get(tournamentKey);
+const tournament25Key = 'tournament:2026-10-25:placement';
+// Frozen before kickoff: final lineups, results and ratings revision 1608.
+const tournament25Input = {
+  "date": "2026-10-25",
+  "ratingRevision": 1608,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Ahmad",
+        "Inca",
+        "Levi",
+        "Samu",
+        "Baraa",
+        "Ali",
+        "3rd GK"
+      ],
+      "points": 7,
+      "champions": true
+    },
+    {
+      "team": 2,
+      "players": [
+        "Hay",
+        "Carlo",
+        "Omar Johny",
+        "Steve Alex",
+        "Johny",
+        "Leo",
+        "Andre"
+      ],
+      "points": 0
+    },
+    {
+      "team": 3,
+      "players": [
+        "Ronaldo",
+        "davideb",
+        "Enil",
+        "Paolo (pac)",
+        "Darius",
+        "Mauro",
+        "AlexG"
+      ],
+      "points": 4
+    },
+    {
+      "team": 4,
+      "players": [
+        "Obaida",
+        "Omar",
+        "gabi",
+        "Alexander",
+        "Takunda",
+        "Danilo",
+        "Loay"
+      ],
+      "points": 6
+    }
+  ],
+  "ratings": {
+    "Ahmad": 1000,
+    "Inca": 1177,
+    "Levi": 1062,
+    "Samu": 1181,
+    "Baraa": 893,
+    "Ali": 1102,
+    "3rd GK": 1100,
+    "Hay": 1163,
+    "Carlo": 1000,
+    "Omar Johny": 1000,
+    "Steve Alex": 800,
+    "Johny": 927,
+    "Leo": 1000,
+    "Andre": 1262,
+    "Ronaldo": 959,
+    "davideb": 1107,
+    "Enil": 1446,
+    "Paolo (pac)": 709,
+    "Darius": 1015,
+    "Mauro": 1000,
+    "AlexG": 1097,
+    "Obaida": 1000,
+    "Omar": 834,
+    "gabi": 1103,
+    "Alexander": 1076,
+    "Takunda": 956,
+    "Danilo": 1145,
+    "Loay": 1219
+  }
+};
+
+// Round robin, one match against each opponent, 3 points for a win / 1 for a draw.
+function tournamentEloDelta(difference, champion = false) {
+ if (!Number.isFinite(difference)) throw new Error('Invalid points difference');
+ const gap = Math.abs(difference);
+ const magnitude = gap >= 3 ? 40 : gap >= 1 ? 20 : gap >= 0.5 ? 10 : 0;
+ const delta = magnitude === 0 ? 0 : Math.sign(difference) * magnitude;
+ return champion ? Math.max(10, delta) : delta;
+}
+function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
+ if (!Array.isArray(teams) || teams.length < 2 || !Number.isFinite(divisor) || divisor <= 0) throw new Error('Invalid tournament settings');
+ const seen = new Set(), teamIds = new Set();
+ const calculated = teams.map(team => {
+  if (teamIds.has(team.team) || !Array.isArray(team.players) || !team.players.length || !Number.isInteger(team.points) || team.points < 0 || team.points > 3 * (teams.length - 1)) throw new Error('Invalid tournament team');
+  teamIds.add(team.team);
+  const total = team.players.reduce((sum, name) => {
+   if (seen.has(name) || !Object.hasOwn(ratings, name) || !Number.isFinite(ratings[name])) throw new Error('Missing or duplicate tournament player: ' + name);
+   seen.add(name);
+   return sum + ratings[name];
+  }, 0);
+  return { ...team, averageElo: total / team.players.length };
+ });
+ const adjustments = {};
+ for (const team of calculated) {
+  team.expectedPoints = calculated.reduce((sum, opponent) => {
+   if (opponent === team) return sum;
+   const expectedScore = 1 / (1 + 10 ** ((opponent.averageElo - team.averageElo) / divisor));
+   const drawProbability = expectedScore * (1 - expectedScore);
+   return sum + 3 * expectedScore - drawProbability / 2;
+  }, 0);
+  team.difference = team.points - team.expectedPoints;
+  team.delta = tournamentEloDelta(team.difference, team.champions === true);
+  for (const name of team.players) adjustments[name] = team.delta;
+ }
+ return { rule: 'tournament-elo-v1', divisor, drawModel: 'E*(1-E)', neutralBand: 0.5, championMinimum: 10, teams: calculated, adjustments };
+}
+
+const latestTournamentPlacement = async storage => await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
 const mvpOpening = Date.parse('2026-10-18T18:30:00+02:00');
 const mvpPoll = '2026-10-18-official';
 const mvpCandidates = ["Vasilis", "fabian", "Iacob", "Giorgios", "Alexander", "Mostafa", "Andreeas", "Ronaldo", "Manuel", "Levi", "Jack", "Nikita", "Yahya", "gabi", "Shahrom", "Raul", "Momo", "Ali", "Paolo (pac)", "davideb", "Lucas", "Hay", "Loay", "David", "Martin", "Marco", "Johny", "Chris"];
@@ -142,6 +271,20 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    // Apply the frozen calculation once to current Elo, preserving intervening duels.
+    if (env.APPLY_TOURNAMENT_20261025 === 'true' && !await tx.get(tournament25Key)) {
+     const calculation = calculateTournamentElo(tournament25Input);
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(calculation.adjustments)) {
+      if (!ratings[name]) throw new Error('Missing tournament player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournament25Key, { ...calculation, input: tournament25Input, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
@@ -179,7 +322,7 @@ export class Rankings {
   }
   if (path === '/tournament-placement' && request.method === 'GET') {
    const date = url.searchParams.get('date');
-   if (date && !['2026-10-11', '2026-10-18'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   if (date && !['2026-10-11', '2026-10-18', '2026-10-25'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
    return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
   }
   if (path === '/mvp') return this.mvp(request);
@@ -246,3 +389,5 @@ export class Rankings {
  }
 
 }
+
+export { tournament25Input, tournamentEloDelta, calculateTournamentElo };

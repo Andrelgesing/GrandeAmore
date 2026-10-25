@@ -288,10 +288,10 @@ function renderMvp() {
   rating.append(stars(player.rating));
   const elo = document.createElement('td');
   elo.textContent = player.elo;
-  if (tournamentEloAdjustments[player.name]) {
+  if (Object.hasOwn(tournamentEloAdjustments, player.name)) {
     const delta = tournamentEloAdjustments[player.name];
     const change = document.createElement('span');
-    change.className = `elo-adjustment ${delta > 0 ? 'elo-gain' : 'elo-loss'}`;
+    change.className = `elo-adjustment ${delta > 0 ? 'elo-gain' : delta < 0 ? 'elo-loss' : 'elo-neutral'}`;
     change.textContent = ` (${delta > 0 ? '+' : ''}${delta})`;
     elo.append(change);
   }
