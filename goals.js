@@ -27,10 +27,11 @@ function combinedContributions(...fixtures) {
  for (const entries of fixtures) for (const [name, count] of entries) totals.set(name, (totals.get(name) || 0) + count);
  return [...totals];
 }
-function renderContributions(selector, contributions, unit) {
+const contributionLimits = { goals: 10, assists: 10 };
+function renderContributions(selector, contributions, unit, limit = 10) {
  const list = document.querySelector(selector);
  list.replaceChildren();
- for (const [name, count] of [...contributions].sort((a, b) => b[1] - a[1])) {
+ for (const [name, count] of [...contributions].sort((a, b) => b[1] - a[1]).slice(0, limit)) {
   const player = players.find(player => player.name === name);
   const row = document.createElement('div');
   row.className = `goal-row player-card ${cardStyle(player)}`;
@@ -44,8 +45,17 @@ function renderContributions(selector, contributions, unit) {
  }
 }
 function renderGoals() {
- renderContributions('#goals-list', combinedContributions(tournamentGoals, currentTournamentGoals), 'goal');
- renderContributions('#assists-list', combinedContributions(tournamentAssists, currentTournamentAssists), 'assist');
+ renderContributions('#goals-list', combinedContributions(tournamentGoals, currentTournamentGoals), 'goal', contributionLimits.goals);
+ renderContributions('#assists-list', combinedContributions(tournamentAssists, currentTournamentAssists), 'assist', contributionLimits.assists);
+}
+for (const key of ['goals', 'assists']) {
+ const toggle = document.querySelector(`#${key}-toggle`);
+ toggle.addEventListener('click', () => {
+  contributionLimits[key] = contributionLimits[key] === 10 ? 20 : 10;
+  toggle.textContent = contributionLimits[key] === 10 ? 'Show top 20' : 'Show top 10';
+  toggle.setAttribute('aria-expanded', String(contributionLimits[key] === 20));
+  renderGoals();
+ });
 }
 renderGoals();
 document.addEventListener('ratings-updated', renderGoals);
