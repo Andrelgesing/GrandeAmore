@@ -102,7 +102,7 @@ const october18Standings = [
   { team: 1, points: 3 },
   { team: 3, points: 3 }
 ];
-const currentMatch = {
+const october25Match = {
   "date": "2026-10-25",
   "rankingRevision": 1608,
   "teams": [
@@ -151,12 +151,51 @@ const currentMatch = {
   ]
 };
 // Final results for 25 October 2026; team numbers and players stay fixed.
-const currentMatchStandings = [
+const october25Standings = [
   { team: 1, points: 7, champions: true },
   { team: 4, points: 6 },
   { team: 3, points: 4 },
   { team: 2, points: 0 }
 ];
+const currentMatch = {
+  "date": "2026-11-01",
+  "rankingRevision": 1678,
+  "roles": [
+    "ST",
+    "ST",
+    "CM",
+    "CM",
+    "CB",
+    "CB",
+    "CB",
+    "GK"
+  ],
+  "showRatings": false,
+  "teams": [
+    [
+      "Ali",
+      "Teodor",
+      "fabian",
+      "Omar",
+      "Baraa",
+      "Paolo",
+      "Ahmed",
+      "Wesam"
+    ],
+    [
+      "Steve Alex",
+      "Hay",
+      "davideb",
+      "Andreeas",
+      "Takunda",
+      "Nikita",
+      "Johny",
+      "Luka"
+    ]
+  ],
+  "captains": []
+};
+const currentMatchStandings = [1, 2].map(team => ({ team, points: null }));
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
@@ -261,7 +300,9 @@ function matchPlayer({ player, role }) {
     const captain = document.createElement('span'); captain.className = 'match-captain';
     captain.textContent = 'C'; captain.setAttribute('aria-label', 'Captain'); photo.append(captain);
   }
-  item.append(photo, name, stars(player.rating), position);
+  item.append(photo, name);
+  if (currentMatch.showRatings !== false) item.append(stars(player.rating));
+  item.append(position);
   return item;
 }
 
@@ -271,7 +312,7 @@ function renderMatches() {
   const teams = currentMatch.teams.map(names => names.map((name, index) => {
     const player = byName.get(name);
     if (!player) throw new Error(`Missing tournament player: ${name}`);
-    return { player, role: matchRoles[index] };
+    return { player, role: currentMatch.roles[index] };
   }));
   const available = teams.flat().map(entry => entry.player);
   const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo, player.status]));
@@ -302,7 +343,7 @@ function renderMatches() {
       const points = document.createElement('strong'); points.className = 'match-points';
       points.textContent = `${standing.points} pts`; heading.append(points);
     }
-    heading.append(average);
+    if (currentMatch.showRatings !== false) heading.append(average);
     const pitch = document.createElement('div'); pitch.className = 'match-pitch';
     pitch.setAttribute('aria-labelledby', name.id);
     const center = document.createElement('div'); center.className = 'pitch-center'; center.setAttribute('aria-hidden', 'true');

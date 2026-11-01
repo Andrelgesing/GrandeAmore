@@ -11,7 +11,7 @@ assert.equal(size('goals'),10);assert.equal(size('assists'),10);
 nodes['#goals-toggle'].listeners.click();
 assert.equal(size('goals'),20);assert.equal(size('assists'),10);
 nodes['#assists-toggle'].listeners.click();
-const totalAssists=vm.runInContext('combinedContributions(tournamentAssists,currentTournamentAssists).length',context);
+const totalAssists=vm.runInContext('combinedContributions(tournamentAssists,currentTournamentAssists,october25Assists).length',context);
 assert.equal(size('assists'),Math.min(20,totalAssists));
 assert.equal(nodes['#assists-toggle'].attributes['aria-expanded'],'true');
 events['ratings-updated']();assert.equal(size('goals'),20);assert.equal(size('assists'),Math.min(20,totalAssists));

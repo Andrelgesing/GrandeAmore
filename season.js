@@ -14,9 +14,9 @@ const seasonFixtures = [{
   assists: currentTournamentAssists,
   matchesPlayed: 3
 }, {
-  date: currentMatch.date,
-  teams: currentMatch.teams,
-  standings: currentMatchStandings,
+  date: october25Match.date,
+  teams: october25Match.teams,
+  standings: october25Standings,
   goals: october25Goals,
   assists: october25Assists,
   matchesPlayed: 3
