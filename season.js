@@ -17,9 +17,8 @@ const seasonFixtures = [{
   date: currentMatch.date,
   teams: currentMatch.teams,
   standings: currentMatchStandings,
-  // Goal and assist scorers for 25 October have not been supplied yet.
-  goals: [],
-  assists: [],
+  goals: october25Goals,
+  assists: october25Assists,
   matchesPlayed: 3
 }];
 

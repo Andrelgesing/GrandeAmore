@@ -61,7 +61,7 @@ assert.notEqual(grid.children, originalCards);
 assert.deepEqual(lineups(), [expected[0], expected[3], expected[2], expected[1]]);
 for (const p of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname,p.photo)));
 // The first fixture keeps its historical participants and points.
-vm.runInContext('const tournamentGoals = []; const tournamentAssists = []; const currentTournamentGoals = []; const currentTournamentAssists = [];', context);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'goals.js'), 'utf8').split('const contributionLimits')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'season.js'),'utf8').split('function buildSeasonStandings')[0],context);
 const old = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[0])', context));
 assert.equal(old.date, '2026-10-11');
@@ -77,6 +77,10 @@ assert.deepEqual(previous.standings.map(s=>s.team), [4,2,1,3]);
 assert.deepEqual(previous.standings.map(s=>s.points), [7,4,3,3]);
 const today = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[2])', context));
 assert.equal(today.date, '2026-10-25');
+assert.equal(today.goals.length, 10);
+assert.equal(today.goals.reduce((sum, [, n]) => sum + n, 0), 25);
+assert.equal(today.assists.reduce((sum, [, n]) => sum + n, 0), 17);
+for (const [name] of [...today.goals, ...today.assists]) assert(expected.flat().includes(name));
 assert.deepEqual(today.teams, expected);
 assert.deepEqual(today.standings.map(s => [s.team, s.points]), [[1,7],[4,6],[3,4],[2,0]]);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'season.js'), 'utf8').split('function renderSeason')[0].split('function buildSeasonStandings')[1].replace(/^/, 'function buildSeasonStandings'), context);
@@ -89,8 +93,8 @@ for (const [teamIndex, team] of expected.entries()) for (const name of team) {
  const after = afterSeason.get(name);
  assert.equal(after.points, before.points + [7,0,4,6][teamIndex]);
  assert.equal(after.mp, before.mp + 3);
- assert.equal(after.goals, before.goals);
- assert.equal(after.assists, before.assists);
+ assert.equal(after.goals, before.goals + (new Map(today.goals).get(name) || 0));
+ assert.equal(after.assists, before.assists + (new Map(today.assists).get(name) || 0));
 }
 for (const [name, before] of beforeSeason) if (!expected.flat().includes(name)) assert.deepEqual(afterSeason.get(name), before);
 for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200,null,'gold'],[1000,'Legendary','legendary']]) {
