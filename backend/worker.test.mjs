@@ -1,14 +1,14 @@
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 const source = readFileSync(process.argv[2] || new URL('./worker.js', import.meta.url), 'utf8');
-const { Rankings, viennaDate, default: worker } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
+const { Rankings, viennaDate, duelEligible, default: worker } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 const frontendSource = readFileSync(new URL('../players.js', import.meta.url), 'utf8');
 const { default: vm } = await import('node:vm');
 const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () => null } });
 vm.runInContext(frontendSource.split('const grid =')[0], context);
 const players = vm.runInContext('players', context);
 const loay = players.find(player => player.name === 'Loay');
-assert.equal(players.length, 55);
+assert.equal(players.length, 59);
 const inca = players.find(player => player.name === 'Inca');
 assert.equal(inca.rating, 4);
 const omarJohny = players.find(player => player.name === 'Omar Johny');
@@ -34,7 +34,20 @@ assert.equal(hay.secondaryPosition, 'CM');
 assert.equal(players.find(player => player.name === 'Daniel').secondaryPosition, 'ST');
 assert(players.filter(player => !player.position.includes('/')).every(player => player.secondaryPosition === null));
 
-const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios', 'Omar Johny'].includes(player.name)).map(player => [vm.runInContext(`servicePlayerName(${JSON.stringify(player.name)})`, context), { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
+for (const name of ['Ahmed','Wesam','Teodor','Luka']) {
+ const p = players.find(p => p.name === name);
+ assert.equal(p.elo,1000); assert.equal(p.rating,3);
+ assert.equal(p.primaryPosition,'CB'); assert.equal(p.secondaryPosition,'CM');
+ assert.equal(p.stats.length,2); assert.notEqual(p.stats[0].label,p.stats[1].label);
+ for (const stat of p.stats) assert(Number.isInteger(stat.rating) && stat.rating >= 1 && stat.rating <= 5);
+ const substitute = name === 'Ahmed' || name === 'Wesam';
+ assert.equal(vm.runInContext(`substituteNames.has(${JSON.stringify(name)})`, context),substitute);
+ assert.equal(duelEligible(name),!substitute);
+}
+assert.notEqual(players.find(p=>p.name==='Ahmed'),players.find(p=>p.name==='Ahmad'));
+assert.notEqual(players.find(p=>p.name==='Luka'),players.find(p=>p.name==='Lucas'));
+
+const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios', 'Omar Johny', 'Ahmed', 'Wesam', 'Teodor', 'Luka'].includes(player.name)).map(player => [vm.runInContext(`servicePlayerName(${JSON.stringify(player.name)})`, context), { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
 const savedVote = { winner: 'Andre', loser: 'AlexG', points: 16, at: 1 };
 const data = new Map([['ratings', structuredClone(existing)], ['revision', 487], ['vote:old-vote-1234567', savedVote]]);
 let ready, chain = Promise.resolve();
@@ -53,6 +66,7 @@ let service = await create();
 const getRatings = async () => (await service.fetch(new Request('https://test/ratings'))).json();
 let response = await getRatings();
 assert.equal(response.revision, 487);
+for (const name of ['Ahmed','Wesam','Teodor','Luka']) assert.deepEqual(response.ratings[name],{elo:1000,legendary:false});
 assert.deepEqual(response.ratings['Omar Johny'], { elo: 1000, legendary: false });
 assert.deepEqual(response.ratings.Omar, existing.Omar);
 assert.deepEqual(response.ratings.Loay, { elo: 1100, legendary: false });
@@ -90,7 +104,7 @@ assert.deepEqual(await getRatings(), beforeExcludedVotes, 'Excluded votes and re
 data.clear();
 service = await create();
 response = await getRatings();
-assert.equal(Object.keys(response.ratings).length, 55);
+assert.equal(Object.keys(response.ratings).length, 59);
 assert.deepEqual(response.ratings.Inca, { elo: 1200, legendary: true });
 assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);

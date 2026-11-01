@@ -32,7 +32,11 @@ const roster = [
   ['Obaida', 'ST', 1000], ['Ahmad', 'ST', 1000], ['Mauro', 'CM', 1000],
   ['3rd GK', 'GK', 1100],
   ['Steve Alex', 'CM/ST', 800, 'players/stevealex.jpg'],
-  ['Omar Johny', 'CM', 1000]
+  ['Omar Johny', 'CM', 1000],
+  ['Ahmed', 'CB/CM', 1000, 'players/ahmed.jpg'],
+  ['Wesam', 'CB/CM', 1000],
+  ['Teodor', 'CB/CM', 1000, 'players/Teodor.jpg'],
+  ['Luka', 'CB/CM', 1000, 'players/luka.jpg']
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
@@ -96,6 +100,14 @@ const customJokeStats = {
     { label: 'Last 5 minutes form', rating: 5 }
   ]
 };
+const newcomerJokes = ['Striker pocket capacity: deluxe edition', 'Emergency clearance altitude', 'Back-pass drama', 'Tactical pointing accuracy', 'Shin-pad hide-and-seek', 'Halftime snack scouting', 'Invisible armband authority', 'Offside trap escape artistry', 'Studs-to-grass negotiation', 'Crossbar inspection duty', 'Post-match excuse originality', 'Warm-up enthusiasm'];
+for (const name of ['Ahmed', 'Wesam', 'Teodor', 'Luka']) {
+  const labels = [...newcomerJokes];
+  customJokeStats[name] = Array.from({ length: 2 }, () => ({
+    label: labels.splice(Math.floor(Math.random() * labels.length), 1)[0],
+    rating: 1 + Math.floor(Math.random() * 5)
+  }));
+}
 const players = roster.map(([name, position, elo, photo = null, status = null, title = null], index) => ({
   calibrationDuels: ratingState[name]?.calibrationDuels ?? 10,
   name, title, position, primaryPosition: position.split('/')[0], secondaryPosition: position.split('/')[1] || null,
@@ -105,7 +117,7 @@ const players = roster.map(([name, position, elo, photo = null, status = null, t
   stats: customJokeStats[name] || [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
 })).sort((a, b) => Number(Boolean(b.photo)) - Number(Boolean(a.photo)));
 // Explicit squad membership: remove a name here and in the backend policy to promote them.
-const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro"]);
+const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam"]);
 const grid = document.querySelector('#player-grid');
 const photoPlayers = players.filter(player => player.photo && !substituteNames.has(player.name));
 for (let i = photoPlayers.length - 1; i > 0; i--) {
