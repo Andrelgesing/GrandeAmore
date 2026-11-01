@@ -289,6 +289,17 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    // Apply Baraa's requested three-star rating once; preserve all other records and later votes.
+    const baraaCorrectionKey = 'elo-correction:baraa:2026-11-01';
+    if (env.APPLY_BARAA_20261101 === 'true' && !await tx.get(baraaCorrectionKey)) {
+     if (!ratings.Baraa) throw new Error('Missing player: Baraa');
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     ratings.Baraa.elo = 1000;
+     await tx.put(baraaCorrectionKey, { beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
