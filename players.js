@@ -117,7 +117,7 @@ const players = roster.map(([name, position, elo, photo = null, status = null, t
   stats: customJokeStats[name] || [0, 1].map(offset => ({ label: jokes[(index * 2 + offset) % jokes.length], rating: 1 + Math.floor(Math.random() * 5) }))
 })).sort((a, b) => Number(Boolean(b.photo)) - Number(Boolean(a.photo)));
 // Explicit squad membership: remove a name here and in the backend policy to promote them.
-const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam"]);
+const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "Fabien", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam", "@~❄️"]);
 const grid = document.querySelector('#player-grid');
 const photoPlayers = players.filter(player => player.photo && !substituteNames.has(player.name));
 for (let i = photoPlayers.length - 1; i > 0; i--) {
