@@ -166,6 +166,7 @@ seed.Ahmed = { elo: 1000, legendary: false };
 seed.Wesam = { elo: 1000, legendary: false };
 seed.Teodor = { elo: 1000, legendary: false };
 seed.Luka = { elo: 1000, legendary: false };
+seed['Omar B'] = { elo: 913, legendary: false };
 // Keep membership aligned with players.js; ratings and history stay stored.
 const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "@Fabien Vjaceslavs", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam"]);
 export const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️' && !substituteNames.has(name);

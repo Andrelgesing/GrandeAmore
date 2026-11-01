@@ -27,7 +27,7 @@ vm.runInContext(playerSource.slice(playerSource.indexOf('const tier ='), playerS
 vm.runInContext('function stars' + playerSource.split('function stars')[1].split('function cardContent')[0], context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'matches.js'), 'utf8'), context);
 const october25Expected = [["Ahmad", "Inca", "Levi", "Samu", "Baraa", "Ali", "3rd GK"], ["Hay", "Carlo", "Omar Johny", "Steve Alex", "Johny", "Leo", "Andre"], ["Ronaldo", "davideb", "Enil", "Paolo", "Darius", "Mauro", "AlexG"], ["Obaida", "Omar", "gabi", "Alexandre", "Takunda", "Danilo", "Loay"]];
-const expected = [["Ali", "Teodor", "fabian", "Omar", "Baraa", "Paolo", "Ahmed", "Wesam"], ["Steve Alex", "Hay", "davideb", "Andreeas", "Takunda", "Nikita", "Johny", "Luka"]];
+const expected = [["Ali", "Teodor", "fabian", "Omar B", "Baraa", "Paolo", "Ahmed", "Wesam"], ["Steve Alex", "Hay", "davideb", "Andreeas", "Takunda", "Nikita", "Johny", "Luka"]];
 const config = JSON.parse(vm.runInContext('JSON.stringify(currentMatch)', context));
 assert.deepEqual(config.teams, expected);
 assert.equal(config.date,'2026-11-01');

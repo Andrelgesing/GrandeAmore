@@ -176,7 +176,7 @@ const currentMatch = {
       "Ali",
       "Teodor",
       "fabian",
-      "Omar",
+      "Omar B",
       "Baraa",
       "Paolo",
       "Ahmed",

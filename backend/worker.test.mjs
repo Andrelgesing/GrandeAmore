@@ -8,7 +8,7 @@ const context = vm.createContext({ RATINGS_API: '', localStorage: { getItem: () 
 vm.runInContext(frontendSource.split('const grid =')[0], context);
 const players = vm.runInContext('players', context);
 const loay = players.find(player => player.name === 'Loay');
-assert.equal(players.length, 59);
+assert.equal(players.length, 60);
 const inca = players.find(player => player.name === 'Inca');
 assert.equal(inca.rating, 4);
 const omarJohny = players.find(player => player.name === 'Omar Johny');
@@ -47,7 +47,10 @@ for (const name of ['Ahmed','Wesam','Teodor','Luka']) {
 assert.notEqual(players.find(p=>p.name==='Ahmed'),players.find(p=>p.name==='Ahmad'));
 assert.notEqual(players.find(p=>p.name==='Luka'),players.find(p=>p.name==='Lucas'));
 
-const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios', 'Omar Johny', 'Ahmed', 'Wesam', 'Teodor', 'Luka'].includes(player.name)).map(player => [vm.runInContext(`servicePlayerName(${JSON.stringify(player.name)})`, context), { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
+const omarB = players.find(p=>p.name==='Omar B');
+assert.equal(omarB.elo,913); assert.equal(omarB.position,'CM'); assert.equal(omarB.photo,'players/OmarB.jpg');
+assert.notEqual(omarB,players.find(p=>p.name==='Omar'));
+const existing = Object.fromEntries(players.filter(player => !['Loay', 'Hay', 'Giorgios', 'Omar Johny', 'Ahmed', 'Wesam', 'Teodor', 'Luka', 'Omar B'].includes(player.name)).map(player => [vm.runInContext(`servicePlayerName(${JSON.stringify(player.name)})`, context), { elo: player.elo + 37, legendary: player.name === 'Shahrom' }]));
 const savedVote = { winner: 'Andre', loser: 'AlexG', points: 16, at: 1 };
 const data = new Map([['ratings', structuredClone(existing)], ['revision', 487], ['vote:old-vote-1234567', savedVote]]);
 let ready, chain = Promise.resolve();
@@ -66,6 +69,7 @@ let service = await create();
 const getRatings = async () => (await service.fetch(new Request('https://test/ratings'))).json();
 let response = await getRatings();
 assert.equal(response.revision, 487);
+assert.deepEqual(response.ratings['Omar B'],{elo:913,legendary:false});
 for (const name of ['Ahmed','Wesam','Teodor','Luka']) assert.deepEqual(response.ratings[name],{elo:1000,legendary:false});
 assert.deepEqual(response.ratings['Omar Johny'], { elo: 1000, legendary: false });
 assert.deepEqual(response.ratings.Omar, existing.Omar);
@@ -104,7 +108,7 @@ assert.deepEqual(await getRatings(), beforeExcludedVotes, 'Excluded votes and re
 data.clear();
 service = await create();
 response = await getRatings();
-assert.equal(Object.keys(response.ratings).length, 59);
+assert.equal(Object.keys(response.ratings).length, 60);
 assert.deepEqual(response.ratings.Inca, { elo: 1200, legendary: true });
 assert.equal(response.ratings.Loay.elo, 1100);
 assert.equal(response.ratings.Hay.elo, 1000);
