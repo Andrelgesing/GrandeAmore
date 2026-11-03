@@ -46,13 +46,13 @@ const originalCards = grid.children;
 listeners['ratings-updated']();
 assert.equal(grid.children, originalCards);
 assert.equal(JSON.stringify(players), before);
-for (const card of grid.children) {
+for (const [i, card] of grid.children.entries()) {
  const all=descendants(card);
  assert.equal(all.filter(e=>e.className==='match-player-name').length,8);
  assert.equal(all.filter(e=>e.className==='stars').length,0);
  assert.equal(all.filter(e=>e.className==='match-average').length,0);
- assert.equal(all.filter(e=>e.className==='match-points').length,0);
- assert.equal(all.filter(e=>e.className==='match-champions').length,0);
+ assert.equal(all.find(e=>e.className==='match-points').textContent, `${i === 0 ? 0 : 3} pts`);
+ assert.equal(all.filter(e=>e.className==='match-champions').length,i === 1 ? 1 : 0);
  const roles=all.filter(e=>e.className==='match-position').map(e=>e.textContent.split(' ·')[0]);
  assert.deepEqual(roles,config.roles);
 }
@@ -91,7 +91,7 @@ vm.runInContext(fs.readFileSync(path.join(__dirname, 'season.js'), 'utf8').split
 const build = vm.runInContext('buildSeasonStandings', context);
 const fixtures = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)', context));
 const beforeSeason = new Map(build(fixtures.slice(0, 2), players).map(e => [e.player.name, e]));
-const afterSeason = new Map(build(fixtures, players).map(e => [e.player.name, e]));
+const afterSeason = new Map(build(fixtures.slice(0, 3), players).map(e => [e.player.name, e]));
 for (const [teamIndex, team] of october25Expected.entries()) for (const name of team) {
  const before = beforeSeason.get(name) || { points: 0, mp: 0, goals: 0, assists: 0 };
  const after = afterSeason.get(name);
@@ -105,5 +105,21 @@ for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200
  const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'});
  assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);
 }
-assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,3);
+assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,4);
 console.log('Passed: current lineups, fixed team, paired players, captains, cards, read-only ratings, live refresh, and preserved historical season record.');
+
+const november = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[3])', context));
+assert.equal(november.date, '2026-11-01');
+assert.equal(november.matchesPlayed, 1);
+assert.deepEqual(november.standings.map(s=>s.points), [0,3]);
+assert.equal(november.goals.reduce((sum,[,n])=>sum+n,0),12);
+assert.equal(november.assists.reduce((sum,[,n])=>sum+n,0),8);
+const beforeNovember = new Map(build(fixtures.slice(0,3),players).map(e=>[e.player.name,e]));
+const afterNovember = new Map(build(fixtures,players).map(e=>[e.player.name,e]));
+for(const [i,team] of expected.entries()) for(const name of team) {
+ const old=beforeNovember.get(name)||{points:0,mp:0,goals:0,assists:0}, now=afterNovember.get(name);
+ assert.equal(now.points,old.points+(i===1?3:0));assert.equal(now.mp,old.mp+1);
+ assert.equal(now.goals,old.goals+(new Map(november.goals).get(name)||0));
+ assert.equal(now.assists,old.assists+(new Map(november.assists).get(name)||0));
+}
+console.log('November 1 verified: 16 participants, points, one appearance, 12 supplied goals and 8 assists.');

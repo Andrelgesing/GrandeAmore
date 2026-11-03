@@ -1,3 +1,5 @@
+const november1Key = 'tournament:2026-11-01:placement';
+const november1Changes = {"Ali": -20, "Teodor": -20, "fabian": -20, "Omar B": -20, "Baraa": -20, "Paolo (pac)": -20, "Ahmed": -20, "Wesam": -20, "Steve Alex": 20, "Hay": 20, "davideb": 20, "Andreeas": 20, "Takunda": 20, "Nikita": 20, "Johny": 20, "Luka": 20};
 const tournamentKey = 'tournament:2026-10-11:placement';
 const tournamentChanges = {"Hay": -20, "Omar": -20, "Daniel": -20, "Paolo (pac)": -20, "Jack": -20, "Takunda": -20, "AlexG": -20, "Samu": -40, "Iacob": -40, "Levi": -40, "Nikita": -40, "Dejan": -40, "davideb": -40, "Andre": -40, "Ali": 40, "Loay": 40, "Andreeas": 40, "Danilo": 40, "Darius": 40, "Enil": 40, "Milan": 40, "Lucas": 20, "gabi": 20, "fabian": 20, "Mohamed": 20, "Baraa": 20, "Valentin": 20, "@Fabien Vjaceslavs": 20};
 const tournament18Key = 'tournament:2026-10-18:placement';
@@ -131,7 +133,7 @@ function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
  return { rule: 'tournament-elo-v1', divisor, drawModel: 'E*(1-E)', neutralBand: 0.5, championMinimum: 10, teams: calculated, adjustments };
 }
 
-const latestTournamentPlacement = async storage => await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
+const latestTournamentPlacement = async storage => await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
 const mvpOpening = Date.parse('2026-10-18T18:30:00+02:00');
 const mvpPoll = '2026-10-18-official';
 const mvpCandidates = ["Vasilis", "fabian", "Iacob", "Giorgios", "Alexander", "Mostafa", "Andreeas", "Ronaldo", "Manuel", "Levi", "Jack", "Nikita", "Yahya", "gabi", "Shahrom", "Raul", "Momo", "Ali", "Paolo (pac)", "davideb", "Lucas", "Hay", "Loay", "David", "Martin", "Marco", "Johny", "Chris"];
@@ -301,6 +303,19 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    // Explicitly approved single-match adjustment; never recalculate or apply twice.
+    if (env.APPLY_MATCH_20261101 === 'true' && !await tx.get(november1Key)) {
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(november1Changes)) {
+      if (!ratings[name]) throw new Error('Missing match player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november1Key, { date: '2026-11-01', score: { team1: 6, team2: 11 }, rule: 'approved-match-adjustment', adjustments: november1Changes, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
@@ -338,7 +353,7 @@ export class Rankings {
   }
   if (path === '/tournament-placement' && request.method === 'GET') {
    const date = url.searchParams.get('date');
-   if (date && !['2026-10-11', '2026-10-18', '2026-10-25'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
    return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
   }
   if (path === '/mvp') return this.mvp(request);

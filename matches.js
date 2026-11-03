@@ -195,7 +195,11 @@ const currentMatch = {
   ],
   "captains": []
 };
-const currentMatchStandings = [1, 2].map(team => ({ team, points: null }));
+// Final result, 1 November: Team 2 won 11–6.
+const currentMatchStandings = [
+  { team: 1, points: 0, goalsFor: 6 },
+  { team: 2, points: 3, goalsFor: 11, champions: true }
+];
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
