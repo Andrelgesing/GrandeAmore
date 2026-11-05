@@ -37,7 +37,13 @@ const roster = [
   ['Wesam', 'CB/CM', 1000],
   ['Teodor', 'CB/CM', 1000, 'players/Teodor.jpg'],
   ['Luka', 'CB/CM', 1000, 'players/luka.jpg'],
-  ['Omar B', 'CM', 913, 'players/OmarB.jpg']
+  ['Omar B', 'CM', 913, 'players/OmarB.jpg'],
+  ['Alexandros', 'CB', 1000],
+  ['Cedo', 'CB', 1000],
+  ['Ali K', 'CM', 1000],
+  ['Vadim', 'ST', 1000],
+  ['Laurenz', 'CM', 1000],
+  ['Saad', 'ST', 1000]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
@@ -102,7 +108,7 @@ const customJokeStats = {
   ]
 };
 const newcomerJokes = ['Striker pocket capacity: deluxe edition', 'Emergency clearance altitude', 'Back-pass drama', 'Tactical pointing accuracy', 'Shin-pad hide-and-seek', 'Halftime snack scouting', 'Invisible armband authority', 'Offside trap escape artistry', 'Studs-to-grass negotiation', 'Crossbar inspection duty', 'Post-match excuse originality', 'Warm-up enthusiasm'];
-for (const name of ['Ahmed', 'Wesam', 'Teodor', 'Luka', 'Omar B']) {
+for (const name of ['Ahmed', 'Wesam', 'Teodor', 'Luka', 'Omar B', 'Alexandros', 'Cedo', 'Ali K', 'Vadim', 'Laurenz', 'Saad']) {
   const labels = [...newcomerJokes];
   customJokeStats[name] = Array.from({ length: 2 }, () => ({
     label: labels.splice(Math.floor(Math.random() * labels.length), 1)[0],
