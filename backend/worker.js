@@ -336,6 +336,20 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    const november8SecondBonusKey = 'elo-correction:chris-martin-johny:2026-11-08';
+    if (env.APPLY_NOVEMBER8_SECOND_BONUS === 'true' && !await tx.get(november8SecondBonusKey)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const before = {};
+     for (const name of ['Chris', 'Martin', 'Johny']) {
+      if (!ratings[name]) throw new Error('Missing player: ' + name);
+      before[name] = ratings[name].elo;
+      ratings[name].elo += 30;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november8SecondBonusKey, { before, delta: 30, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));

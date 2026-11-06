@@ -5,6 +5,7 @@
   "vars": {
     "ELO_K": "16",
     "APPLY_NOVEMBER8_BONUS": "true",
+    "APPLY_NOVEMBER8_SECOND_BONUS": "true",
     "APPLY_MATCH_20261101": "true",
     "APPLY_BARAA_20261101": "true",
     "APPLY_TOURNAMENT_20261025": "true",
