@@ -4,6 +4,7 @@
   const entry = document.querySelector('#account-entry');
   const dialog = document.querySelector('#account-dialog');
   let state, message;
+  const rosterPhotos = new Map(players.map(player => [player.name, player.photo]));
   const params = new URLSearchParams(location.search);
 
   function element(tag, content = '') {
@@ -62,8 +63,43 @@
       players.push(player);
       if ((!RATINGS_API || Object.hasOwn(ratingState, key)) && typeof duelPlayers !== 'undefined') duelPlayers.push(player);
     }
+    applyPlayerPhotos();
     renderPlayerGrid();
     if (RATINGS_API) await refreshRatings();
+  }
+  function applyPlayerPhotos() {
+    const changed = new Map();
+    for (const player of players) {
+      const photo = state.profiles[player.name]?.photo || rosterPhotos.get(player.name) ||
+        (state.profiles[player.name]?.created ? 'player-placeholder.svg' : '');
+      if (photo === (player.photo || '')) continue;
+      player.photo = photo;
+      changed.set(player.name, player);
+    }
+    if (!changed.size) return;
+
+    for (const image of document.querySelectorAll('#home-player-photos img')) {
+      const player = changed.get(image.alt);
+      if (player) image.src = player.photo;
+    }
+    const portraits = document.querySelectorAll('#fight-options .portrait');
+    pair.forEach((player, index) => {
+      const portrait = portraits[index];
+      if (!portrait || !changed.has(player.name)) return;
+      const display = window.localCardProfile(player);
+      if (!player.photo) {
+        portrait.textContent = Array.from(display.name.replace(/^@/, ''))[0].toUpperCase();
+        return;
+      }
+      const image = element('img');
+      image.src = player.photo;
+      image.alt = display.name;
+      portrait.replaceChildren(image);
+    });
+    renderMvp();
+    renderSeason();
+    renderGoals();
+    renderMatches();
   }
   function report(error) { message.textContent = error.message; }
   function button(label, action) {
