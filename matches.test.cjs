@@ -11,6 +11,7 @@ class Element {
 }
 const grid = new Element('div');
 const upcomingGrid = new Element('div');
+const bench = new Element('div');
 const listeners = {};
 let openedPlayer;
 const context = vm.createContext({
@@ -19,6 +20,7 @@ const context = vm.createContext({
     createElement: tag => new Element(tag),
     querySelector: selector => {
       if (selector === '#november-8-teams') return upcomingGrid;
+      if (selector === '#november-8-bench') return bench;
       assert.equal(selector, '#match-teams');
       return grid;
     },

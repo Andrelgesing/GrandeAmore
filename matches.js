@@ -204,11 +204,12 @@ const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 const november8Match = {
   roles: matchRoles,
   showRatings: false,
+  bench: 'Iacob',
   teams: [
-    ['Vadim', 'Ali K', 'Laurenz', 'Nikita', 'Alexandros', 'Cedo', 'Obaida'],
-    ['Shahrom', 'Omar', 'Hay', 'Alexandre', 'Giorgios', 'Teodor', 'Takunda'],
-    ['Daniel', 'Levi', 'gabi', 'Ali', 'Baraa', 'Dejan', 'Saad'],
-    ['Samu', 'Loay', 'Ahmed', 'Martin', 'Chris', 'Johny', 'Jack']
+    ['Vadim', 'Omar', 'Laurenz', 'Nikita', 'Jack', 'Cedo', 'Samu'],
+    ['Shahrom', 'gabi', 'Ali K', 'Teodor', 'Ali', 'Alexandre', 'Takunda'],
+    ['Saad', 'Daniel', 'Hay', 'Giorgios', 'Baraa', 'Dejan', 'Obaida'],
+    ['Loay', 'Ahmed', 'Levi', 'Alexandros', 'Martin', 'Chris', 'Johny']
   ]
 };
 const november8Standings = november8Match.teams.map((_, index) => ({ team: index + 1, points: null }));
@@ -309,7 +310,7 @@ function matchPlayer({ player, role }, match, captains) {
   const position = document.createElement('span');
   position.className = 'match-position';
   const covering = !player.position.split('/').includes(role);
-  position.textContent = covering ? `${role} · covering (${player.position})` : role;
+  position.textContent = !role ? 'Substitute' : covering ? `${role} · covering (${player.position})` : role;
   const photo = document.createElement('div'); photo.className = 'match-photo';
   photo.append(portrait);
   if (captains.includes(player.name)) {
@@ -331,11 +332,16 @@ function renderMatch(match, standings, gridId) {
     return { player, role: match.roles[index] };
   }));
   const available = teams.flat().map(entry => entry.player);
+  const substitute = byName.get(match.bench);
+  if (substitute) available.push(substitute);
   const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo, player.status]));
   if (fingerprint === matchFingerprints.get(gridId)) return;
   const grid = document.querySelector('#' + gridId);
   matchFingerprints.set(gridId, fingerprint);
   grid.replaceChildren();
+  if (substitute) {
+    document.querySelector('#november-8-bench').replaceChildren(matchPlayer({ player: substitute }, match, []));
+  }
   standings.forEach(standing => {
     const index = standing.team - 1;
     const team = teams[index];
