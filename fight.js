@@ -25,7 +25,7 @@ function chooseDuel(pool, previous = '', random = Math.random) {
   // With fewer than two available players, consecutive appearances are unavoidable.
   if (eligible.length < 2) eligible = pool.map((_, index) => index);
   const newcomers = eligible.filter(index => (pool[index].calibrationDuels ?? 10) < 10);
-  const featureNewcomer = newcomers.length > 0 && random() < 0.60;
+  const featureNewcomer = newcomers.length > 0 && random() < 0.20;
   const preferSimilar = random() < 0.7;
   let first, second, key;
   do {
@@ -73,21 +73,22 @@ function nextFight() {
     button.type = 'button';
     button.className = 'fighter';
     button.setAttribute('aria-pressed', 'false');
-    button.setAttribute('aria-label', `Vote for ${player.name}`);
+    const display = globalThis.localCardProfile?.(player) ?? player;
+    button.setAttribute('aria-label', `Vote for ${display.name}`);
     button.disabled = !sharedReady;
     const portrait = document.createElement('div');
     portrait.className = 'portrait';
-    if (player.photo) {
+    if (display.photo) {
       const image = document.createElement('img');
-      image.src = player.photo;
-      image.alt = player.name;
+      image.src = display.photo;
+      image.alt = display.name;
       portrait.append(image);
     } else {
-      portrait.textContent = Array.from(player.name.replace(/^@/, ''))[0].toUpperCase();
+      portrait.textContent = Array.from(display.name.replace(/^@/, ''))[0].toUpperCase();
     }
     const name = document.createElement('span');
     name.className = 'fighter-name';
-    name.textContent = player.name;
+    name.textContent = display.name;
     const reveal = document.createElement('div');
     reveal.className = 'fighter-reveal';
     reveal.append(portrait, name);
@@ -116,6 +117,9 @@ function applyRatings(updates) {
  ratingState = updates;
  for (const player of players) {
   if (!updates[player.name]) continue;
+  if (fightApi && player.name.startsWith('pilot-player-') && !duelPlayers.includes(player)) {
+   duelPlayers.push(player);
+  }
   player.elo = updates[player.name].elo;
   player.calibrationDuels = updates[player.name].calibrationDuels ?? 10;
   player.rating = starsFromElo(player.elo);
@@ -185,6 +189,14 @@ skipFight.addEventListener('click', () => {
   if (saving || submitted) return;
   nextFight();
 });
+if (!fightApi) {
+  fetch('/pilot-ratings').then(response => {
+    if (!response.ok) return;
+    return response.json().then(data => {
+      if (!localStorage.getItem('grande-amore-ratings')) applyShared(data);
+    });
+  }).catch(() => {});
+}
 refreshRatings();
 setInterval(() => { if (!document.hidden) refreshRatings(); }, 30000);
 window.addEventListener('hashchange', refreshRatings);

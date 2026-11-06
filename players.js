@@ -156,11 +156,14 @@ function stars(rating) {
   return span;
 }
 function cardContent(player, full = false) {
+  player = globalThis.localCardProfile?.(player) ?? player;
   const fragment = document.createDocumentFragment();
   const position = document.createElement('span');
   position.className = 'position';
   position.textContent = player.secondaryPosition ? `${player.primaryPosition} · preferred` : player.primaryPosition;
-  if (player.secondaryPosition) {
+  if (player.cardPositions) {
+    position.textContent = player.cardPositions.join(' · ') || '—';
+  } else if (player.secondaryPosition) {
     const secondary = document.createElement('span');
     secondary.className = 'secondary-position';
     secondary.textContent = `${player.secondaryPosition} · secondary`;
@@ -236,7 +239,7 @@ for (const player of players) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = `player-card ${cardStyle(player)}`;
-  button.setAttribute('aria-label', `View ${player.name}, ${player.position}, ${player.rating} out of 5 stars${player.status ? ', ' + player.status : ''}`);
+  button.setAttribute('aria-label', `View ${globalThis.localCardProfile?.(player).name ?? player.name}, ${globalThis.localCardProfile?.(player).position ?? player.position}, ${player.rating} out of 5 stars${player.status ? ', ' + player.status : ''}`);
   button.setAttribute('aria-haspopup', 'dialog');
   button.append(cardContent(player));
   button.addEventListener('click', () => openPlayerCard(player));
@@ -276,21 +279,22 @@ function renderMvp() {
   const rank = document.createElement('td');
   rank.textContent = rankedPlayers.findIndex(candidate => candidate.elo === player.elo) + 1;
   const name = document.createElement('td');
+  const display = globalThis.localCardProfile?.(player) ?? player;
   name.className = 'mvp-name';
   const identity = document.createElement('div');
   identity.className = 'mvp-identity';
   const portrait = document.createElement('span');
   portrait.className = 'mvp-photo';
   portrait.setAttribute('aria-hidden', 'true');
-  if (player.photo) {
+  if (display.photo) {
     const image = document.createElement('img');
-    image.src = player.photo;
+    image.src = display.photo;
     image.alt = '';
     image.loading = 'lazy';
     portrait.append(image);
-  } else portrait.textContent = Array.from(player.name.replace(/^@/, ''))[0].toUpperCase();
+  } else portrait.textContent = Array.from(display.name.replace(/^@/, ''))[0].toUpperCase();
   const label = document.createElement('span');
-  label.textContent = player.name;
+  label.textContent = display.name;
   identity.append(portrait, label);
   name.append(identity);
   if (player.status) {
