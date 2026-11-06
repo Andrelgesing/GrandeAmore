@@ -350,6 +350,15 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    const obaidaCorrectionKey = 'elo-correction:obaida:2026-11-08';
+    if (env.APPLY_OBAIDA_1150 === 'true' && !await tx.get(obaidaCorrectionKey)) {
+     const before = ratings.Obaida.elo;
+     const revision = (await tx.get('revision') || 0) + 1;
+     ratings.Obaida.elo = 1150;
+     await tx.put(obaidaCorrectionKey, { before, after: 1150, revision, at: Date.now() });
+     await tx.put('revision', revision);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
