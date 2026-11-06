@@ -206,10 +206,10 @@ const november8Match = {
   showRatings: false,
   bench: 'Iacob',
   teams: [
-    ['Vadim', 'Omar', 'Laurenz', 'Nikita', 'Jack', 'Cedo', 'Samu'],
-    ['Shahrom', 'gabi', 'Ali K', 'Teodor', 'Ali', 'Alexandre', 'Takunda'],
-    ['Saad', 'Daniel', 'Hay', 'Giorgios', 'Baraa', 'Dejan', 'Obaida'],
-    ['Loay', 'Ahmed', 'Levi', 'Alexandros', 'Martin', 'Chris', 'Johny']
+    ['Vadim', 'Omar', 'Ali K', 'Alexandros', 'Cedo', 'Nikita', 'Hay'],
+    ['Shahrom', 'gabi', 'Teodor', 'Alexandre', 'Ali', 'Takunda', 'Saad'],
+    ['Samu', 'Daniel', 'Levi', 'Jack', 'Baraa', 'Dejan', 'Laurenz'],
+    ['Obaida', 'Loay', 'Ahmed', 'Giorgios', 'Martin', 'Chris', 'Johny']
   ]
 };
 const november8Standings = november8Match.teams.map((_, index) => ({ team: index + 1, points: null }));
