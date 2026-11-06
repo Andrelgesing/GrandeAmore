@@ -378,7 +378,7 @@ function renderMatch(match, standings, gridId) {
 }
 function renderMatches() {
   renderMatch(november8Match, november8Standings, 'november-8-teams');
-  renderMatch(currentMatch, currentMatchStandings, 'match-teams');
+  renderMatch(currentMatch, [...currentMatchStandings].reverse(), 'match-teams');
 }
 document.addEventListener('ratings-updated', renderMatches);
 renderMatches();

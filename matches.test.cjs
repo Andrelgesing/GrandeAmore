@@ -44,7 +44,7 @@ assert(!config.teams.some(t=>t.includes('fabian') && t.includes('davideb')));
 assert.deepEqual(config.roles,['ST','ST','CM','CM','CB','CB','CB','GK']);
 const descendants = element => [element, ...element.children.flatMap(descendants)];
 const lineups = () => grid.children.map(card => descendants(card).filter(e => e.className === 'match-player-name').map(e => e.textContent));
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [...expected].reverse());
 const players = vm.runInContext('players', context);
 const before = JSON.stringify(players);
 const originalCards = grid.children;
@@ -56,8 +56,8 @@ for (const [i, card] of grid.children.entries()) {
  assert.equal(all.filter(e=>e.className==='match-player-name').length,8);
  assert.equal(all.filter(e=>e.className==='stars').length,0);
  assert.equal(all.filter(e=>e.className==='match-average').length,0);
- assert.equal(all.find(e=>e.className==='match-points').textContent, `${i === 0 ? 0 : 3} pts`);
- assert.equal(all.filter(e=>e.className==='match-champions').length,i === 1 ? 1 : 0);
+ assert.equal(all.find(e=>e.className==='match-points').textContent, `${i === 0 ? 3 : 0} pts`);
+ assert.equal(all.filter(e=>e.className==='match-champions').length,i === 0 ? 1 : 0);
  const roles=all.filter(e=>e.className==='match-position').map(e=>e.textContent.split(' ·')[0]);
  assert.deepEqual(roles,config.roles);
 }
@@ -67,7 +67,7 @@ raul.listeners.click(); assert.equal(openedPlayer, 'Teodor');
 vm.runInContext("players.find(p => p.name === 'Hay').elo += 400; players.find(p => p.name === 'Hay').rating = 5;", context);
 listeners['ratings-updated']();
 assert.notEqual(grid.children, originalCards);
-assert.deepEqual(lineups(), expected);
+assert.deepEqual(lineups(), [...expected].reverse());
 for (const p of players.filter(p => expected.flat().includes(p.name) && p.photo)) assert(fs.existsSync(path.join(__dirname,p.photo)));
 // The first fixture keeps its historical participants and points.
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'goals.js'), 'utf8').split('const contributionLimits')[0], context);
