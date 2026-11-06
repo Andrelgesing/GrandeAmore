@@ -10,13 +10,18 @@ class Element {
   setAttribute(name, value) { this.attributes[name] = value; }
 }
 const grid = new Element('div');
+const upcomingGrid = new Element('div');
 const listeners = {};
 let openedPlayer;
 const context = vm.createContext({
   openPlayerCard: player => { openedPlayer = player.name; },
   document: {
     createElement: tag => new Element(tag),
-    querySelector: selector => { assert.equal(selector, '#match-teams'); return grid; },
+    querySelector: selector => {
+      if (selector === '#november-8-teams') return upcomingGrid;
+      assert.equal(selector, '#match-teams');
+      return grid;
+    },
     addEventListener: (name, listener) => { listeners[name] = listener; }
   }
 });
@@ -102,7 +107,7 @@ for (const [teamIndex, team] of october25Expected.entries()) for (const name of 
 }
 for (const [name, before] of beforeSeason) if (!october25Expected.flat().includes(name)) assert.deepEqual(afterSeason.get(name), before);
 for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200,null,'gold'],[1000,'Legendary','legendary']]) {
- const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'});
+ const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'}, config, config.captains);
  assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);
 }
 assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,4);

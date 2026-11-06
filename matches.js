@@ -201,6 +201,18 @@ const currentMatchStandings = [
   { team: 2, points: 3, goalsFor: 11, champions: true }
 ];
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
+const november8Match = {
+  roles: matchRoles,
+  showRatings: false,
+  teams: [
+    ['Vadim', 'Ali K', 'Laurenz', 'Nikita', 'Alexandros', 'Cedo', 'Obaida'],
+    ['Shahrom', 'Omar', 'Hay', 'Alexandre', 'Giorgios', 'Teodor', 'Takunda'],
+    ['Daniel', 'Levi', 'gabi', 'Ali', 'Baraa', 'Dejan', 'Saad'],
+    ['Samu', 'Loay', 'Ahmed', 'Martin', 'Chris', 'Johny', 'Jack']
+  ]
+};
+const november8Standings = november8Match.teams.map((_, index) => ({ team: index + 1, points: null }));
+
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [
   { team: 3, points: 7, champions: true },
@@ -275,7 +287,7 @@ function recommendTeams(available) {
   return Array.from({ length: 4 }, (_, team) => slots.flatMap((slot, index) => slot.team === team ? [{ player: best.assignment[index], role: slot.role }] : []));
 }
 
-function matchPlayer({ player, role }) {
+function matchPlayer({ player, role }, match, captains) {
   const item = document.createElement('div');
   item.className = 'pitch-player';
   const portrait = document.createElement('button');
@@ -300,33 +312,37 @@ function matchPlayer({ player, role }) {
   position.textContent = covering ? `${role} · covering (${player.position})` : role;
   const photo = document.createElement('div'); photo.className = 'match-photo';
   photo.append(portrait);
-  if (currentMatch.captains.includes(player.name)) {
+  if (captains.includes(player.name)) {
     const captain = document.createElement('span'); captain.className = 'match-captain';
     captain.textContent = 'C'; captain.setAttribute('aria-label', 'Captain'); photo.append(captain);
   }
   item.append(photo, name);
-  if (currentMatch.showRatings !== false) item.append(stars(player.rating));
+  if (match.showRatings !== false) item.append(stars(player.rating));
   item.append(position);
   return item;
 }
 
-let matchFingerprint = '';
-function renderMatches() {
+const matchFingerprints = new Map();
+function renderMatch(match, standings, gridId) {
   const byName = new Map(players.map(player => [player.name, player]));
-  const teams = currentMatch.teams.map(names => names.map((name, index) => {
+  const teams = match.teams.map(names => names.map((name, index) => {
     const player = byName.get(name);
     if (!player) throw new Error(`Missing tournament player: ${name}`);
-    return { player, role: currentMatch.roles[index] };
+    return { player, role: match.roles[index] };
   }));
   const available = teams.flat().map(entry => entry.player);
   const fingerprint = JSON.stringify(available.map(player => [player.name, player.elo, player.rating, player.photo, player.status]));
-  if (fingerprint === matchFingerprint) return;
-  matchFingerprint = fingerprint;
-  const grid = document.querySelector('#match-teams');
+  if (fingerprint === matchFingerprints.get(gridId)) return;
+  const grid = document.querySelector('#' + gridId);
+  matchFingerprints.set(gridId, fingerprint);
   grid.replaceChildren();
-  currentMatchStandings.forEach(standing => {
+  standings.forEach(standing => {
     const index = standing.team - 1;
     const team = teams[index];
+    const captain = match.captains ? null : team.map(entry => entry.player).sort((a, b) =>
+      Number(b.status === 'Legendary') - Number(a.status === 'Legendary') || b.elo - a.elo
+    )[0];
+    const captains = match.captains ?? [captain.name];
     const averageStars = team.reduce((sum, entry) => sum + entry.player.rating, 0) / team.length;
     const averageElo = team.reduce((sum, entry) => sum + entry.player.elo, 0) / team.length;
     const card = document.createElement('article');
@@ -337,7 +353,7 @@ function renderMatches() {
       banner.textContent = 'Champions'; card.append(banner);
     }
     const heading = document.createElement('div'); heading.className = 'match-team-heading';
-    const name = document.createElement('h2'); name.id = `match-team-${index + 1}`; name.textContent = `Team ${index + 1}`;
+    const name = document.createElement('h2'); name.id = `${gridId}-team-${index + 1}`; name.textContent = `Team ${index + 1}`;
     const average = document.createElement('div'); average.className = 'match-average';
     const value = document.createElement('strong'); value.textContent = `${averageStars.toFixed(2)} / 5`;
     const label = document.createElement('span'); label.textContent = `Average stars · ${averageElo.toFixed(1)} Elo`;
@@ -347,18 +363,22 @@ function renderMatches() {
       const points = document.createElement('strong'); points.className = 'match-points';
       points.textContent = `${standing.points} pts`; heading.append(points);
     }
-    if (currentMatch.showRatings !== false) heading.append(average);
+    if (match.showRatings !== false) heading.append(average);
     const pitch = document.createElement('div'); pitch.className = 'match-pitch';
     pitch.setAttribute('aria-labelledby', name.id);
     const center = document.createElement('div'); center.className = 'pitch-center'; center.setAttribute('aria-hidden', 'true');
     pitch.append(center);
     for (const role of ['ST', 'CM', 'CB', 'GK']) {
       const row = document.createElement('div'); row.className = `pitch-row pitch-row-${role.toLowerCase()}`;
-      team.filter(entry => entry.role === role).forEach(entry => row.append(matchPlayer(entry)));
+      team.filter(entry => entry.role === role).forEach(entry => row.append(matchPlayer(entry, match, captains)));
       pitch.append(row);
     }
     card.append(heading, pitch); grid.append(card);
   });
+}
+function renderMatches() {
+  renderMatch(november8Match, november8Standings, 'november-8-teams');
+  renderMatch(currentMatch, currentMatchStandings, 'match-teams');
 }
 document.addEventListener('ratings-updated', renderMatches);
 renderMatches();
