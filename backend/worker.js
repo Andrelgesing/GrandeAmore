@@ -134,9 +134,9 @@ function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
 }
 
 const latestTournamentPlacement = async storage => await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
-const mvpOpening = Date.parse('2026-10-18T18:30:00+02:00');
-const mvpPoll = '2026-10-18-official';
-const mvpCandidates = ["Vasilis", "fabian", "Iacob", "Giorgios", "Alexander", "Mostafa", "Andreeas", "Ronaldo", "Manuel", "Levi", "Jack", "Nikita", "Yahya", "gabi", "Shahrom", "Raul", "Momo", "Ali", "Paolo (pac)", "davideb", "Lucas", "Hay", "Loay", "David", "Martin", "Marco", "Johny", "Chris"];
+const mvpOpening = Date.parse('2026-11-08T18:30:00+01:00');
+const mvpPoll = '2026-11-08-official';
+const mvpCandidates = ["Vadim", "Hay", "Teodor", "Cedo", "Ahmed", "Nikita", "Baraa", "Saad", "Samu", "Laurenz", "Alexander", "Alexandros", "Giorgios", "Shahrom", "Daniel", "Ali K", "gabi", "Ali", "Takunda", "Dejan", "Levi", "Obaida", "Loay", "Omar", "Jack", "Martin", "Chris", "Johny"];
 const seed = {"AlexG": {"elo": 1200, "legendary": false}, "Andre": {"elo": 1200, "legendary": false}, "Darius": {"elo": 1000, "legendary": false}, "fabian": {"elo": 1000, "legendary": false}, "Enil": {"elo": 1200, "legendary": false}, "gabi": {"elo": 1000, "legendary": false}, "Daniel": {"elo": 1200, "legendary": false}, "Levi": {"elo": 1000, "legendary": false}, "Samu": {"elo": 1000, "legendary": false}, "Dejan": {"elo": 1000, "legendary": false}, "Jack": {"elo": 1000, "legendary": false}, "Ali": {"elo": 1000, "legendary": false}, "Omar": {"elo": 1000, "legendary": false}, "Baraa": {"elo": 1000, "legendary": false}, "Takunda": {"elo": 1000, "legendary": false}, "Danilo": {"elo": 1000, "legendary": false}, "Andreeas": {"elo": 1000, "legendary": false}, "davideb": {"elo": 1000, "legendary": false}, "Nikita": {"elo": 1000, "legendary": false}, "Iacob": {"elo": 1000, "legendary": false}, "Damien": {"elo": 1000, "legendary": false}, "Valentin": {"elo": 1000, "legendary": false}, "Milan": {"elo": 1000, "legendary": false}, "Mohamed": {"elo": 1000, "legendary": false}, "Paolo (pac)": {"elo": 1000, "legendary": false}, "@Fabien Vjaceslavs": {"elo": 1000, "legendary": false}, "Lucas": {"elo": 1200, "legendary": false}, "@~\u2744\ufe0f": {"elo": 1000, "legendary": false}, "Shahrom": {"elo": 1000, "legendary": true}};
 seed.Loay = { elo: 1100, legendary: false };
 seed.Hay = { elo: 1000, legendary: false };

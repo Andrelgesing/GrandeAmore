@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-label="GrandeAmore Ballon d’Or">
+<defs>
+<radialGradient id="bg"><stop stop-color="#244451"/><stop offset="1" stop-color="#08151f"/></radialGradient>
+<linearGradient id="gold" x2=".8" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#fff3c3"/><stop offset=".5" stop-color="#e8b858"/><stop offset="1" stop-color="#9d5f22"/></linearGradient>
+</defs>
+<rect width="1200" height="560" fill="url(#bg)"/>
+<g fill="none" stroke="#e8b858" opacity=".26"><circle cx="600" cy="159" r="125"/><circle cx="600" cy="159" r="142"/><path d="M0 310Q600 12 1200 310M0 380Q600 48 1200 380"/></g>
+<g fill="url(#gold)" stroke="#744717" stroke-width="3"><circle cx="600" cy="145" r="86"/><path d="m600 109 39 29-15 45h-48l-15-45zM539 85l22 53-41 21m141-74-22 53 41 21m-56 24 23 35m-71-35-23 35m47-109V59" fill="none"/><path d="M580 224h40l11 35h-62zM552 260h96l14 20H538z"/></g>
+<text x="600" y="391" text-anchor="middle" font-family="Georgia,serif" font-size="75" fill="#fff1ce">GrandeAmore Ballon d’Or</text>
+</svg>
