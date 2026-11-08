@@ -1,0 +1,812 @@
+{
+  "date": "2026-11-08",
+  "rule": "tournament-elo-v1",
+  "divisor": 200,
+  "drawModel": "E*(1-E)",
+  "neutralBand": 0.5,
+  "championMinimum": 10,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Vadim",
+        "Ali K",
+        "Ahmed",
+        "Alexandros",
+        "Nikita",
+        "Cedo",
+        "Obaida"
+      ],
+      "points": 0,
+      "averageElo": 1071.7142857142858,
+      "expectedPoints": 4.392191062679929,
+      "difference": -4.392191062679929,
+      "delta": -40
+    },
+    {
+      "team": 2,
+      "players": [
+        "Samu",
+        "gabi",
+        "Daniel",
+        "Dejan",
+        "Ali",
+        "Takunda",
+        "Baraa"
+      ],
+      "points": 9,
+      "champions": true,
+      "averageElo": 1088.142857142857,
+      "expectedPoints": 4.956930193946057,
+      "difference": 4.043069806053943,
+      "delta": 40
+    },
+    {
+      "team": 3,
+      "players": [
+        "Saad",
+        "Laurenz",
+        "Alexander",
+        "Giorgios",
+        "Jack",
+        "Teodor",
+        "Levi"
+      ],
+      "points": 3,
+      "averageElo": 1056.5714285714287,
+      "expectedPoints": 3.87494240015453,
+      "difference": -0.8749424001545298,
+      "delta": -10
+    },
+    {
+      "team": 4,
+      "players": [
+        "Hay",
+        "Loay",
+        "Omar",
+        "Martin",
+        "Chris",
+        "Johny",
+        "Shahrom"
+      ],
+      "points": 6,
+      "averageElo": 1039.857142857143,
+      "expectedPoints": 3.317012274981848,
+      "difference": 2.682987725018152,
+      "delta": 20
+    }
+  ],
+  "adjustments": {
+    "Vadim": -40,
+    "Ali K": -40,
+    "Ahmed": -40,
+    "Alexandros": -40,
+    "Nikita": -40,
+    "Cedo": -40,
+    "Obaida": -40,
+    "Samu": 40,
+    "gabi": 40,
+    "Daniel": 40,
+    "Dejan": 40,
+    "Ali": 40,
+    "Takunda": 40,
+    "Baraa": 40,
+    "Saad": -10,
+    "Laurenz": -10,
+    "Alexander": -10,
+    "Giorgios": -10,
+    "Jack": -10,
+    "Teodor": -10,
+    "Levi": -10,
+    "Hay": 20,
+    "Loay": 20,
+    "Omar": 20,
+    "Martin": 20,
+    "Chris": 20,
+    "Johny": 20,
+    "Shahrom": 20
+  },
+  "input": {
+    "date": "2026-11-08",
+    "ratingRevision": 1856,
+    "divisor": 200,
+    "teams": [
+      {
+        "team": 1,
+        "players": [
+          "Vadim",
+          "Ali K",
+          "Ahmed",
+          "Alexandros",
+          "Nikita",
+          "Cedo",
+          "Obaida"
+        ],
+        "points": 0
+      },
+      {
+        "team": 2,
+        "players": [
+          "Samu",
+          "gabi",
+          "Daniel",
+          "Dejan",
+          "Ali",
+          "Takunda",
+          "Baraa"
+        ],
+        "points": 9,
+        "champions": true
+      },
+      {
+        "team": 3,
+        "players": [
+          "Saad",
+          "Laurenz",
+          "Alexander",
+          "Giorgios",
+          "Jack",
+          "Teodor",
+          "Levi"
+        ],
+        "points": 3
+      },
+      {
+        "team": 4,
+        "players": [
+          "Hay",
+          "Loay",
+          "Omar",
+          "Martin",
+          "Chris",
+          "Johny",
+          "Shahrom"
+        ],
+        "points": 6
+      }
+    ],
+    "ratings": {
+      "Vadim": 969,
+      "Ali K": 934,
+      "Ahmed": 1010,
+      "Alexandros": 1121,
+      "Nikita": 1320,
+      "Cedo": 998,
+      "Obaida": 1150,
+      "Samu": 1208,
+      "gabi": 1148,
+      "Daniel": 1381,
+      "Dejan": 746,
+      "Ali": 1146,
+      "Takunda": 993,
+      "Baraa": 995,
+      "Saad": 974,
+      "Laurenz": 994,
+      "Alexander": 1038,
+      "Giorgios": 1172,
+      "Jack": 1068,
+      "Teodor": 1052,
+      "Levi": 1098,
+      "Hay": 1159,
+      "Loay": 1241,
+      "Omar": 880,
+      "Martin": 1049,
+      "Chris": 1022,
+      "Johny": 929,
+      "Shahrom": 999
+    }
+  },
+  "beforeRatings": {
+    "AlexG": {
+      "elo": 1093,
+      "legendary": false
+    },
+    "Andre": {
+      "elo": 1240,
+      "legendary": false
+    },
+    "Darius": {
+      "elo": 987,
+      "legendary": false
+    },
+    "fabian": {
+      "elo": 1173,
+      "legendary": false
+    },
+    "Enil": {
+      "elo": 1436,
+      "legendary": true
+    },
+    "gabi": {
+      "elo": 1148,
+      "legendary": false
+    },
+    "Daniel": {
+      "elo": 1381,
+      "legendary": true
+    },
+    "Levi": {
+      "elo": 1098,
+      "legendary": false
+    },
+    "Samu": {
+      "elo": 1208,
+      "legendary": false
+    },
+    "Dejan": {
+      "elo": 746,
+      "legendary": false
+    },
+    "Jack": {
+      "elo": 1068,
+      "legendary": false
+    },
+    "Ali": {
+      "elo": 1146,
+      "legendary": false
+    },
+    "Omar": {
+      "elo": 880,
+      "legendary": false
+    },
+    "Baraa": {
+      "elo": 995,
+      "legendary": false
+    },
+    "Takunda": {
+      "elo": 993,
+      "legendary": false
+    },
+    "Danilo": {
+      "elo": 1122,
+      "legendary": false
+    },
+    "Andreeas": {
+      "elo": 966,
+      "legendary": false
+    },
+    "davideb": {
+      "elo": 1126,
+      "legendary": false
+    },
+    "Nikita": {
+      "elo": 1320,
+      "legendary": false
+    },
+    "Iacob": {
+      "elo": 903,
+      "legendary": false
+    },
+    "Damien": {
+      "elo": 1000,
+      "legendary": false
+    },
+    "Valentin": {
+      "elo": 856,
+      "legendary": false
+    },
+    "Milan": {
+      "elo": 793,
+      "legendary": false
+    },
+    "Mohamed": {
+      "elo": 934,
+      "legendary": false
+    },
+    "Paolo (pac)": {
+      "elo": 713,
+      "legendary": false
+    },
+    "@Fabien Vjaceslavs": {
+      "elo": 889,
+      "legendary": false
+    },
+    "Lucas": {
+      "elo": 1281,
+      "legendary": false
+    },
+    "@~❄️": {
+      "elo": 798,
+      "legendary": false
+    },
+    "Shahrom": {
+      "elo": 999,
+      "legendary": true
+    },
+    "Loay": {
+      "elo": 1241,
+      "legendary": false
+    },
+    "Hay": {
+      "elo": 1159,
+      "legendary": false
+    },
+    "Giorgios": {
+      "elo": 1172,
+      "legendary": true
+    },
+    "Manuel": {
+      "elo": 991,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Momo": {
+      "elo": 835,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Alexander": {
+      "elo": 1038,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Mostafa": {
+      "elo": 1062,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Johny": {
+      "elo": 929,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Ronaldo": {
+      "elo": 987,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Leandro": {
+      "elo": 880,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Chris": {
+      "elo": 1022,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Marco": {
+      "elo": 1028,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Martin": {
+      "elo": 1049,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "David": {
+      "elo": 1019,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Yahya": {
+      "elo": 1038,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Vasilis": {
+      "elo": 908,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Raul": {
+      "elo": 1074,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Inca": {
+      "elo": 1160,
+      "legendary": true,
+      "calibrationDuels": 10
+    },
+    "Carlo": {
+      "elo": 875,
+      "legendary": false,
+      "calibrationDuels": 2
+    },
+    "Leo": {
+      "elo": 960,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Obaida": {
+      "elo": 1150,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Ahmad": {
+      "elo": 1020,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Mauro": {
+      "elo": 1000,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "3rd GK": {
+      "elo": 1070,
+      "legendary": false,
+      "calibrationDuels": 1
+    },
+    "Steve Alex": {
+      "elo": 716,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Omar Johny": {
+      "elo": 960,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Ahmed": {
+      "elo": 1010,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Wesam": {
+      "elo": 980,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Teodor": {
+      "elo": 1052,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Luka": {
+      "elo": 1009,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Omar B": {
+      "elo": 946,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Alexandros": {
+      "elo": 1121,
+      "legendary": false,
+      "calibrationDuels": 8
+    },
+    "Cedo": {
+      "elo": 998,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Ali K": {
+      "elo": 934,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Vadim": {
+      "elo": 969,
+      "legendary": false,
+      "calibrationDuels": 9
+    },
+    "Laurenz": {
+      "elo": 994,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Saad": {
+      "elo": 974,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "pilot-player-dad61ee5-4951-4ca4-b7dd-faf4e557f6d5": {
+      "elo": 1050,
+      "legendary": false,
+      "calibrationDuels": 1
+    }
+  },
+  "afterRatings": {
+    "AlexG": {
+      "elo": 1093,
+      "legendary": false
+    },
+    "Andre": {
+      "elo": 1240,
+      "legendary": false
+    },
+    "Darius": {
+      "elo": 987,
+      "legendary": false
+    },
+    "fabian": {
+      "elo": 1173,
+      "legendary": false
+    },
+    "Enil": {
+      "elo": 1436,
+      "legendary": true
+    },
+    "gabi": {
+      "elo": 1188,
+      "legendary": false
+    },
+    "Daniel": {
+      "elo": 1421,
+      "legendary": true
+    },
+    "Levi": {
+      "elo": 1088,
+      "legendary": false
+    },
+    "Samu": {
+      "elo": 1248,
+      "legendary": false
+    },
+    "Dejan": {
+      "elo": 786,
+      "legendary": false
+    },
+    "Jack": {
+      "elo": 1058,
+      "legendary": false
+    },
+    "Ali": {
+      "elo": 1186,
+      "legendary": false
+    },
+    "Omar": {
+      "elo": 900,
+      "legendary": false
+    },
+    "Baraa": {
+      "elo": 1035,
+      "legendary": false
+    },
+    "Takunda": {
+      "elo": 1033,
+      "legendary": false
+    },
+    "Danilo": {
+      "elo": 1122,
+      "legendary": false
+    },
+    "Andreeas": {
+      "elo": 966,
+      "legendary": false
+    },
+    "davideb": {
+      "elo": 1126,
+      "legendary": false
+    },
+    "Nikita": {
+      "elo": 1280,
+      "legendary": false
+    },
+    "Iacob": {
+      "elo": 903,
+      "legendary": false
+    },
+    "Damien": {
+      "elo": 1000,
+      "legendary": false
+    },
+    "Valentin": {
+      "elo": 856,
+      "legendary": false
+    },
+    "Milan": {
+      "elo": 793,
+      "legendary": false
+    },
+    "Mohamed": {
+      "elo": 934,
+      "legendary": false
+    },
+    "Paolo (pac)": {
+      "elo": 713,
+      "legendary": false
+    },
+    "@Fabien Vjaceslavs": {
+      "elo": 889,
+      "legendary": false
+    },
+    "Lucas": {
+      "elo": 1281,
+      "legendary": false
+    },
+    "@~❄️": {
+      "elo": 798,
+      "legendary": false
+    },
+    "Shahrom": {
+      "elo": 1019,
+      "legendary": true
+    },
+    "Loay": {
+      "elo": 1261,
+      "legendary": false
+    },
+    "Hay": {
+      "elo": 1179,
+      "legendary": false
+    },
+    "Giorgios": {
+      "elo": 1162,
+      "legendary": true
+    },
+    "Manuel": {
+      "elo": 991,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Momo": {
+      "elo": 835,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Alexander": {
+      "elo": 1028,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Mostafa": {
+      "elo": 1062,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Johny": {
+      "elo": 949,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Ronaldo": {
+      "elo": 987,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Leandro": {
+      "elo": 880,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Chris": {
+      "elo": 1042,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Marco": {
+      "elo": 1028,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Martin": {
+      "elo": 1069,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "David": {
+      "elo": 1019,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Yahya": {
+      "elo": 1038,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Vasilis": {
+      "elo": 908,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Raul": {
+      "elo": 1074,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Inca": {
+      "elo": 1160,
+      "legendary": true,
+      "calibrationDuels": 10
+    },
+    "Carlo": {
+      "elo": 875,
+      "legendary": false,
+      "calibrationDuels": 2
+    },
+    "Leo": {
+      "elo": 960,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Obaida": {
+      "elo": 1110,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Ahmad": {
+      "elo": 1020,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Mauro": {
+      "elo": 1000,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "3rd GK": {
+      "elo": 1070,
+      "legendary": false,
+      "calibrationDuels": 1
+    },
+    "Steve Alex": {
+      "elo": 716,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Omar Johny": {
+      "elo": 960,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Ahmed": {
+      "elo": 970,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Wesam": {
+      "elo": 980,
+      "legendary": false,
+      "calibrationDuels": 0
+    },
+    "Teodor": {
+      "elo": 1042,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Luka": {
+      "elo": 1009,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Omar B": {
+      "elo": 946,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "Alexandros": {
+      "elo": 1081,
+      "legendary": false,
+      "calibrationDuels": 8
+    },
+    "Cedo": {
+      "elo": 958,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Ali K": {
+      "elo": 894,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Vadim": {
+      "elo": 929,
+      "legendary": false,
+      "calibrationDuels": 9
+    },
+    "Laurenz": {
+      "elo": 984,
+      "legendary": false,
+      "calibrationDuels": 6
+    },
+    "Saad": {
+      "elo": 964,
+      "legendary": false,
+      "calibrationDuels": 10
+    },
+    "pilot-player-dad61ee5-4951-4ca4-b7dd-faf4e557f6d5": {
+      "elo": 1050,
+      "legendary": false,
+      "calibrationDuels": 1
+    }
+  },
+  "beforeRevision": 1856,
+  "revision": 1857,
+  "at": 1794172551370
+}
