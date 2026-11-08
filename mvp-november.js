@@ -67,11 +67,18 @@
   const reset = root.querySelector('#november-mvp-reset');
   let selected = null;
   let totals = {};
+  let viewingResults = false;
   const results = document.createElement('section');
   results.hidden = true;
   results.tabIndex = -1;
   results.setAttribute('aria-label', 'Preliminary results');
   grid.after(results);
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'button';
+  toggle.textContent = 'View preliminary results';
+  root.querySelector('.mvp-preview-footer').append(toggle);
+  toggle.addEventListener('click', () => { viewingResults = !viewingResults; update(); });
   function showResults() {
     const total = Object.values(totals).reduce((sum, n) => sum + n, 0);
     const title = document.createElement('h3');
@@ -93,10 +100,12 @@
       button.disabled = Boolean(vote) || locked() || busy;
       button.setAttribute('aria-pressed', String(button.dataset.name === (vote || selected)));
     });
-    grid.hidden = Boolean(vote);
-    results.hidden = !vote;
-    root.querySelector('.mvp-preview-header h2').textContent = vote ? 'Preliminary results' : 'Choose your MVP';
-    if (vote) showResults();
+    grid.hidden = Boolean(vote) || viewingResults;
+    results.hidden = !vote && !viewingResults;
+    root.querySelector('.mvp-preview-header h2').textContent = vote || viewingResults ? 'Preliminary results' : 'Choose your MVP';
+    if (vote || viewingResults) showResults();
+    toggle.hidden = Boolean(vote);
+    toggle.textContent = viewingResults ? 'Back to voting' : 'View preliminary results';
     reset.hidden = !demo || !vote;
     root.querySelector('#november-mvp-status').textContent = error || (vote ? `${demo ? 'Test vote' : 'Vote'} saved for ${vote}.` : closed ? 'Voting is closed.' : locked() ? 'Voting opens Sunday at 18:30 Vienna time.' : busy ? 'Saving vote…' : 'Select one player.');
   }
