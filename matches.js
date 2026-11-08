@@ -207,8 +207,8 @@ const november8Match = {
   bench: 'Iacob',
   teams: [
     ['Vadim', 'Ali K', 'Ahmed', 'Alexandros', 'Nikita', 'Cedo', 'Obaida'],
-    ['Samu', 'gabi', 'Daniel', 'Dejan', 'Teodor', 'Takunda', 'Baraa'],
-    ['Saad', 'Laurenz', 'Alexandre', 'Giorgios', 'Jack', 'Ali', 'Levi'],
+    ['Samu', 'gabi', 'Daniel', 'Dejan', 'Ali', 'Takunda', 'Baraa'],
+    ['Saad', 'Laurenz', 'Alexandre', 'Giorgios', 'Jack', 'Teodor', 'Levi'],
     ['Hay', 'Loay', 'Omar', 'Martin', 'Chris', 'Johny', 'Shahrom']
   ]
 };
