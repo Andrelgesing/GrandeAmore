@@ -89,8 +89,28 @@
     Object.entries(totals).sort((a,b) => b[1]-a[1]).forEach(([name, count]) => {
       const row = document.createElement('p');
       row.style.padding = '8px 0';
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '12px';
       row.style.borderBottom = '1px solid #ffffff30';
-      row.textContent = displayPlayerName(name) + ' — ' + count + ' votes · ' + (total ? (count / total * 100).toFixed(1) : 0) + '%';
+      row.textContent = displayPlayerName(name) + ' — ' + count + (count === 1 ? ' vote · ' : ' votes · ') + (total ? (count / total * 100).toFixed(1) : 0) + '%';
+      const avatar = document.createElement('span');
+      avatar.className = 'ballot-avatar';
+      avatar.style.width = '56px';
+      avatar.style.height = '56px';
+      avatar.setAttribute('aria-hidden', 'true');
+      const displayName = displayPlayerName(name);
+      const photo = players.find(player => player.name === displayName)?.photo;
+      avatar.textContent = displayName[0];
+      if (photo) {
+        const img = document.createElement('img');
+        img.src = photo;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.addEventListener('error', () => { avatar.textContent = displayName[0]; }, {once:true});
+        avatar.replaceChildren(img);
+      }
+      row.prepend(avatar);
       results.append(row);
     });
   }
