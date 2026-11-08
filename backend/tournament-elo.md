@@ -69,3 +69,22 @@ Frozen ratings revision: 1608. Final lineups are stored in `tournament25Input`.
 Flag: `APPLY_TOURNAMENT_20261025=true`.
 Audit endpoint: `GET /tournament-placement?date=2026-10-25`.
 Stored key: `tournament:2026-10-25:placement`.
+
+## 8 November 2026
+
+Frozen ratings revision: 1856, after the Ali / Teodor switch (Ali in Team 2,
+Teodor in Team 3). Divisor 200, unchanged v1 draw model and thresholds.
+
+| Team | Expected points | Actual points | Elo per player | Season MP added |
+| --- | ---: | ---: | ---: | ---: |
+| 2 | 4.956930 | 9 | +40 | 3 |
+| 4 | 3.317012 | 6 | +20 | 3 |
+| 3 | 3.874942 | 3 | -10 | 3 |
+| 1 | 4.392191 | 0 | -40 | 3 |
+
+All seven participants per team receive the team's season points and Elo delta.
+Bench player Iacob receives neither points, MP, nor Elo from this event. Goals and
+assists await supplied scorer records; existing season contributions stay intact.
+Apply with APPLY_TOURNAMENT_20261108=true. Dated audit:
+GET /tournament-placement?date=2026-11-08. Storage key:
+tournament:2026-11-08:placement. Do not apply this tournament twice.

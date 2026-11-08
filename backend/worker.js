@@ -1,3 +1,95 @@
+const november8Key = 'tournament:2026-11-08:placement';
+// Frozen expectations reviewed with the user after the Ali / Teodor switch.
+const november8Input = {
+  "date": "2026-11-08",
+  "ratingRevision": 1856,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Vadim",
+        "Ali K",
+        "Ahmed",
+        "Alexandros",
+        "Nikita",
+        "Cedo",
+        "Obaida"
+      ],
+      "points": 0
+    },
+    {
+      "team": 2,
+      "players": [
+        "Samu",
+        "gabi",
+        "Daniel",
+        "Dejan",
+        "Ali",
+        "Takunda",
+        "Baraa"
+      ],
+      "points": 9,
+      "champions": true
+    },
+    {
+      "team": 3,
+      "players": [
+        "Saad",
+        "Laurenz",
+        "Alexander",
+        "Giorgios",
+        "Jack",
+        "Teodor",
+        "Levi"
+      ],
+      "points": 3
+    },
+    {
+      "team": 4,
+      "players": [
+        "Hay",
+        "Loay",
+        "Omar",
+        "Martin",
+        "Chris",
+        "Johny",
+        "Shahrom"
+      ],
+      "points": 6
+    }
+  ],
+  "ratings": {
+    "Vadim": 969,
+    "Ali K": 934,
+    "Ahmed": 1010,
+    "Alexandros": 1121,
+    "Nikita": 1320,
+    "Cedo": 998,
+    "Obaida": 1150,
+    "Samu": 1208,
+    "gabi": 1148,
+    "Daniel": 1381,
+    "Dejan": 746,
+    "Ali": 1146,
+    "Takunda": 993,
+    "Baraa": 995,
+    "Saad": 974,
+    "Laurenz": 994,
+    "Alexander": 1038,
+    "Giorgios": 1172,
+    "Jack": 1068,
+    "Teodor": 1052,
+    "Levi": 1098,
+    "Hay": 1159,
+    "Loay": 1241,
+    "Omar": 880,
+    "Martin": 1049,
+    "Chris": 1022,
+    "Johny": 929,
+    "Shahrom": 999
+  }
+};
 const november1Key = 'tournament:2026-11-01:placement';
 const november1Changes = {"Ali": -20, "Teodor": -20, "fabian": -20, "Omar B": -20, "Baraa": -20, "Paolo (pac)": -20, "Ahmed": -20, "Wesam": -20, "Steve Alex": 20, "Hay": 20, "davideb": 20, "Andreeas": 20, "Takunda": 20, "Nikita": 20, "Johny": 20, "Luka": 20};
 const tournamentKey = 'tournament:2026-10-11:placement';
@@ -133,7 +225,7 @@ function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
  return { rule: 'tournament-elo-v1', divisor, drawModel: 'E*(1-E)', neutralBand: 0.5, championMinimum: 10, teams: calculated, adjustments };
 }
 
-const latestTournamentPlacement = async storage => await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
+const latestTournamentPlacement = async storage => await storage.get(november8Key) || await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
 const mvpOpening = Date.parse('2026-11-08T18:30:00+01:00');
 const mvpPoll = '2026-11-08-official';
 const mvpCandidates = ["Vadim", "Hay", "Teodor", "Cedo", "Ahmed", "Nikita", "Baraa", "Saad", "Samu", "Laurenz", "Alexander", "Alexandros", "Giorgios", "Shahrom", "Daniel", "Ali K", "gabi", "Ali", "Takunda", "Dejan", "Levi", "Obaida", "Loay", "Omar", "Jack", "Martin", "Chris", "Johny"];
@@ -359,6 +451,20 @@ export class Rankings {
      await tx.put('revision', revision);
      changed = true;
     }
+    // One-time tournament result: add frozen deltas to current scores atomically.
+    if (env.APPLY_TOURNAMENT_20261108 === 'true' && !await tx.get(november8Key)) {
+     const calculation = calculateTournamentElo(november8Input);
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(calculation.adjustments)) {
+      if (!ratings[name]) throw new Error('Missing tournament player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november8Key, { date: november8Input.date, ...calculation, input: november8Input, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
@@ -396,7 +502,7 @@ export class Rankings {
   }
   if (path === '/tournament-placement' && request.method === 'GET') {
    const date = url.searchParams.get('date');
-   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01', '2026-11-08'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
    return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
   }
   if (path === '/mvp') return this.mvp(request);
@@ -464,4 +570,4 @@ export class Rankings {
 
 }
 
-export { tournament25Input, tournamentEloDelta, calculateTournamentElo };
+export { november8Input, tournament25Input, tournamentEloDelta, calculateTournamentElo };

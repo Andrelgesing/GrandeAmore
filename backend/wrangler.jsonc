@@ -4,6 +4,7 @@
   "compatibility_date": "2026-10-10",
   "vars": {
     "ELO_K": "16",
+    "APPLY_TOURNAMENT_20261108": "true",
     "APPLY_OBAIDA_1150": "true",
     "APPLY_NOVEMBER8_BONUS": "true",
     "APPLY_NOVEMBER8_SECOND_BONUS": "true",

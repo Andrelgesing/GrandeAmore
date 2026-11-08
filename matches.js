@@ -202,6 +202,7 @@ const currentMatchStandings = [
 ];
 const matchRoles = ['ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'];
 const november8Match = {
+  date: '2026-11-08',
   roles: matchRoles,
   showRatings: false,
   bench: 'Iacob',
@@ -212,7 +213,13 @@ const november8Match = {
     ['Hay', 'Loay', 'Omar', 'Martin', 'Chris', 'Johny', 'Shahrom']
   ]
 };
-const november8Standings = november8Match.teams.map((_, index) => ({ team: index + 1, points: null }));
+// Final 8 November results. Preserve team numbers and the Ali / Teodor switch.
+const november8Standings = [
+  { team: 2, points: 9, champions: true },
+  { team: 4, points: 6 },
+  { team: 3, points: 3 },
+  { team: 1, points: 0 }
+];
 
 // Results affect display order only; the approved team numbers and lineups stay fixed.
 const matchStandings = [

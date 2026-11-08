@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-08",
+  "ratingRevision": 1856,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Vadim",
+        "Ali K",
+        "Ahmed",
+        "Alexandros",
+        "Nikita",
+        "Cedo",
+        "Obaida"
+      ],
+      "points": 0
+    },
+    {
+      "team": 2,
+      "players": [
+        "Samu",
+        "gabi",
+        "Daniel",
+        "Dejan",
+        "Ali",
+        "Takunda",
+        "Baraa"
+      ],
+      "points": 9,
+      "champions": true
+    },
+    {
+      "team": 3,
+      "players": [
+        "Saad",
+        "Laurenz",
+        "Alexander",
+        "Giorgios",
+        "Jack",
+        "Teodor",
+        "Levi"
+      ],
+      "points": 3
+    },
+    {
+      "team": 4,
+      "players": [
+        "Hay",
+        "Loay",
+        "Omar",
+        "Martin",
+        "Chris",
+        "Johny",
+        "Shahrom"
+      ],
+      "points": 6
+    }
+  ],
+  "ratings": {
+    "Vadim": 969,
+    "Ali K": 934,
+    "Ahmed": 1010,
+    "Alexandros": 1121,
+    "Nikita": 1320,
+    "Cedo": 998,
+    "Obaida": 1150,
+    "Samu": 1208,
+    "gabi": 1148,
+    "Daniel": 1381,
+    "Dejan": 746,
+    "Ali": 1146,
+    "Takunda": 993,
+    "Baraa": 995,
+    "Saad": 974,
+    "Laurenz": 994,
+    "Alexander": 1038,
+    "Giorgios": 1172,
+    "Jack": 1068,
+    "Teodor": 1052,
+    "Levi": 1098,
+    "Hay": 1159,
+    "Loay": 1241,
+    "Omar": 880,
+    "Martin": 1049,
+    "Chris": 1022,
+    "Johny": 929,
+    "Shahrom": 999
+  }
+}

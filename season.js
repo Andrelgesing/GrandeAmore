@@ -27,6 +27,14 @@ const seasonFixtures = [{
   goals: november1Goals,
   assists: november1Assists,
   matchesPlayed: 1
+}, {
+  date: november8Match.date,
+  teams: november8Match.teams,
+  standings: november8Standings,
+  // Scorer/assist details have not been supplied for this tournament.
+  goals: [],
+  assists: [],
+  matchesPlayed: 3
 }];
 
 function buildSeasonStandings(fixtures, rosterPlayers) {

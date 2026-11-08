@@ -112,7 +112,7 @@ for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200
  const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'}, config, config.captains);
  assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);
 }
-assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,4);
+assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,5);
 console.log('Passed: current lineups, fixed team, paired players, captains, cards, read-only ratings, live refresh, and preserved historical season record.');
 
 const november = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[3])', context));
@@ -122,7 +122,7 @@ assert.deepEqual(november.standings.map(s=>s.points), [0,3]);
 assert.equal(november.goals.reduce((sum,[,n])=>sum+n,0),12);
 assert.equal(november.assists.reduce((sum,[,n])=>sum+n,0),8);
 const beforeNovember = new Map(build(fixtures.slice(0,3),players).map(e=>[e.player.name,e]));
-const afterNovember = new Map(build(fixtures,players).map(e=>[e.player.name,e]));
+const afterNovember = new Map(build(fixtures.slice(0,4),players).map(e=>[e.player.name,e]));
 for(const [i,team] of expected.entries()) for(const name of team) {
  const old=beforeNovember.get(name)||{points:0,mp:0,goals:0,assists:0}, now=afterNovember.get(name);
  assert.equal(now.points,old.points+(i===1?3:0));assert.equal(now.mp,old.mp+1);
@@ -130,3 +130,17 @@ for(const [i,team] of expected.entries()) for(const name of team) {
  assert.equal(now.assists,old.assists+(new Map(november.assists).get(name)||0));
 }
 console.log('November 1 verified: 16 participants, points, one appearance, 12 supplied goals and 8 assists.');
+
+const latest = fixtures[4];
+assert.equal(latest.date,'2026-11-08');assert.equal(latest.matchesPlayed,3);
+assert.deepEqual(latest.standings.map(s=>[s.team,s.points]),[[2,9],[4,6],[3,3],[1,0]]);
+assert(latest.teams[1].includes('Ali'));assert(latest.teams[2].includes('Teodor'));
+const afterNovember8=new Map(build(fixtures,players).map(e=>[e.player.name,e]));
+const participantPoints=new Map(latest.standings.flatMap(s=>latest.teams[s.team-1].map(n=>[n,s.points])));
+assert.equal(participantPoints.size,28);assert(!participantPoints.has('Iacob'));
+for(const [name,points] of participantPoints){const old=afterNovember.get(name)||{points:0,mp:0,goals:0,assists:0},now=afterNovember8.get(name);assert.equal(now.points,old.points+points);assert.equal(now.mp,old.mp+3);assert.equal(now.goals,old.goals);assert.equal(now.assists,old.assists);}
+for(const [name,old] of afterNovember)if(!participantPoints.has(name))assert.deepEqual(afterNovember8.get(name),old);
+assert.deepEqual(upcomingGrid.children.map(c=>descendants(c).find(e=>e.tag==='h2').textContent),['Team 2','Team 4','Team 3','Team 1']);
+assert.deepEqual(upcomingGrid.children.map(c=>descendants(c).find(e=>e.className==='match-points').textContent),['9 pts','6 pts','3 pts','0 pts']);
+assert.deepEqual(upcomingGrid.children.map(c=>descendants(c).filter(e=>e.className==='match-champions').length),[1,0,0,0]);
+console.log('November 8 verified: 28 players gain their team points and 3 MP; bench, nonparticipants, prior goals/assists preserved; champion banner and 9/6/3/0 pts render.');
