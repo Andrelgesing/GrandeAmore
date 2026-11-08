@@ -66,12 +66,37 @@
   const confirm = root.querySelector('#november-mvp-confirm');
   const reset = root.querySelector('#november-mvp-reset');
   let selected = null;
+  let totals = {};
+  const results = document.createElement('section');
+  results.hidden = true;
+  results.tabIndex = -1;
+  results.setAttribute('aria-label', 'Preliminary results');
+  grid.after(results);
+  function showResults() {
+    const total = Object.values(totals).reduce((sum, n) => sum + n, 0);
+    const title = document.createElement('h3');
+    title.textContent = 'Preliminary results';
+    const summary = document.createElement('p');
+    summary.textContent = total + (total === 1 ? ' vote cast' : ' votes cast');
+    results.replaceChildren(title, summary);
+    Object.entries(totals).sort((a,b) => b[1]-a[1]).forEach(([name, count]) => {
+      const row = document.createElement('p');
+      row.style.padding = '8px 0';
+      row.style.borderBottom = '1px solid #ffffff30';
+      row.textContent = displayPlayerName(name) + ' — ' + count + ' votes · ' + (total ? (count / total * 100).toFixed(1) : 0) + '%';
+      results.append(row);
+    });
+  }
   const candidates = [];
   function update() {
     candidates.forEach(button => {
       button.disabled = Boolean(vote) || locked() || busy;
       button.setAttribute('aria-pressed', String(button.dataset.name === (vote || selected)));
     });
+    grid.hidden = Boolean(vote);
+    results.hidden = !vote;
+    root.querySelector('.mvp-preview-header h2').textContent = vote ? 'Preliminary results' : 'Choose your MVP';
+    if (vote) showResults();
     reset.hidden = !demo || !vote;
     root.querySelector('#november-mvp-status').textContent = error || (vote ? `${demo ? 'Test vote' : 'Vote'} saved for ${vote}.` : closed ? 'Voting is closed.' : locked() ? 'Voting opens Sunday at 18:30 Vienna time.' : busy ? 'Saving vote…' : 'Select one player.');
   }
@@ -130,6 +155,7 @@
     if (confirm.returnValue !== 'yes' || !selected || vote) { selected = null; return; }
     if (locked() || busy) return;
     if (demo) {
+      totals[selected] = (totals[selected] || 0) + 1;
       vote = selected;
       localStorage.setItem(key, vote);
       update();
@@ -144,12 +170,14 @@
       if (!response.ok) throw Error('Vote rejected');
       const data = await response.json();
       if (data.poll !== '2026-11-08-official' || !data.choice) throw Error('Unexpected poll response');
+      totals = data.totals || {};
       vote = displayPlayerName(data.choice.player);
     } catch (_) { error = 'Could not confirm your vote. Please try again.'; }
     finally { busy = false; selected = null; update(); }
   });
   reset.addEventListener('click', () => {
     localStorage.removeItem(key);
+    totals = {};
     selected = vote = null;
     update();
     candidates[0].focus();
@@ -166,6 +194,7 @@
       if (!response.ok) throw Error('Poll unavailable');
       const data = await response.json();
       if (data.poll !== '2026-11-08-official') throw Error('Unexpected poll');
+      totals = data.totals || {};
       if (data.choice) vote = displayPlayerName(data.choice.player);
       closed = data.closed;
       ready = true;
