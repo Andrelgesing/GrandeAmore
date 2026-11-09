@@ -207,13 +207,13 @@ const november8Match = {
   showRatings: false,
   bench: 'Iacob',
   teams: [
-    ['Vadim', 'Ali K', 'Ahmed', 'Alexandros', 'Nikita', 'Cedo', 'Obaida'],
-    ['Samu', 'gabi', 'Daniel', 'Dejan', 'Ali', 'Takunda', 'Baraa'],
-    ['Saad', 'Laurenz', 'Alexandre', 'Giorgios', 'Jack', 'Teodor', 'Levi'],
+    ['Vadim', 'Ali K', 'Ahmed', 'Teodor', 'Nikita', 'Cedo', 'Obaida'],
+    ['Samu', 'gabi', 'Daniel', 'Dejan', 'Alexandros', 'Takunda', 'Baraa'],
+    ['Saad', 'Laurenz', 'Alexandre', 'Giorgios', 'Jack', 'Ali', 'Levi'],
     ['Hay', 'Loay', 'Omar', 'Martin', 'Chris', 'Johny', 'Shahrom']
   ]
 };
-// Final 8 November results. Preserve team numbers and the Ali / Teodor switch.
+// Final 8 November results. Preserve team numbers and the Alexandros / Teodor switch.
 const november8Standings = [
   { team: 2, points: 9, champions: true },
   { team: 4, points: 6 },

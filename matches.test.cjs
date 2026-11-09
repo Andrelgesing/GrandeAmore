@@ -134,7 +134,7 @@ console.log('November 1 verified: 16 participants, points, one appearance, 12 su
 const latest = fixtures[4];
 assert.equal(latest.date,'2026-11-08');assert.equal(latest.matchesPlayed,3);
 assert.deepEqual(latest.standings.map(s=>[s.team,s.points]),[[2,9],[4,6],[3,3],[1,0]]);
-assert(latest.teams[1].includes('Ali'));assert(latest.teams[2].includes('Teodor'));
+assert(latest.teams[0].includes('Teodor'));assert(latest.teams[1].includes('Alexandros'));assert(latest.teams[2].includes('Ali'));
 const afterNovember8=new Map(build(fixtures,players).map(e=>[e.player.name,e]));
 const participantPoints=new Map(latest.standings.flatMap(s=>latest.teams[s.team-1].map(n=>[n,s.points])));
 assert.equal(participantPoints.size,28);assert(!participantPoints.has('Iacob'));
