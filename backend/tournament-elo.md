@@ -88,3 +88,19 @@ assists await supplied scorer records; existing season contributions stay intact
 Apply with APPLY_TOURNAMENT_20261108=true. Dated audit:
 GET /tournament-placement?date=2026-11-08. Storage key:
 tournament:2026-11-08:placement. Do not apply this tournament twice.
+
+## 9 November lineup correction for 8 November
+
+Correct teams: Teodor in Team 1, Alexandros in Team 2, Ali in Team 3. Reuse
+frozen ratings revision 1856 and divisor 200. Final awards per player are
+Team 1 -40, Team 2 +40, Team 3 -20, Team 4 +20. Expected points are
+4.053045, 4.834251, 4.332266 and 3.314167 respectively.
+
+Apply only the difference between the original and corrected awards to current
+live Elo. Nine corrections: Teodor -30, Alexandros +80, Ali -60, and Saad,
+Laurenz, Alexander (displayed Alexandre), Giorgios, Jack and Levi -10 each.
+The original placement audit is preserved. A separate immutable record at
+tournament:2026-11-08:lineup-correction:v1 holds before/after live ratings and
+correctionAdjustments. Its adjustments field contains FINAL tournament awards
+(-40/+40/-20/+20), used by Stats parentheses, dated placement reads and archives.
+Flag APPLY_NOVEMBER8_LINEUP_CORRECTION=true applies this only once.

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync(new URL('./worker.js',import.meta.url),'utf8');
-const {Rankings,calculateTournamentElo,november8Input}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const {Rankings,calculateTournamentElo,november8Input,november8CorrectedInput}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const calculation=calculateTournamentElo(november8Input);
 assert.equal(november8Input.ratingRevision,1856);
 assert.deepEqual(calculation.teams.map(t=>t.delta),[-40,40,-10,20]);
@@ -12,7 +12,7 @@ assert.equal(calculation.adjustments.Ali,40);assert.equal(calculation.adjustment
 const ctx=vm.createContext({});vm.runInContext(readFileSync(new URL('../matches.js',import.meta.url),'utf8').split('function positionCost')[0],ctx);
 const fixture=JSON.parse(vm.runInContext('JSON.stringify(november8Match)',ctx));
 assert.equal(fixture.date,'2026-11-08');
-assert.deepEqual(fixture.teams.map(t=>t.map(n=>n==='Alexandre'?'Alexander':n)),november8Input.teams.map(t=>t.players));
+assert.deepEqual(fixture.teams.map(t=>t.map(n=>n==='Alexandre'?'Alexander':n)),november8CorrectedInput.teams.map(t=>t.players));
 assert.deepEqual(JSON.parse(vm.runInContext('JSON.stringify(november8Standings)',ctx)),[{team:2,points:9,champions:true},{team:4,points:6},{team:3,points:3},{team:1,points:0}]);
 let data=new Map();
 const storage={get:async k=>structuredClone(data.get(k)),put:async(k,v)=>data.set(k,structuredClone(v)),async transaction(fn){const before=structuredClone(data);try{return await fn(storage);}catch(e){data=before;throw e;}}};

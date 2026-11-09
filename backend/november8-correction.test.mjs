@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+const source=fs.readFileSync(new URL('./worker.js',import.meta.url),'utf8');const {Rankings,calculateTournamentElo,november8CorrectedInput}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const original=JSON.parse(fs.readFileSync(new URL('../backups/elo-tournament-2026-11-08-exact-before-after.json',import.meta.url),'utf8'));
+const startRatings=JSON.parse(fs.readFileSync(new URL('../backups/elo-before-lineup-correction-2026-11-09.json',import.meta.url))).ratings;
+const calc=calculateTournamentElo(november8CorrectedInput);assert.deepEqual(calc.teams.map(t=>t.delta),[-40,40,-20,20]);
+let data=new Map([['ratings',structuredClone(startRatings)],['revision',2000],['elo-calibration:v1',true],['tournament:2026-11-08:placement',structuredClone(original)],['mvp:history',{Daniel:7}],['vote:history',{points:8}]]);
+const storage={get:async k=>structuredClone(data.get(k)),put:async(k,v)=>data.set(k,structuredClone(v)),async transaction(fn){const before=structuredClone(data);try{return await fn(storage);}catch(e){data=before;throw e;}}};
+async function start(Class=Rankings){let ready;const service=new Class({storage,blockConcurrencyWhile(fn){ready=fn();}},{APPLY_NOVEMBER8_LINEUP_CORRECTION:'true'});await ready;return service;}
+let service=await start();const expectedCorrections={Teodor:-30,Alexandros:80,Ali:-60,Saad:-10,Laurenz:-10,Alexander:-10,Giorgios:-10,Jack:-10,Levi:-10};
+const key='tournament:2026-11-08:lineup-correction:v1',saved=structuredClone(data.get(key));assert.deepEqual(saved.correctionAdjustments,expectedCorrections);assert.deepEqual(saved.adjustments,calc.adjustments);assert.equal(Object.keys(saved.adjustments).length,28);
+for(const[n,before]of Object.entries(startRatings)){const after=data.get('ratings')[n];assert.equal(after.elo,before.elo+(expectedCorrections[n]??0));assert.equal(after.calibrationDuels,before.calibrationDuels);if(before.legendary)assert(after.legendary);}
+assert.deepEqual(data.get('tournament:2026-11-08:placement'),original);assert.equal(data.get('revision'),2001);assert.deepEqual(saved.beforeRatings,startRatings);assert.deepEqual(saved.afterRatings,data.get('ratings'));
+const response=await(await service.fetch(new Request('https://test/ratings'))).json();assert.deepEqual(response.tournamentAdjustments,calc.adjustments);assert.equal(response.tournamentAdjustments.Alexandros,40);assert.equal(response.tournamentAdjustments.Ali,-20);assert.equal(response.tournamentAdjustments.Teodor,-40);
+assert.deepEqual(await(await service.fetch(new Request('https://test/tournament-placement?date=2026-11-08'))).json(),saved);
+data.get('ratings').Ali.elo+=8;await start();assert.equal(data.get('ratings').Ali.elo,startRatings.Ali.elo-60+8);assert.equal(data.get('revision'),2001);assert.deepEqual(data.get(key),saved);assert.deepEqual(data.get('mvp:history'),{Daniel:7});assert.deepEqual(data.get('vote:history'),{points:8});
+const prior=structuredClone(data);data.delete(key);data.get('tournament:2026-11-08:placement').adjustments.Ali=0;const invalid=structuredClone(data);await assert.rejects(start(),/Unexpected original/);assert.deepEqual(data,invalid);
+console.log('Passed: nine corrections, all final-award annotations, original immutable audit, preserved duel progress/counters/honors/nonparticipants, restart protection, dated endpoint and rollback.');

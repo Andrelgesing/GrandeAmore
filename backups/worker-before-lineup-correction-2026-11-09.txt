@@ -1,0 +1,578 @@
+--5ca21ffa099d5403c671670bc0187252005ae86afd0a0d16978b8696d9b1
+Content-Disposition: form-data; name="worker.js"
+
+const november8Key = 'tournament:2026-11-08:placement';
+// Frozen expectations reviewed with the user after the Ali / Teodor switch.
+const november8Input = {
+  "date": "2026-11-08",
+  "ratingRevision": 1856,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Vadim",
+        "Ali K",
+        "Ahmed",
+        "Alexandros",
+        "Nikita",
+        "Cedo",
+        "Obaida"
+      ],
+      "points": 0
+    },
+    {
+      "team": 2,
+      "players": [
+        "Samu",
+        "gabi",
+        "Daniel",
+        "Dejan",
+        "Ali",
+        "Takunda",
+        "Baraa"
+      ],
+      "points": 9,
+      "champions": true
+    },
+    {
+      "team": 3,
+      "players": [
+        "Saad",
+        "Laurenz",
+        "Alexander",
+        "Giorgios",
+        "Jack",
+        "Teodor",
+        "Levi"
+      ],
+      "points": 3
+    },
+    {
+      "team": 4,
+      "players": [
+        "Hay",
+        "Loay",
+        "Omar",
+        "Martin",
+        "Chris",
+        "Johny",
+        "Shahrom"
+      ],
+      "points": 6
+    }
+  ],
+  "ratings": {
+    "Vadim": 969,
+    "Ali K": 934,
+    "Ahmed": 1010,
+    "Alexandros": 1121,
+    "Nikita": 1320,
+    "Cedo": 998,
+    "Obaida": 1150,
+    "Samu": 1208,
+    "gabi": 1148,
+    "Daniel": 1381,
+    "Dejan": 746,
+    "Ali": 1146,
+    "Takunda": 993,
+    "Baraa": 995,
+    "Saad": 974,
+    "Laurenz": 994,
+    "Alexander": 1038,
+    "Giorgios": 1172,
+    "Jack": 1068,
+    "Teodor": 1052,
+    "Levi": 1098,
+    "Hay": 1159,
+    "Loay": 1241,
+    "Omar": 880,
+    "Martin": 1049,
+    "Chris": 1022,
+    "Johny": 929,
+    "Shahrom": 999
+  }
+};
+const november1Key = 'tournament:2026-11-01:placement';
+const november1Changes = {"Ali": -20, "Teodor": -20, "fabian": -20, "Omar B": -20, "Baraa": -20, "Paolo (pac)": -20, "Ahmed": -20, "Wesam": -20, "Steve Alex": 20, "Hay": 20, "davideb": 20, "Andreeas": 20, "Takunda": 20, "Nikita": 20, "Johny": 20, "Luka": 20};
+const tournamentKey = 'tournament:2026-10-11:placement';
+const tournamentChanges = {"Hay": -20, "Omar": -20, "Daniel": -20, "Paolo (pac)": -20, "Jack": -20, "Takunda": -20, "AlexG": -20, "Samu": -40, "Iacob": -40, "Levi": -40, "Nikita": -40, "Dejan": -40, "davideb": -40, "Andre": -40, "Ali": 40, "Loay": 40, "Andreeas": 40, "Danilo": 40, "Darius": 40, "Enil": 40, "Milan": 40, "Lucas": 20, "gabi": 20, "fabian": 20, "Mohamed": 20, "Baraa": 20, "Valentin": 20, "@Fabien Vjaceslavs": 20};
+const tournament18Key = 'tournament:2026-10-18:placement';
+const tournament18Changes = {"Vasilis": -30, "fabian": -30, "Iacob": -30, "Giorgios": -30, "Alexander": -30, "Mostafa": -30, "Andreeas": -30, "Ronaldo": 20, "Manuel": 20, "Levi": 20, "Jack": 20, "Nikita": 20, "Yahya": 20, "gabi": 20, "Shahrom": -30, "Raul": -30, "Momo": -30, "Ali": -30, "Paolo (pac)": -30, "davideb": -30, "Lucas": -30, "Hay": 40, "Loay": 40, "David": 40, "Martin": 40, "Marco": 40, "Johny": 40, "Chris": 40};
+const tournament25Key = 'tournament:2026-10-25:placement';
+// Frozen before kickoff: final lineups, results and ratings revision 1608.
+const tournament25Input = {
+  "date": "2026-10-25",
+  "ratingRevision": 1608,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Ahmad",
+        "Inca",
+        "Levi",
+        "Samu",
+        "Baraa",
+        "Ali",
+        "3rd GK"
+      ],
+      "points": 7,
+      "champions": true
+    },
+    {
+      "team": 2,
+      "players": [
+        "Hay",
+        "Carlo",
+        "Omar Johny",
+        "Steve Alex",
+        "Johny",
+        "Leo",
+        "Andre"
+      ],
+      "points": 0
+    },
+    {
+      "team": 3,
+      "players": [
+        "Ronaldo",
+        "davideb",
+        "Enil",
+        "Paolo (pac)",
+        "Darius",
+        "Mauro",
+        "AlexG"
+      ],
+      "points": 4
+    },
+    {
+      "team": 4,
+      "players": [
+        "Obaida",
+        "Omar",
+        "gabi",
+        "Alexander",
+        "Takunda",
+        "Danilo",
+        "Loay"
+      ],
+      "points": 6
+    }
+  ],
+  "ratings": {
+    "Ahmad": 1000,
+    "Inca": 1177,
+    "Levi": 1062,
+    "Samu": 1181,
+    "Baraa": 893,
+    "Ali": 1102,
+    "3rd GK": 1100,
+    "Hay": 1163,
+    "Carlo": 1000,
+    "Omar Johny": 1000,
+    "Steve Alex": 800,
+    "Johny": 927,
+    "Leo": 1000,
+    "Andre": 1262,
+    "Ronaldo": 959,
+    "davideb": 1107,
+    "Enil": 1446,
+    "Paolo (pac)": 709,
+    "Darius": 1015,
+    "Mauro": 1000,
+    "AlexG": 1097,
+    "Obaida": 1000,
+    "Omar": 834,
+    "gabi": 1103,
+    "Alexander": 1076,
+    "Takunda": 956,
+    "Danilo": 1145,
+    "Loay": 1219
+  }
+};
+
+// Round robin, one match against each opponent, 3 points for a win / 1 for a draw.
+function tournamentEloDelta(difference, champion = false) {
+ if (!Number.isFinite(difference)) throw new Error('Invalid points difference');
+ const gap = Math.abs(difference);
+ const magnitude = gap >= 3 ? 40 : gap >= 1 ? 20 : gap >= 0.5 ? 10 : 0;
+ const delta = magnitude === 0 ? 0 : Math.sign(difference) * magnitude;
+ return champion ? Math.max(10, delta) : delta;
+}
+function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
+ if (!Array.isArray(teams) || teams.length < 2 || !Number.isFinite(divisor) || divisor <= 0) throw new Error('Invalid tournament settings');
+ const seen = new Set(), teamIds = new Set();
+ const calculated = teams.map(team => {
+  if (teamIds.has(team.team) || !Array.isArray(team.players) || !team.players.length || !Number.isInteger(team.points) || team.points < 0 || team.points > 3 * (teams.length - 1)) throw new Error('Invalid tournament team');
+  teamIds.add(team.team);
+  const total = team.players.reduce((sum, name) => {
+   if (seen.has(name) || !Object.hasOwn(ratings, name) || !Number.isFinite(ratings[name])) throw new Error('Missing or duplicate tournament player: ' + name);
+   seen.add(name);
+   return sum + ratings[name];
+  }, 0);
+  return { ...team, averageElo: total / team.players.length };
+ });
+ const adjustments = {};
+ for (const team of calculated) {
+  team.expectedPoints = calculated.reduce((sum, opponent) => {
+   if (opponent === team) return sum;
+   const expectedScore = 1 / (1 + 10 ** ((opponent.averageElo - team.averageElo) / divisor));
+   const drawProbability = expectedScore * (1 - expectedScore);
+   return sum + 3 * expectedScore - drawProbability / 2;
+  }, 0);
+  team.difference = team.points - team.expectedPoints;
+  team.delta = tournamentEloDelta(team.difference, team.champions === true);
+  for (const name of team.players) adjustments[name] = team.delta;
+ }
+ return { rule: 'tournament-elo-v1', divisor, drawModel: 'E*(1-E)', neutralBand: 0.5, championMinimum: 10, teams: calculated, adjustments };
+}
+
+const latestTournamentPlacement = async storage => await storage.get(november8Key) || await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
+const mvpOpening = Date.parse('2026-11-08T18:30:00+01:00');
+const mvpPoll = '2026-11-08-official';
+const mvpCandidates = ["Vadim", "Hay", "Teodor", "Cedo", "Ahmed", "Nikita", "Baraa", "Saad", "Samu", "Laurenz", "Alexander", "Alexandros", "Giorgios", "Shahrom", "Daniel", "Ali K", "gabi", "Ali", "Takunda", "Dejan", "Levi", "Obaida", "Loay", "Omar", "Jack", "Martin", "Chris", "Johny"];
+const seed = {"AlexG": {"elo": 1200, "legendary": false}, "Andre": {"elo": 1200, "legendary": false}, "Darius": {"elo": 1000, "legendary": false}, "fabian": {"elo": 1000, "legendary": false}, "Enil": {"elo": 1200, "legendary": false}, "gabi": {"elo": 1000, "legendary": false}, "Daniel": {"elo": 1200, "legendary": false}, "Levi": {"elo": 1000, "legendary": false}, "Samu": {"elo": 1000, "legendary": false}, "Dejan": {"elo": 1000, "legendary": false}, "Jack": {"elo": 1000, "legendary": false}, "Ali": {"elo": 1000, "legendary": false}, "Omar": {"elo": 1000, "legendary": false}, "Baraa": {"elo": 1000, "legendary": false}, "Takunda": {"elo": 1000, "legendary": false}, "Danilo": {"elo": 1000, "legendary": false}, "Andreeas": {"elo": 1000, "legendary": false}, "davideb": {"elo": 1000, "legendary": false}, "Nikita": {"elo": 1000, "legendary": false}, "Iacob": {"elo": 1000, "legendary": false}, "Damien": {"elo": 1000, "legendary": false}, "Valentin": {"elo": 1000, "legendary": false}, "Milan": {"elo": 1000, "legendary": false}, "Mohamed": {"elo": 1000, "legendary": false}, "Paolo (pac)": {"elo": 1000, "legendary": false}, "@Fabien Vjaceslavs": {"elo": 1000, "legendary": false}, "Lucas": {"elo": 1200, "legendary": false}, "@~\u2744\ufe0f": {"elo": 1000, "legendary": false}, "Shahrom": {"elo": 1000, "legendary": true}};
+seed.Loay = { elo: 1100, legendary: false };
+seed.Hay = { elo: 1000, legendary: false };
+seed.Giorgios = { elo: 1100, legendary: true };
+seed.Manuel = { elo: 1100, legendary: false };
+seed.Momo = { elo: 1000, legendary: false };
+seed.Alexander = { elo: 1100, legendary: false };
+seed.Mostafa = { elo: 1100, legendary: false };
+seed.Johny = { elo: 1000, legendary: false };
+seed.Ronaldo = { elo: 900, legendary: false };
+seed.Leandro = { elo: 1000, legendary: false };
+seed.Chris = { elo: 1000, legendary: false };
+seed.Marco = { elo: 1000, legendary: false };
+seed.Martin = { elo: 1000, legendary: false };
+seed.David = { elo: 1000, legendary: false };
+seed.Yahya = { elo: 1000, legendary: false };
+seed.Vasilis = { elo: 1000, legendary: false };
+seed.Raul = { elo: 1200, legendary: false };
+seed.Inca = { elo: 1200, legendary: true };
+seed.Carlo = { elo: 1000, legendary: false };
+seed.Leo = { elo: 1000, legendary: false };
+seed.Obaida = { elo: 1000, legendary: false };
+seed.Ahmad = { elo: 1000, legendary: false };
+seed.Mauro = { elo: 1000, legendary: false };
+seed['3rd GK'] = { elo: 1100, legendary: false };
+seed['Steve Alex'] = { elo: 800, legendary: false };
+seed['Omar Johny'] = { elo: 1000, legendary: false };
+seed.Ahmed = { elo: 1000, legendary: false };
+seed.Wesam = { elo: 1000, legendary: false };
+seed.Teodor = { elo: 1000, legendary: false };
+seed.Luka = { elo: 1000, legendary: false };
+seed['Omar B'] = { elo: 913, legendary: false };
+seed['Alexandros'] = { elo: 1000, legendary: false };
+seed['Cedo'] = { elo: 1000, legendary: false };
+seed['Ali K'] = { elo: 1000, legendary: false };
+seed['Vadim'] = { elo: 1000, legendary: false };
+seed['Laurenz'] = { elo: 1000, legendary: false };
+seed['Saad'] = { elo: 1000, legendary: false };
+// Keep membership aligned with players.js; ratings and history stay stored.
+const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "@Fabien Vjaceslavs", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam"]);
+export const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️' && !substituteNames.has(name);
+export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
+const calibrationMigration = 'elo-calibration:v1';
+const archivePrefix = 'elo-snapshot:';
+const archiveBaseline = 'elo-archive-baseline';
+export function viennaDate(timestamp) {
+ const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Vienna', year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+ }).formatToParts(new Date(timestamp)).map(part => [part.type, part.value]));
+ return { date: `${parts.year}-${parts.month}-${parts.day}`, time: `${parts.hour}:${parts.minute}` };
+}
+async function snapshot(tx, scheduledAt = null) {
+ const capturedAt = new Date().toISOString();
+ return {
+  schemaVersion: 1, timezone: 'Europe/Vienna', capturedAt,
+  date: viennaDate(scheduledAt ?? Date.now()).date,
+  scheduledAt: scheduledAt === null ? null : new Date(scheduledAt).toISOString(),
+  revision: await tx.get('revision') || 0,
+  ratings: await tx.get('ratings'),
+  tournamentAdjustments: (await latestTournamentPlacement(tx))?.adjustments || {}
+ };
+}
+function archiveResponse(data, format, filename) {
+ const headers = { 'Content-Disposition': `attachment; filename="${filename}.${format}"` };
+ if (format === 'csv') {
+  const quote = value => '"' + String(value).replaceAll('"', '""') + '"';
+  const snapshots = Array.isArray(data.snapshots) ? [data.baseline, ...data.snapshots].filter(Boolean) : [data];
+  const rows = [['date', 'captured_at', 'scheduled_at', 'revision', 'player', 'elo', 'legendary', 'tournament_adjustment']];
+  for (const item of snapshots) for (const [name, rating] of Object.entries(item.ratings)) {
+   rows.push([item.date, item.capturedAt, item.scheduledAt || '', item.revision, name, rating.elo, rating.legendary, item.tournamentAdjustments[name] || 0]);
+  }
+  return new Response(rows.map(row => row.map(quote).join(',')).join('\r\n') + '\r\n', { headers: { ...headers, 'Content-Type': 'text/csv; charset=utf-8' } });
+ }
+ return Response.json(data, { headers });
+}
+export default {
+ async scheduled(controller, env) {
+  if (viennaDate(controller.scheduledTime).time !== '23:55') return;
+  const id = env.RANKINGS.idFromName('grande-amore');
+  const response = await env.RANKINGS.get(id).fetch(new Request('https://internal/internal/elo-snapshot', {
+   method: 'POST', body: JSON.stringify({ scheduledAt: controller.scheduledTime })
+  }));
+  if (!response.ok) throw new Error(`Daily Elo export failed: ${response.status}`);
+  console.log(JSON.stringify({ event: 'daily-elo-export', date: viennaDate(controller.scheduledTime).date }));
+ },
+ async fetch(request, env) {
+  if (new URL(request.url).pathname.startsWith('/internal/')) return new Response('Not found', { status: 404 });
+  const origin = request.headers.get('Origin');
+  const allowed = origin === env.ALLOWED_ORIGIN;
+  const headers = { 'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Cache-Control': 'no-store', 'Vary': 'Origin' };
+  if (request.method === 'OPTIONS') return new Response(null, { status: allowed ? 204 : 403, headers });
+  if (request.method === 'POST' && !allowed) return new Response('Forbidden', { status: 403 });
+  try {
+   const id = env.RANKINGS.idFromName('grande-amore');
+   const result = await env.RANKINGS.get(id).fetch(request);
+   const response = new Response(result.body, result);
+   for (const [key, value] of Object.entries(headers)) response.headers.set(key, value);
+   return response;
+  } catch (_) { return Response.json({ error: 'Ratings service unavailable' }, { status: 503, headers }); }
+ }
+};
+export class Rankings {
+ constructor(ctx, env) {
+  this.ctx = ctx; this.env = env;
+  ctx.blockConcurrencyWhile(async () => {
+   await ctx.storage.transaction(async tx => {
+    const ratings = await tx.get('ratings') || {};
+    const calibrationEnabled = await tx.get(calibrationMigration);
+    let changed = false;
+    for (const [name, initial] of Object.entries(seed)) {
+     if (!Object.hasOwn(ratings, name)) { ratings[name] = { ...initial, ...(calibrationEnabled ? { calibrationDuels: 0 } : {}) }; changed = true; }
+    }
+    if (env.APPLY_TOURNAMENT_20261011 === 'true' && !await tx.get(tournamentKey)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const beforeRatings = structuredClone(ratings);
+     for (const [name, delta] of Object.entries(tournamentChanges)) {
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournamentKey, { adjustments: tournamentChanges, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Apply the requested Ronaldo correction once, preserving every other record.
+    const ronaldoCorrectionKey = 'elo-correction:ronaldo:2026-10-18';
+    if (env.APPLY_RONALDO_20261018 === 'true' && !await tx.get(ronaldoCorrectionKey)) {
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     ratings.Ronaldo.elo = 900;
+     await tx.put(ronaldoCorrectionKey, { beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Apply placement deltas to current scores once, preserving subsequent duels.
+    if (env.APPLY_TOURNAMENT_20261018 === 'true' && !await tx.get(tournament18Key)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const beforeRatings = structuredClone(ratings);
+     for (const [name, delta] of Object.entries(tournament18Changes)) {
+      if (!ratings[name]) throw new Error(`Missing tournament player: ${name}`);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournament18Key, { adjustments: tournament18Changes, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Apply the frozen calculation once to current Elo, preserving intervening duels.
+    if (env.APPLY_TOURNAMENT_20261025 === 'true' && !await tx.get(tournament25Key)) {
+     const calculation = calculateTournamentElo(tournament25Input);
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(calculation.adjustments)) {
+      if (!ratings[name]) throw new Error('Missing tournament player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(tournament25Key, { ...calculation, input: tournament25Input, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Apply Baraa's requested three-star rating once; preserve all other records and later votes.
+    const baraaCorrectionKey = 'elo-correction:baraa:2026-11-01';
+    if (env.APPLY_BARAA_20261101 === 'true' && !await tx.get(baraaCorrectionKey)) {
+     if (!ratings.Baraa) throw new Error('Missing player: Baraa');
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     ratings.Baraa.elo = 1000;
+     await tx.put(baraaCorrectionKey, { beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    // Explicitly approved single-match adjustment; never recalculate or apply twice.
+    if (env.APPLY_MATCH_20261101 === 'true' && !await tx.get(november1Key)) {
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(november1Changes)) {
+      if (!ratings[name]) throw new Error('Missing match player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november1Key, { date: '2026-11-01', score: { team1: 6, team2: 11 }, rule: 'approved-match-adjustment', adjustments: november1Changes, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    const november8BonusKey = 'elo-correction:ahmed-martin-chris:2026-11-08';
+    if (env.APPLY_NOVEMBER8_BONUS === 'true' && !await tx.get(november8BonusKey)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const before = {};
+     for (const name of ['Ahmed', 'Martin', 'Chris']) {
+      if (!ratings[name]) throw new Error('Missing player: ' + name);
+      before[name] = ratings[name].elo;
+      ratings[name].elo += 30;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november8BonusKey, { before, delta: 30, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    const november8SecondBonusKey = 'elo-correction:chris-martin-johny:2026-11-08';
+    if (env.APPLY_NOVEMBER8_SECOND_BONUS === 'true' && !await tx.get(november8SecondBonusKey)) {
+     const beforeRevision = await tx.get('revision') || 0;
+     const before = {};
+     for (const name of ['Chris', 'Martin', 'Johny']) {
+      if (!ratings[name]) throw new Error('Missing player: ' + name);
+      before[name] = ratings[name].elo;
+      ratings[name].elo += 30;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november8SecondBonusKey, { before, delta: 30, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    const obaidaCorrectionKey = 'elo-correction:obaida:2026-11-08';
+    if (env.APPLY_OBAIDA_1150 === 'true' && !await tx.get(obaidaCorrectionKey)) {
+     const before = ratings.Obaida.elo;
+     const revision = (await tx.get('revision') || 0) + 1;
+     ratings.Obaida.elo = 1150;
+     await tx.put(obaidaCorrectionKey, { before, after: 1150, revision, at: Date.now() });
+     await tx.put('revision', revision);
+     changed = true;
+    }
+    // One-time tournament result: add frozen deltas to current scores atomically.
+    if (env.APPLY_TOURNAMENT_20261108 === 'true' && !await tx.get(november8Key)) {
+     const calculation = calculateTournamentElo(november8Input);
+     const beforeRatings = structuredClone(ratings);
+     const beforeRevision = await tx.get('revision') || 0;
+     for (const [name, delta] of Object.entries(calculation.adjustments)) {
+      if (!ratings[name]) throw new Error('Missing tournament player: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november8Key, { date: november8Input.date, ...calculation, input: november8Input, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
+    if (changed) await tx.put('ratings', ratings);
+    if (!calibrationEnabled) await tx.put(calibrationMigration, true);
+    if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
+   });
+  });
+ }
+ async fetch(request) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+  if (path === '/internal/elo-snapshot' && request.method === 'POST') {
+   const { scheduledAt } = await request.json();
+   if (!Number.isFinite(scheduledAt) || viennaDate(scheduledAt).time !== '23:55') return new Response('Invalid schedule', { status: 400 });
+   return this.ctx.storage.transaction(async tx => {
+    const key = archivePrefix + viennaDate(scheduledAt).date;
+    let saved = await tx.get(key);
+    if (!saved) { saved = await snapshot(tx, scheduledAt); await tx.put(key, saved); }
+    return Response.json(saved);
+   });
+  }
+  if (path === '/elo-history' && request.method === 'GET') {
+   const format = url.searchParams.get('format') || 'json';
+   const date = url.searchParams.get('date');
+   const after = url.searchParams.get('after');
+   if (!['json', 'csv'].includes(format) || [date, after].some(value => value !== null && !/^\d{4}-\d{2}-\d{2}$/.test(value))) return new Response('Invalid archive query', { status: 400 });
+   if (date) {
+    const saved = await this.ctx.storage.get(archivePrefix + date);
+    return saved ? archiveResponse(saved, format, `grande-amore-elo-${date}`) : new Response('Snapshot not found', { status: 404 });
+   }
+   const entries = await this.ctx.storage.list({ prefix: archivePrefix, limit: 366, ...(after ? { startAfter: archivePrefix + after } : {}) });
+   const snapshots = [...entries.values()];
+   return archiveResponse({ schemaVersion: 1, timezone: 'Europe/Vienna', scheduledTime: '23:55',
+    baseline: after ? null : await this.ctx.storage.get(archiveBaseline), snapshots,
+    nextAfter: snapshots.length === 366 ? snapshots.at(-1).date : null
+   }, format, 'grande-amore-elo-history');
+  }
+  if (path === '/tournament-placement' && request.method === 'GET') {
+   const date = url.searchParams.get('date');
+   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01', '2026-11-08'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
+  }
+  if (path === '/mvp') return this.mvp(request);
+  if (path === '/ratings' && request.method === 'GET') return this.ctx.storage.transaction(async tx => Response.json({ ratings: await tx.get('ratings'), revision: await tx.get('revision') || 0, tournamentAdjustments: (await latestTournamentPlacement(tx))?.adjustments || {} }));
+  if (path !== '/votes' || request.method !== 'POST') return new Response('Not found', { status: 404 });
+  let vote;
+  try { vote = JSON.parse(await request.text()); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }
+  const { winner, loser, id } = vote;
+  if (!duelEligible(winner) || !duelEligible(loser) || winner === loser || typeof id !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(id)) return new Response('Invalid vote', { status: 400 });
+  return this.ctx.storage.transaction(async tx => {
+   const previous = await tx.get('vote:' + id);
+   const ratings = await tx.get('ratings');
+   if (previous) {
+    if (previous.winner !== winner || previous.loser !== loser) return new Response('Conflicting vote', { status: 409 });
+    return Response.json({ ratings, revision: await tx.get('revision') || 0 });
+   }
+   const k = Number(this.env.ELO_K || 16);
+   const beforeWinner = ratings[winner].elo, beforeLoser = ratings[loser].elo;
+   const winnerK = calibrationK(ratings[winner], k), loserK = calibrationK(ratings[loser], k);
+   const upset = 1 - 1 / (1 + 10 ** ((beforeLoser - beforeWinner) / 400));
+   const winnerPoints = Math.round(winnerK * upset), loserPoints = Math.round(loserK * upset);
+   const beforeWinnerCalibration = ratings[winner].calibrationDuels ?? 10;
+   const beforeLoserCalibration = ratings[loser].calibrationDuels ?? 10;
+   ratings[winner].elo += winnerPoints; ratings[loser].elo -= loserPoints;
+   for (const name of [winner, loser]) {
+    if ((ratings[name].calibrationDuels ?? 10) < 10) ratings[name].calibrationDuels++;
+   }
+   for (const name of [winner, loser]) ratings[name].legendary ||= ratings[name].elo >= 1350;
+   const revision = (await tx.get('revision') || 0) + 1;
+   await tx.put('revision', revision);
+   await tx.put('ratings', ratings);
+   await tx.put('vote:' + id, { winner, loser, points: winnerPoints, winnerPoints, loserPoints, beforeWinner, beforeLoser, k, winnerK, loserK, beforeWinnerCalibration, beforeLoserCalibration, at: Date.now() });
+   return Response.json({ ratings, revision });
+  });
+ }
+ async mvp(request) {
+  const voterPattern = /^[a-zA-Z0-9-]{16,80}$/;
+  const totalsKey = `mvp:${mvpPoll}:totals`;
+  if (request.method === 'GET') {
+   const voter = new URL(request.url).searchParams.get('voter');
+   if (voter && !voterPattern.test(voter)) return new Response('Invalid voter', { status: 400 });
+   return this.ctx.storage.transaction(async tx => Response.json({
+    poll: mvpPoll, closed: this.env.MVP_CLOSED === 'true', totals: await tx.get(totalsKey) || {},
+    choice: voter ? await tx.get(`mvp:${mvpPoll}:voter:` + voter) || null : null
+   }));
+  }
+  if (request.method !== 'POST') return new Response('Method not allowed', { status: 405 });
+  if (this.env.MVP_CLOSED === 'true') return Response.json({ error: 'Voting is closed' }, { status: 403 });
+  if (Date.now() < mvpOpening) return Response.json({ error: 'Voting opens at 18:30 Vienna time' }, { status: 403 });
+  let body;
+  try { body = await request.json(); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }
+  if (!body || typeof body.voter !== 'string' || !voterPattern.test(body.voter) || !mvpCandidates.includes(body.player)) return new Response('Invalid vote', { status: 400 });
+  return this.ctx.storage.transaction(async tx => {
+   const key = `mvp:${mvpPoll}:voter:` + body.voter;
+   const previous = await tx.get(key);
+   const totals = await tx.get(totalsKey) || {};
+   if (previous) return Response.json({ poll: mvpPoll, totals, choice: previous });
+   totals[body.player] = (totals[body.player] || 0) + 1;
+   const choice = { player: body.player, at: Date.now() };
+   await tx.put(totalsKey, totals);
+   await tx.put(key, choice);
+   return Response.json({ poll: mvpPoll, totals, choice });
+  });
+ }
+
+}
+
+export { november8Input, tournament25Input, tournamentEloDelta, calculateTournamentElo };
+
+--5ca21ffa099d5403c671670bc0187252005ae86afd0a0d16978b8696d9b1--
