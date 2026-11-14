@@ -4,7 +4,8 @@
   const entry = document.querySelector('#account-entry');
   const dialog = document.querySelector('#account-dialog');
   let state, message;
-  const rosterPhotos = new Map(players.map(player => [player.name, player.photo]));
+  const rosterPhotos = new Map([...players.map(player => [player.name, player.photo]),
+    ['pilot-player-dad61ee5-4951-4ca4-b7dd-faf4e557f6d5', 'players/dash.jpg']]);
   const params = new URLSearchParams(location.search);
 
   function element(tag, content = '') {

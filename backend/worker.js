@@ -358,6 +358,9 @@ seed['Ali K'] = { elo: 1000, legendary: false };
 seed['Vadim'] = { elo: 1000, legendary: false };
 seed['Laurenz'] = { elo: 1000, legendary: false };
 seed['Saad'] = { elo: 1000, legendary: false };
+seed['Davide Polli'] = { elo: 1200, legendary: false };
+seed['Philipp'] = { elo: 1000, legendary: false };
+seed['Ado'] = { elo: 1000, legendary: false };
 // Keep membership aligned with players.js; ratings and history stay stored.
 const substituteNames = new Set(["Dejan", "Valentin", "Andreeas", "Milan", "Mohamed", "@Fabien Vjaceslavs", "Manuel", "Momo", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Obaida", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam"]);
 export const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️' && !substituteNames.has(name);

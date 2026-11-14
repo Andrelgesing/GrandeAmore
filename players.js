@@ -3,7 +3,7 @@ const rawStars = elo => Math.max(1, Math.min(5, (elo - 400) / 200));
 const starsFromElo = elo => Math.round(rawStars(elo) * 2) / 2;
 // Add a photo path to a player when photos are available.
 const roster = [
-  ['AlexG', 'GK', 1200, 'players/alexg.jpg'], ['Andre', 'GK', 1200, 'players/andre.jpg'], ['Darius', 'CB', 1000],
+  ['AlexG', 'GK', 1200, 'players/alexg.jpg'], ['Andre', 'GK', 1200, 'players/andre.jpg'], ['Darius', 'CB', 1000, 'players/darius.jpg'],
   ['fabian', 'CM', 1000, 'players/fabian.jpg'], ['Enil', 'CM', 1200, 'players/enil.jpg'], ['gabi', 'CM', 1000, 'players/gabi.jpg'],
   ['Daniel', 'CM/ST', 1200, 'players/daniel.jpg'], ['Levi', 'CM', 1000, 'players/levi.jpg'], ['Samu', 'ST/CM', 1000, 'players/samu.jpg'],
   ['Dejan', 'CB', 1000], ['Jack', 'CB', 1000, 'players/jack.jpg'], ['Ali', 'ST/CB', 1000, 'players/ali.jpg'],
@@ -43,7 +43,10 @@ const roster = [
   ['Ali K', 'CM', 1000],
   ['Vadim', 'ST', 1000],
   ['Laurenz', 'CM', 1000],
-  ['Saad', 'ST', 1000]
+  ['Saad', 'ST', 1000],
+  ['Davide Polli', 'ST', 1200, 'players/davide_polli.jpg'],
+  ['Philipp', 'ST', 1000, 'players/philipp.jpg'],
+  ['Ado', 'CB', 1000]
 ];
 let ratingState = {};
 try { if (!RATINGS_API) ratingState = JSON.parse(localStorage.getItem('grande-amore-ratings') || '{}') || {}; } catch (_) {}
@@ -55,6 +58,7 @@ const displayPlayerRecords = records => Object.fromEntries(Object.entries(record
 ratingState = displayPlayerRecords(ratingState);
 const jokes = ['Post-match pizza instinct', 'Celebration choreography', 'VAR negotiation skills', 'Excuse creativity', 'Dressing-room DJ skills', 'Monday morning soreness', 'Nutmeg ambition', 'Touchline banter', 'Last-minute boot search', 'Offside appeal volume', 'Striker pocket capacity', 'Sliding tackle laundry bill'];
 const customJokeStats = {
+  'Davide Polli': [{ label: 'Crème Brûlée', rating: 5 }, { label: 'Michelin', rating: 1 }],
   Inca: [
     { label: 'Tango', rating: 3 },
     { label: 'Salsa', rating: 2 },
@@ -108,7 +112,7 @@ const customJokeStats = {
   ]
 };
 const newcomerJokes = ['Striker pocket capacity: deluxe edition', 'Emergency clearance altitude', 'Back-pass drama', 'Tactical pointing accuracy', 'Shin-pad hide-and-seek', 'Halftime snack scouting', 'Invisible armband authority', 'Offside trap escape artistry', 'Studs-to-grass negotiation', 'Crossbar inspection duty', 'Post-match excuse originality', 'Warm-up enthusiasm'];
-for (const name of ['Ahmed', 'Wesam', 'Teodor', 'Luka', 'Omar B', 'Alexandros', 'Cedo', 'Ali K', 'Vadim', 'Laurenz', 'Saad']) {
+for (const name of ['Ahmed', 'Wesam', 'Teodor', 'Luka', 'Omar B', 'Alexandros', 'Cedo', 'Ali K', 'Vadim', 'Laurenz', 'Saad', 'Philipp', 'Ado']) {
   const labels = [...newcomerJokes];
   customJokeStats[name] = Array.from({ length: 2 }, () => ({
     label: labels.splice(Math.floor(Math.random() * labels.length), 1)[0],
