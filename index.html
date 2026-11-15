@@ -86,6 +86,7 @@
     @media (max-width: 650px) { .stats-grid { grid-template-columns: 1fr; } }
     .match-date { display: inline-block; padding: 8px 14px; border: 1px solid #dce2d9; border-radius: 30px; background: white; font-weight: 700; }
     .match-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 30px 0 50px; }
+    .match-result-caption { padding: 12px 16px; background: white; border: 1px solid #dce2d9; border-radius: 12px 12px 0 0; font-weight: 800; text-align: center; }
     .match-team-figure { margin: 0; min-width: 0; }
     .match-team-figure a, .match-team-figure img { display: block; width: 100%; }
     .match-team-figure img { height: auto; border-radius: 12px; }
@@ -308,10 +309,10 @@
     <section id="matches-view" hidden aria-labelledby="matches-title">
       <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament</h1><time class="match-date" datetime="2026-11-15">Sunday · 15 November 2026</time></div>
       <div class="match-teams" id="november-15-teams">
-        <figure class="match-team-figure"><a href="assets/teams/2026-11-15/team-1.png" aria-label="Open Team 1 figure"><img src="assets/teams/2026-11-15/team-1.png" width="680" height="995" alt="Team 1, captain Loay: Shahrom, Loay, Iacob, Darius, Giorgios, Teodor, Hay"></a></figure>
-        <figure class="match-team-figure"><a href="assets/teams/2026-11-15/team-2.png" aria-label="Open Team 2 figure"><img src="assets/teams/2026-11-15/team-2.png" width="680" height="995" alt="Team 2, captain Daniel: Philipp, Daniel, Steve Alex, Takunda, Ado, Danilo, Lucas"></a></figure>
-        <figure class="match-team-figure"><a href="assets/teams/2026-11-15/team-3.png" aria-label="Open Team 3 figure"><img src="assets/teams/2026-11-15/team-3.png" width="680" height="995" alt="Team 3, captain Davide Polli: Vadim, fabian, Andreeas, Davide Polli, Nikita, Baraa, Laurenz"></a></figure>
-        <figure class="match-team-figure"><a href="assets/teams/2026-11-15/team-4.png" aria-label="Open Team 4 figure"><img src="assets/teams/2026-11-15/team-4.png" width="680" height="995" alt="Team 4, captain Samu: Obaida, Alexandros, Momo, Alex (Samuel), Mostafa, Jack, Samu"></a></figure>
+        <figure class="match-team-figure"><figcaption class="match-result-caption">Team 1 · 4 pts</figcaption><a href="assets/teams/2026-11-15/team-1.png" aria-label="Open Team 1 figure"><img src="assets/teams/2026-11-15/team-1.png" width="680" height="995" alt="Team 1, captain Loay: Shahrom, Loay, Iacob, Darius, Giorgios, Teodor, Hay"></a></figure>
+        <figure class="match-team-figure"><figcaption class="match-result-caption">Team 2 · 4 pts</figcaption><a href="assets/teams/2026-11-15/team-2.png" aria-label="Open Team 2 figure"><img src="assets/teams/2026-11-15/team-2.png" width="680" height="995" alt="Team 2, captain Daniel: Philipp, Daniel, Steve Alex, Takunda, Ado, Danilo, Lucas"></a></figure>
+        <figure class="match-team-figure"><figcaption class="match-result-caption">Team 3 · Champions · 7 pts</figcaption><a href="assets/teams/2026-11-15/team-3.png" aria-label="Open Team 3 figure"><img src="assets/teams/2026-11-15/team-3.png" width="680" height="995" alt="Team 3, captain Davide Polli: Vadim, fabian, Andreeas, Davide Polli, Nikita, Baraa, Laurenz"></a></figure>
+        <figure class="match-team-figure"><figcaption class="match-result-caption">Team 4 · 1 pts</figcaption><a href="assets/teams/2026-11-15/team-4.png" aria-label="Open Team 4 figure"><img src="assets/teams/2026-11-15/team-4.png" width="680" height="995" alt="Team 4, captain Samu: Obaida, Alexandros, Momo, Alex (Samuel), Mostafa, Jack, Samu"></a></figure>
       </div>
       <section class="match-archive" aria-labelledby="match-archive-nov8-title">
         <h2 id="match-archive-nov8-title">Previous tournament</h2>
@@ -359,7 +360,7 @@
       <div class="stats-grid">
         <article><span class="number">01 / GOALS</span><h2>Top Scorer</h2><div id="goals-list" class="goals-list" aria-label="Goals leaderboard"></div><button class="button" id="goals-toggle" type="button" aria-controls="goals-list" aria-expanded="false">Show top 20</button></article>
         <article><span class="number">02 / PLAYMAKERS</span><h2>Assists</h2><div id="assists-list" class="goals-list" aria-label="Assists leaderboard"></div><button class="button" id="assists-toggle" type="button" aria-controls="assists-list" aria-expanded="false">Show top 20</button></article>
-        <article class="mvp-panel"><span class="number">03 / MVP</span><h2 id="mvp-title">Grande Amore top 10</h2><p class="small-note" id="mvp-method">Based on current Elo. Equal Elo scores share a rank; ties use original roster order. 8 November tournament adjustments appear beside Elo: green gains, red losses, grey zero. Legendary status does not affect ranking.</p><div class="table-wrap"><table aria-describedby="mvp-method"><thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Position</th><th scope="col">Rating</th><th scope="col">Elo</th></tr></thead><tbody id="mvp-list"></tbody></table></div><button class="button" id="mvp-toggle" type="button" aria-controls="mvp-list" aria-expanded="false">Show top 20</button></article>
+        <article class="mvp-panel"><span class="number">03 / MVP</span><h2 id="mvp-title">Grande Amore top 10</h2><p class="small-note" id="mvp-method">Based on current Elo. Equal Elo scores share a rank; ties use original roster order. 15 November tournament adjustments appear beside Elo: green gains, red losses, grey zero. Legendary status does not affect ranking.</p><div class="table-wrap"><table aria-describedby="mvp-method"><thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Position</th><th scope="col">Rating</th><th scope="col">Elo</th></tr></thead><tbody id="mvp-list"></tbody></table></div><button class="button" id="mvp-toggle" type="button" aria-controls="mvp-list" aria-expanded="false">Show top 20</button></article>
       </div>
     </section>
   </main>
@@ -372,8 +373,8 @@
 <script src="placement-preview.js"></script>
 <script src="players.js?v=20261115-alex-samuel"></script>
 <script src="goals.js?v=20261109-nov8-contributions"></script>
-<script src="matches.js?v=20261109-corrected-swap"></script>
-<script src="season.js?v=20261109-nov8-contributions"></script>
+<script src="matches.js?v=20261115-results"></script>
+<script src="season.js?v=20261115-results"></script>
 <script src="memories.js"></script>
 
 <script src="fight.js?v=20261115-duel-squad-inca"></script>

@@ -222,6 +222,9 @@ const november8Standings = [
 ];
 
 // Results affect display order only; the approved team numbers and lineups stay fixed.
+const november15Match = {"date": "2026-11-15", "teams": [["Shahrom", "Loay", "Iacob", "Darius", "Giorgios", "Teodor", "Hay"], ["Philipp", "Daniel", "Steve Alex", "Takunda", "Ado", "Danilo", "Lucas"], ["Vadim", "fabian", "Andreeas", "Davide Polli", "Nikita", "Baraa", "Laurenz"], ["Obaida", "Alexandros", "Momo", "Alex (Samuel)", "Mostafa", "Jack", "Samu"]]};
+const november15Standings = [{"team": 3, "points": 7, "champions": true}, {"team": 1, "points": 4}, {"team": 2, "points": 4}, {"team": 4, "points": 1}];
+
 const matchStandings = [
   { team: 3, points: 7, champions: true },
   { team: 4, points: 4 },

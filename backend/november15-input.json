@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-15",
+  "ratingRevision": 2113,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Shahrom",
+        "Loay",
+        "Iacob",
+        "Darius",
+        "Giorgios",
+        "Teodor",
+        "Hay"
+      ],
+      "points": 4,
+      "champions": false
+    },
+    {
+      "team": 2,
+      "players": [
+        "Philipp",
+        "Daniel",
+        "Steve Alex",
+        "Takunda",
+        "Ado",
+        "Danilo",
+        "Lucas"
+      ],
+      "points": 4,
+      "champions": false
+    },
+    {
+      "team": 3,
+      "players": [
+        "Vadim",
+        "fabian",
+        "Andreeas",
+        "Davide Polli",
+        "Nikita",
+        "Baraa",
+        "Laurenz"
+      ],
+      "points": 7,
+      "champions": true
+    },
+    {
+      "team": 4,
+      "players": [
+        "Obaida",
+        "Alexandros",
+        "Momo",
+        "Alex (Samuel)",
+        "Mostafa",
+        "Jack",
+        "Samu"
+      ],
+      "points": 1,
+      "champions": false
+    }
+  ],
+  "ratings": {
+    "Shahrom": 1022,
+    "Loay": 1307,
+    "Iacob": 874,
+    "Darius": 1009,
+    "Giorgios": 1150,
+    "Teodor": 1006,
+    "Hay": 1203,
+    "Philipp": 1019,
+    "Daniel": 1428,
+    "Steve Alex": 702,
+    "Takunda": 994,
+    "Ado": 1000,
+    "Danilo": 1125,
+    "Lucas": 1302,
+    "Vadim": 924,
+    "fabian": 1184,
+    "Andreeas": 966,
+    "Davide Polli": 1267,
+    "Nikita": 1257,
+    "Baraa": 1050,
+    "Laurenz": 922,
+    "Obaida": 1139,
+    "Alexandros": 1212,
+    "Momo": 835,
+    "Alex (Samuel)": 995,
+    "Mostafa": 1061,
+    "Jack": 1055,
+    "Samu": 1274
+  },
+  "approvedEloOverride": {
+    "team": 3,
+    "delta": 40,
+    "reason": "User-approved winning-team award of +40 instead of calculated +20."
+  }
+}

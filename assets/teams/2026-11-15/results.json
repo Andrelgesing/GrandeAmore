@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-15",
+  "standings": [
+    {
+      "team": 3,
+      "points": 7,
+      "champions": true
+    },
+    {
+      "team": 1,
+      "points": 4
+    },
+    {
+      "team": 2,
+      "points": 4
+    },
+    {
+      "team": 4,
+      "points": 1
+    }
+  ],
+  "eloAdjustmentsPerPlayer": {
+    "1": 0,
+    "2": 0,
+    "3": 40,
+    "4": -40
+  }
+}

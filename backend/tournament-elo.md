@@ -104,3 +104,9 @@ tournament:2026-11-08:lineup-correction:v1 holds before/after live ratings and
 correctionAdjustments. Its adjustments field contains FINAL tournament awards
 (-40/+40/-20/+20), used by Stats parentheses, dated placement reads and archives.
 Flag APPLY_NOVEMBER8_LINEUP_CORRECTION=true applies this only once.
+
+## 15 November 2026
+
+Frozen pre-match revision 2113. Team 3 won with 7 tournament points; Teams 1 and 2 had 4 each; Team 4 had 1. The user approved +40 per winner instead of the routine's calculated +20. Final Elo adjustments per player: Team 1 0, Team 2 0, Team 3 +40, Team 4 -40. Season points: 4, 4, 7, 1; three matches played per participant. Goals and assists were not supplied and remain unchanged.
+
+APPLY_TOURNAMENT_20261115=true applies deltas once to current live ratings. Audit key tournament:2026-11-15:placement preserves the frozen input, routine calculation, explicit override and exact before/after records. Restart/redeploy does not apply the event twice.

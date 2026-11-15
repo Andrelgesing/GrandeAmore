@@ -1,22 +1,25 @@
 {
   "name": "grande-amore-ratings",
+  "account_id": "2e4d25b9d3de1dfa5d8753027089541c",
   "main": "worker.js",
   "compatibility_date": "2026-10-10",
+  "compatibility_flags": [],
   "vars": {
-    "ELO_K": "16",
-    "APPLY_NOVEMBER8_LINEUP_CORRECTION": "true",
-    "APPLY_TOURNAMENT_20261108": "true",
-    "APPLY_OBAIDA_1150": "true",
-    "APPLY_NOVEMBER8_BONUS": "true",
-    "APPLY_NOVEMBER8_SECOND_BONUS": "true",
-    "APPLY_MATCH_20261101": "true",
+    "ALLOWED_ORIGIN": "https://andrelgesing.github.io",
     "APPLY_BARAA_20261101": "true",
-    "APPLY_TOURNAMENT_20261025": "true",
-    "MVP_CLOSED": "false",
+    "APPLY_MATCH_20261101": "true",
+    "APPLY_NOVEMBER8_BONUS": "true",
+    "APPLY_NOVEMBER8_LINEUP_CORRECTION": "true",
+    "APPLY_NOVEMBER8_SECOND_BONUS": "true",
+    "APPLY_OBAIDA_1150": "true",
     "APPLY_RONALDO_20261018": "true",
     "APPLY_TOURNAMENT_20261011": "true",
     "APPLY_TOURNAMENT_20261018": "true",
-    "ALLOWED_ORIGIN": "https://andrelgesing.github.io"
+    "APPLY_TOURNAMENT_20261025": "true",
+    "APPLY_TOURNAMENT_20261108": "true",
+    "ELO_K": "16",
+    "MVP_CLOSED": "false",
+    "APPLY_TOURNAMENT_20261115": "true"
   },
   "durable_objects": {
     "bindings": [
@@ -26,6 +29,28 @@
       }
     ]
   },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": false,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  },
+  "triggers": {
+    "crons": [
+      "55 21 * * *",
+      "55 22 * * *"
+    ]
+  },
   "migrations": [
     {
       "tag": "v1",
@@ -33,17 +58,5 @@
         "Rankings"
       ]
     }
-  ],
-  "triggers": {
-    "crons": [
-      "55 21 * * *",
-      "55 22 * * *"
-    ]
-  },
-  "observability": {
-    "enabled": true,
-    "traces": {
-      "enabled": true
-    }
-  }
+  ]
 }

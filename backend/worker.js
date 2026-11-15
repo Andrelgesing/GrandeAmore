@@ -1,3 +1,102 @@
+const november15Key = 'tournament:2026-11-15:placement';
+const november15Input = {
+  "date": "2026-11-15",
+  "ratingRevision": 2113,
+  "divisor": 200,
+  "teams": [
+    {
+      "team": 1,
+      "players": [
+        "Shahrom",
+        "Loay",
+        "Iacob",
+        "Darius",
+        "Giorgios",
+        "Teodor",
+        "Hay"
+      ],
+      "points": 4,
+      "champions": false
+    },
+    {
+      "team": 2,
+      "players": [
+        "Philipp",
+        "Daniel",
+        "Steve Alex",
+        "Takunda",
+        "Ado",
+        "Danilo",
+        "Lucas"
+      ],
+      "points": 4,
+      "champions": false
+    },
+    {
+      "team": 3,
+      "players": [
+        "Vadim",
+        "fabian",
+        "Andreeas",
+        "Davide Polli",
+        "Nikita",
+        "Baraa",
+        "Laurenz"
+      ],
+      "points": 7,
+      "champions": true
+    },
+    {
+      "team": 4,
+      "players": [
+        "Obaida",
+        "Alexandros",
+        "Momo",
+        "Alex (Samuel)",
+        "Mostafa",
+        "Jack",
+        "Samu"
+      ],
+      "points": 1,
+      "champions": false
+    }
+  ],
+  "ratings": {
+    "Shahrom": 1022,
+    "Loay": 1307,
+    "Iacob": 874,
+    "Darius": 1009,
+    "Giorgios": 1150,
+    "Teodor": 1006,
+    "Hay": 1203,
+    "Philipp": 1019,
+    "Daniel": 1428,
+    "Steve Alex": 702,
+    "Takunda": 994,
+    "Ado": 1000,
+    "Danilo": 1125,
+    "Lucas": 1302,
+    "Vadim": 924,
+    "fabian": 1184,
+    "Andreeas": 966,
+    "Davide Polli": 1267,
+    "Nikita": 1257,
+    "Baraa": 1050,
+    "Laurenz": 922,
+    "Obaida": 1139,
+    "Alexandros": 1212,
+    "Momo": 835,
+    "Alex (Samuel)": 995,
+    "Mostafa": 1061,
+    "Jack": 1055,
+    "Samu": 1274
+  },
+  "approvedEloOverride": {
+    "team": 3,
+    "delta": 40,
+    "reason": "User-approved winning-team award of +40 instead of calculated +20."
+  }
+};
 const november8CorrectedKey = 'tournament:2026-11-08:lineup-correction:v1';
 const november8CorrectedInput = {
   "date": "2026-11-08",
@@ -316,7 +415,7 @@ function calculateTournamentElo({ teams, ratings, divisor = 200 }) {
  return { rule: 'tournament-elo-v1', divisor, drawModel: 'E*(1-E)', neutralBand: 0.5, championMinimum: 10, teams: calculated, adjustments };
 }
 
-const latestTournamentPlacement = async storage => await storage.get(november8CorrectedKey) || await storage.get(november8Key) || await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
+const latestTournamentPlacement = async storage => await storage.get(november15Key) || await storage.get(november8CorrectedKey) || await storage.get(november8Key) || await storage.get(november1Key) || await storage.get(tournament25Key) || await storage.get(tournament18Key) || await storage.get(tournamentKey);
 const mvpOpening = Date.parse('2026-11-08T18:30:00+01:00');
 const mvpPoll = '2026-11-08-official';
 const mvpCandidates = ["Vadim", "Hay", "Teodor", "Cedo", "Ahmed", "Nikita", "Baraa", "Saad", "Samu", "Laurenz", "Alexander", "Alexandros", "Giorgios", "Shahrom", "Daniel", "Ali K", "gabi", "Ali", "Takunda", "Dejan", "Levi", "Obaida", "Loay", "Omar", "Jack", "Martin", "Chris", "Johny"];
@@ -365,6 +464,7 @@ seed['Alex (Samuel)'] = { elo: 1000, legendary: false };
 // Keep membership aligned with players.js; ratings and history stay stored.
 const substituteNames = new Set(["Dejan", "Valentin", "Milan", "Mohamed", "@Fabien Vjaceslavs", "Manuel", "Chris", "Marco", "Martin", "David", "Yahya", "Vasilis", "Raul", "Carlo", "Leo", "Ahmad", "Mauro", "3rd GK", "Omar Johny", "Leandro", "Ahmed", "Wesam", "Luka", "Omar B", "Cedo", "Ali K", "Saad", "Inca"]);
 export const duelEligible = name => Object.hasOwn(seed, name) && name !== '@~❄️' && !substituteNames.has(name);
+const isAccountPlayer = name => typeof name === 'string' && /^pilot-player-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(name);
 export const calibrationK = (rating, baseK = 16) => (rating.calibrationDuels ?? 10) < 3 ? 64 : (rating.calibrationDuels ?? 10) < 10 ? 32 : baseK;
 const calibrationMigration = 'elo-calibration:v1';
 const archivePrefix = 'elo-snapshot:';
@@ -584,6 +684,25 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    // Apply the approved 15 November tournament exactly once to current ratings.
+    if (env.APPLY_TOURNAMENT_20261115 === 'true' && !await tx.get(november15Key)) {
+     const calculation = calculateTournamentElo(november15Input);
+     for (const team of calculation.teams) {
+      team.calculatedDelta = team.delta;
+      if (team.team === november15Input.approvedEloOverride.team) team.delta = november15Input.approvedEloOverride.delta;
+      for (const name of team.players) calculation.adjustments[name] = team.delta;
+     }
+     const beforeRevision = await tx.get('revision') || 0;
+     const beforeRatings = structuredClone(ratings);
+     for (const [name, delta] of Object.entries(calculation.adjustments)) {
+      if (!Object.hasOwn(ratings, name)) throw new Error('Missing November 15 participant: ' + name);
+      ratings[name].elo += delta;
+      ratings[name].legendary ||= ratings[name].elo >= 1350;
+     }
+     await tx.put(november15Key, { date: '2026-11-15', ...calculation, input: november15Input, approvedEloOverride: november15Input.approvedEloOverride, beforeRatings, afterRatings: structuredClone(ratings), beforeRevision, revision: beforeRevision + 1, at: Date.now() });
+     await tx.put('revision', beforeRevision + 1);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));
@@ -593,6 +712,19 @@ export class Rankings {
  async fetch(request) {
   const url = new URL(request.url);
   const path = url.pathname;
+  if (path === '/internal/enroll-player' && request.method === 'POST') {
+   const { player, stars } = await request.json();
+   if (!isAccountPlayer(player) || ![2, 3, 4].includes(stars)) return new Response('Invalid enrollment', { status: 400 });
+   return this.ctx.storage.transaction(async tx => {
+    const ratings = await tx.get('ratings');
+    if (!Object.hasOwn(ratings, player)) {
+     ratings[player] = { elo: 400 + 200 * stars, legendary: false, calibrationDuels: 0 };
+     await tx.put('ratings', ratings);
+     await tx.put('revision', (await tx.get('revision') || 0) + 1);
+    }
+    return Response.json(ratings[player]);
+   });
+  }
   if (path === '/internal/elo-snapshot' && request.method === 'POST') {
    const { scheduledAt } = await request.json();
    if (!Number.isFinite(scheduledAt) || viennaDate(scheduledAt).time !== '23:55') return new Response('Invalid schedule', { status: 400 });
@@ -621,7 +753,7 @@ export class Rankings {
   }
   if (path === '/tournament-placement' && request.method === 'GET') {
    const date = url.searchParams.get('date');
-   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01', '2026-11-08'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
+   if (date && !['2026-10-11', '2026-10-18', '2026-10-25', '2026-11-01', '2026-11-08', '2026-11-15'].includes(date)) return new Response('Invalid tournament date', { status: 400 });
    if (date === '2026-11-08') return Response.json(await this.ctx.storage.get(november8CorrectedKey) || await this.ctx.storage.get(november8Key) || null);
    return Response.json(date ? await this.ctx.storage.get(`tournament:${date}:placement`) || null : await latestTournamentPlacement(this.ctx.storage) || null);
   }
@@ -631,10 +763,11 @@ export class Rankings {
   let vote;
   try { vote = JSON.parse(await request.text()); } catch (_) { return new Response('Invalid JSON', { status: 400 }); }
   const { winner, loser, id } = vote;
-  if (!duelEligible(winner) || !duelEligible(loser) || winner === loser || typeof id !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(id)) return new Response('Invalid vote', { status: 400 });
+  if (!(duelEligible(winner) || isAccountPlayer(winner)) || !(duelEligible(loser) || isAccountPlayer(loser)) || winner === loser || typeof id !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(id)) return new Response('Invalid vote', { status: 400 });
   return this.ctx.storage.transaction(async tx => {
    const previous = await tx.get('vote:' + id);
    const ratings = await tx.get('ratings');
+   if (!Object.hasOwn(ratings, winner) || !Object.hasOwn(ratings, loser)) return new Response('Invalid vote', { status: 400 });
    if (previous) {
     if (previous.winner !== winner || previous.loser !== loser) return new Response('Conflicting vote', { status: 409 });
     return Response.json({ ratings, revision: await tx.get('revision') || 0 });
