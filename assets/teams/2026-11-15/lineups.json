@@ -1,0 +1,245 @@
+{
+  "date": "2026-11-15",
+  "revision": 2113,
+  "pairs": [
+    [
+      "Samu",
+      "Alex (Samuel)"
+    ],
+    [
+      "Loay",
+      "Hay"
+    ],
+    [
+      "Nikita",
+      "Vadim"
+    ]
+  ],
+  "solverStatus": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "teams": [
+    {
+      "team": 1,
+      "captain": "Loay",
+      "averageElo": 1081.5714285714287,
+      "members": [
+        {
+          "role": "ST",
+          "name": "Shahrom",
+          "position": "ST",
+          "elo": 1022,
+          "legendary": true
+        },
+        {
+          "role": "CM",
+          "name": "Loay",
+          "position": "CM/ST",
+          "elo": 1307,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "Iacob",
+          "position": "CM",
+          "elo": 874,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Darius",
+          "position": "CB",
+          "elo": 1009,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Giorgios",
+          "position": "CB",
+          "elo": 1150,
+          "legendary": true
+        },
+        {
+          "role": "CB",
+          "name": "Teodor",
+          "position": "CB/CM",
+          "elo": 1006,
+          "legendary": false
+        },
+        {
+          "role": "GK",
+          "name": "Hay",
+          "position": "ST/CM",
+          "elo": 1203,
+          "legendary": false
+        }
+      ]
+    },
+    {
+      "team": 2,
+      "captain": "Daniel",
+      "averageElo": 1081.4285714285713,
+      "members": [
+        {
+          "role": "ST",
+          "name": "Philipp",
+          "position": "ST",
+          "elo": 1019,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "Daniel",
+          "position": "CM/ST",
+          "elo": 1428,
+          "legendary": true
+        },
+        {
+          "role": "CM",
+          "name": "Steve Alex",
+          "position": "CM/ST",
+          "elo": 702,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Takunda",
+          "position": "CB",
+          "elo": 994,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Ado",
+          "position": "CB",
+          "elo": 1000,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Danilo",
+          "position": "CB",
+          "elo": 1125,
+          "legendary": false
+        },
+        {
+          "role": "GK",
+          "name": "Lucas",
+          "position": "ST/CM",
+          "elo": 1302,
+          "legendary": false
+        }
+      ]
+    },
+    {
+      "team": 3,
+      "captain": "Davide Polli",
+      "averageElo": 1081.4285714285713,
+      "members": [
+        {
+          "role": "ST",
+          "name": "Vadim",
+          "position": "ST",
+          "elo": 924,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "fabian",
+          "position": "CM",
+          "elo": 1184,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "Andreeas",
+          "position": "CM",
+          "elo": 966,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Davide Polli",
+          "position": "ST",
+          "elo": 1267,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Nikita",
+          "position": "CB",
+          "elo": 1257,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Baraa",
+          "position": "CB",
+          "elo": 1050,
+          "legendary": false
+        },
+        {
+          "role": "GK",
+          "name": "Laurenz",
+          "position": "CM",
+          "elo": 922,
+          "legendary": false
+        }
+      ]
+    },
+    {
+      "team": 4,
+      "captain": "Samu",
+      "averageElo": 1081.5714285714287,
+      "members": [
+        {
+          "role": "ST",
+          "name": "Obaida",
+          "position": "ST",
+          "elo": 1139,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "Alexandros",
+          "position": "CM/ST",
+          "elo": 1212,
+          "legendary": false
+        },
+        {
+          "role": "CM",
+          "name": "Momo",
+          "position": "CM",
+          "elo": 835,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Alex (Samuel)",
+          "position": "CB/CM",
+          "elo": 995,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Mostafa",
+          "position": "CB",
+          "elo": 1061,
+          "legendary": false
+        },
+        {
+          "role": "CB",
+          "name": "Jack",
+          "position": "CB",
+          "elo": 1055,
+          "legendary": false
+        },
+        {
+          "role": "GK",
+          "name": "Samu",
+          "position": "ST/CM",
+          "elo": 1274,
+          "legendary": false
+        }
+      ]
+    }
+  ]
+}
