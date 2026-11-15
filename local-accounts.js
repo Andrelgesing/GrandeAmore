@@ -67,6 +67,7 @@
     applyPlayerPhotos();
     renderPlayerGrid();
     if (RATINGS_API) await refreshRatings();
+    window.dispatchEvent(new CustomEvent('account-state-changed', {detail: {user: state.user}}));
   }
   function applyPlayerPhotos() {
     const changed = new Map();
@@ -160,6 +161,7 @@
         const proof = btoa(String.fromCharCode(...new Uint8Array(digest))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
         sessionStorage.setItem('ga-verifier', verifier);
         sessionStorage.setItem('ga-return', location.hash);
+        if (sessionStorage.getItem('ga-mvp-intent')) sessionStorage.setItem('ga-return', '#home');
         location.assign(link.href + '?proof=' + proof);
       };
       link.className = 'google-sign-in';
@@ -533,6 +535,17 @@
     }
     dialog.append(button('Back', home));
   }
+  window.grandeAmoreAccount = {
+    async requireSignIn() {
+      await refresh();
+      if (state.user) return true;
+      auth();
+      message.textContent = 'Sign in to vote for the tournament MVP.';
+      return false;
+    },
+    currentUser: () => state?.user || null,
+    api
+  };
   entry.onclick = home;
   refresh().then(() => {
     if (params.has('sign-in')) {
