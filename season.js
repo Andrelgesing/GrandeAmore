@@ -38,8 +38,8 @@ const seasonFixtures = [{
   date: november15Match.date,
   teams: november15Match.teams,
   standings: november15Standings,
-  goals: [],
-  assists: [],
+  goals: november15Goals,
+  assists: november15Assists,
   matchesPlayed: 3
 }];
 

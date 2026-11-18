@@ -45,6 +45,9 @@ const november8Assists = [
  ['Samu', 5], ['Baraa', 3], ['Giorgios', 3], ['Loay', 3], ['gabi', 3],
  ['Chris', 2], ['Shahrom', 2], ['Takunda', 1], ['Ali K', 1], ['Alexandre', 1], ['Nikita', 1]
 ];
+// Confirmed contributions from 15 November 2026.
+const november15Goals = [["fabian", 4], ["Philipp", 4], ["Loay", 3], ["Shahrom", 3], ["Iacob", 2], ["Samu", 2], ["Daniel", 2], ["Davide Polli", 2], ["Baraa", 1]];
+const november15Assists = [["Davide Polli", 5], ["Mostafa", 4], ["Iacob", 3], ["Loay", 2], ["Takunda", 2], ["Giorgios", 2], ["Andreeas", 1], ["Shahrom", 1], ["Philipp", 1], ["Baraa", 1], ["Jack", 1]];
 function combinedContributions(...fixtures) {
  const totals = new Map();
  for (const entries of fixtures) for (const [name, count] of entries) totals.set(name, (totals.get(name) || 0) + count);
@@ -68,8 +71,8 @@ function renderContributions(selector, contributions, unit, limit = 10) {
  }
 }
 function renderGoals() {
- renderContributions('#goals-list', combinedContributions(tournamentGoals, currentTournamentGoals, october25Goals, november1Goals, november8Goals), 'goal', contributionLimits.goals);
- renderContributions('#assists-list', combinedContributions(tournamentAssists, currentTournamentAssists, october25Assists, november1Assists, november8Assists), 'assist', contributionLimits.assists);
+ renderContributions('#goals-list', combinedContributions(tournamentGoals, currentTournamentGoals, october25Goals, november1Goals, november8Goals, november15Goals), 'goal', contributionLimits.goals);
+ renderContributions('#assists-list', combinedContributions(tournamentAssists, currentTournamentAssists, october25Assists, november1Assists, november8Assists, november15Assists), 'assist', contributionLimits.assists);
 }
 for (const key of ['goals', 'assists']) {
  const toggle = document.querySelector(`#${key}-toggle`);
