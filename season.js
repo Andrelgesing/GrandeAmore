@@ -82,7 +82,8 @@ function renderSeason() {
     identity.addEventListener('click', () => openPlayerCard(entry.player));
     const portrait = document.createElement('span'); portrait.className = 'mvp-photo'; portrait.setAttribute('aria-hidden', 'true');
     if (entry.player.photo) {
-      const image = document.createElement('img'); image.src = entry.player.photo; image.alt = ''; image.loading = 'lazy'; portrait.append(image);
+      const image = document.createElement('img'); image.src = entry.player.photo; image.alt = ''; image.loading = 'lazy'; if (entry.player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
+    portrait.append(image);
     } else portrait.textContent = Array.from(entry.player.name.replace(/^@/, ''))[0].toUpperCase();
     const label = document.createElement('span'); label.textContent = entry.player.name;
     identity.append(portrait, label); nameCell.append(identity);

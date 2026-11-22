@@ -707,6 +707,19 @@ export class Rankings {
      await tx.put('revision', beforeRevision + 1);
      changed = true;
     }
+    const fabianMvpKey = 'elo-award:fabian:mvp:2026-11-15';
+    const november15Placement = await tx.get(november15Key);
+    if (november15Placement && !await tx.get(fabianMvpKey)) {
+     const before = ratings.fabian.elo;
+     const revision = (await tx.get('revision') || 0) + 1;
+     ratings.fabian.elo += 20;
+     ratings.fabian.legendary ||= ratings.fabian.elo >= 1350;
+     november15Placement.adjustments.fabian += 20;
+     await tx.put(november15Key, november15Placement);
+     await tx.put(fabianMvpKey, { before, after: ratings.fabian.elo, delta: 20, revision, at: Date.now() });
+     await tx.put('revision', revision);
+     changed = true;
+    }
     if (changed) await tx.put('ratings', ratings);
     if (!calibrationEnabled) await tx.put(calibrationMigration, true);
     if (!await tx.get(archiveBaseline)) await tx.put(archiveBaseline, await snapshot(tx));

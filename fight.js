@@ -82,7 +82,8 @@ function nextFight() {
       const image = document.createElement('img');
       image.src = display.photo;
       image.alt = display.name;
-      portrait.append(image);
+      if (player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
+    portrait.append(image);
     } else {
       portrait.textContent = Array.from(display.name.replace(/^@/, ''))[0].toUpperCase();
     }

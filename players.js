@@ -144,7 +144,13 @@ for (const player of photoPlayers.slice(0, 2)) {
   const image = document.createElement('img');
   image.src = player.photo;
   image.alt = player.name;
-  document.querySelector('#home-player-photos').append(image);
+  const photos = document.querySelector('#home-player-photos');
+  if (player.name === 'fabian') {
+    const portrait = document.createElement('span');
+    portrait.setAttribute('data-current-mvp', '');
+    portrait.append(image);
+    photos.append(portrait);
+  } else photos.append(image);
 }
 const dialog = document.querySelector('#player-dialog');
 const detail = document.querySelector('#player-detail');
@@ -185,6 +191,7 @@ function cardContent(player, full = false) {
     image.src = player.photo;
     image.alt = player.name;
     image.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+    if (player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
     portrait.append(image);
   } else {
     portrait.textContent = player.name.replace(/^@/, '').split(/\s+/).map(word => Array.from(word)[0]).slice(0, 2).join('').toUpperCase();
@@ -300,6 +307,7 @@ function renderMvp() {
     image.src = display.photo;
     image.alt = '';
     image.loading = 'lazy';
+    if (player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
     portrait.append(image);
   } else portrait.textContent = Array.from(display.name.replace(/^@/, ''))[0].toUpperCase();
   const label = document.createElement('span');

@@ -63,7 +63,8 @@ function renderContributions(selector, contributions, unit, limit = 10) {
   row.className = `goal-row player-card ${cardStyle(player)}`;
   const portrait = document.createElement('span'); portrait.className = 'goal-photo';
   if (player.photo) {
-   const image = document.createElement('img'); image.src = player.photo; image.alt = ''; image.loading = 'lazy'; portrait.append(image);
+   const image = document.createElement('img'); image.src = player.photo; image.alt = ''; image.loading = 'lazy'; if (player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
+    portrait.append(image);
   } else portrait.textContent = name.slice(0, 1).toUpperCase();
   const label = document.createElement('span'); label.className = 'goal-name'; label.textContent = name;
   const score = document.createElement('span'); score.className = 'goal-count'; score.textContent = `${count} ${unit}${count === 1 ? '' : 's'}`;
