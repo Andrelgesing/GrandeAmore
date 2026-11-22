@@ -114,11 +114,6 @@
     .match-portrait:focus-visible { outline: 2px solid white; outline-offset: 3px; }
     [data-current-mvp] { position: relative; }
     [data-current-mvp]::after { content: "👑"; position: absolute; z-index: 1; top: 0; left: 50%; transform: translateX(-50%); font-size: clamp(.72rem, 2vw, 1rem); line-height: 1; pointer-events: none; }
-    .past-mvp-banner { display: flex; align-items: center; gap: 16px; width: min(100%, 420px); margin: 14px 0; padding: 12px 18px; border: 2px solid #e6c467; border-radius: 13px; background: #173e32; color: white; }
-    .past-mvp-banner img { display: block; width: 58px; height: 58px; object-fit: cover; border: 3px solid #e6c467; border-radius: 50%; }
-    .past-mvp-banner [data-current-mvp]::after { top: -6px; }
-    .past-mvp-banner strong { display: block; font-size: 1.35rem; }
-    .past-mvp-banner small { color: #ffe082; font-weight: 800; }
     .match-photo { position: relative; width: 48px; margin: 0 auto; }
     .match-captain { position: absolute; top: 23px; right: -27px; z-index: 1; width: 23px; padding: 1px 0; border: 2px solid #b28b2c; border-radius: 5px; background: #ffe082; color: #302812; font-size: .7rem; font-weight: 800; line-height: 1.15; pointer-events: none; }
     .match-archive { margin: 0 0 40px; }
@@ -279,6 +274,8 @@
     @media(max-width:650px) { #ballot-preview { padding: 24px 16px; } }
   </style>
   <link rel="stylesheet" href="local-accounts.css?v=original-url-1">
+  <link rel="stylesheet" href="match-archive.css">
+  <link rel="stylesheet" href="weekly-mvp.css">
 </head>
 <body>
   <header>
@@ -288,6 +285,7 @@
   <dialog id="account-dialog" aria-labelledby="account-title"></dialog>
   <main>
     <div id="home-view"><span id="home"></span>
+    <div id="weekly-mvp"></div>
     <section class="hero" aria-labelledby="welcome">
       <div class="eyebrow">Football. Friends. Grande Amore.</div>
       <h1 id="welcome">One team.<br>One great love.</h1>
@@ -319,7 +317,7 @@
         <h2 id="match-archive-nov15-title">Previous tournament</h2>
         <time class="match-date" datetime="2026-11-15">Sunday · 15 November 2026</time>
         <div class="past-mvp-banner">
-          <span data-current-mvp><img src="players/fabian.jpg" alt=""></span>
+          <span class="past-mvp-portrait" aria-hidden="true"><img src="players/fabian.jpg" alt=""></span>
           <span><small>MVP</small><strong>Fabian</strong></span>
         </div>
       <div class="match-teams" id="november-15-teams">
@@ -394,5 +392,6 @@
 
 <script src="fight.js?v=20261122-fabian-mvp"></script>
 <script src="local-accounts.js?v=20261115-mvp-signin"></script>
+<script src="weekly-mvp.js"></script>
 </body>
 </html>

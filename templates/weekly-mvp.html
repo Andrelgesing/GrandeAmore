@@ -1,0 +1,30 @@
+<section class="weekly-mvp-stage" aria-label="MVP poll">
+  <button class="weekly-mvp-banner" type="button" aria-controls="weekly-mvp-ballot" aria-expanded="false">
+    <img src="assets/grandeamore-ballon-dor.svg" alt="">
+    <span class="weekly-mvp-caption">
+      <strong data-mvp-label></strong>
+      <span id="weekly-mvp-banner-status" role="status"></span>
+      <span id="weekly-mvp-banner-action">Open ballot</span>
+    </span>
+  </button>
+  <div class="weekly-mvp-ballot" id="weekly-mvp-ballot" hidden>
+    <header class="weekly-mvp-header">
+      <h2>Choose your MVP</h2>
+      <button type="button" class="button" id="weekly-mvp-back">Back to banner</button>
+    </header>
+    <p data-mvp-label></p>
+    <div class="weekly-mvp-grid" aria-label="Candidates by team"></div>
+    <section class="weekly-mvp-results" aria-label="Results" hidden></section>
+    <div class="weekly-mvp-footer">
+      <p role="status" id="weekly-mvp-status"></p>
+      <button type="button" class="button" id="weekly-mvp-view-results">View results</button>
+    </div>
+  </div>
+  <dialog id="weekly-mvp-confirm" aria-labelledby="weekly-mvp-question">
+    <h2 id="weekly-mvp-question"></h2>
+    <form method="dialog">
+      <button class="button" value="yes">Yes</button>
+      <button class="button" value="no" autofocus>No</button>
+    </form>
+  </dialog>
+</section>

@@ -2,6 +2,8 @@
 
 A simple football team website. Layout and styling are in `index.html`; the player roster and card interactions are in `players.js`.
 
+See [Weekly matchday](WEEKLY-MATCHDAY.md) for the recurring team graphics, MVP ballot, archive, and chat commands.
+
 ## Players
 
 Open the Players tab to see all 32 players. Ratings are calculated from Elo;
