@@ -10,6 +10,7 @@ class Element {
   setAttribute(name, value) { this.attributes[name] = value; }
 }
 const grid = new Element('div');
+const november22Grid = new Element('div');
 const upcomingGrid = new Element('div');
 const bench = new Element('div');
 const listeners = {};
@@ -19,6 +20,7 @@ const context = vm.createContext({
   document: {
     createElement: tag => new Element(tag),
     querySelector: selector => {
+      if (selector === '#november-22-teams') return november22Grid;
       if (selector === '#november-8-teams') return upcomingGrid;
       if (selector === '#november-8-bench') return bench;
       assert.equal(selector, '#match-teams');
@@ -112,7 +114,7 @@ for (const [elo,status,color] of [[800,null,'bronze'],[1000,null,'silver'],[1200
  const item=vm.runInContext('matchPlayer',context)({player:{name:'Border check',position:'CM',elo,rating:3,status},role:'CM'}, config, config.captains);
  assert.equal(item.children[0].children[0].className, `match-portrait ${color}`);
 }
-assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,5);
+assert.equal(JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures)',context)).length,6);
 console.log('Passed: current lineups, fixed team, paired players, captains, cards, read-only ratings, live refresh, and preserved historical season record.');
 
 const november = JSON.parse(vm.runInContext('JSON.stringify(seasonFixtures[3])', context));
@@ -135,10 +137,10 @@ const latest = fixtures[4];
 assert.equal(latest.date,'2026-11-08');assert.equal(latest.matchesPlayed,3);
 assert.deepEqual(latest.standings.map(s=>[s.team,s.points]),[[2,9],[4,6],[3,3],[1,0]]);
 assert(latest.teams[0].includes('Teodor'));assert(latest.teams[1].includes('Alexandros'));assert(latest.teams[2].includes('Ali'));
-const afterNovember8=new Map(build(fixtures,players).map(e=>[e.player.name,e]));
+const afterNovember8=new Map(build(fixtures.slice(0,5),players).map(e=>[e.player.name,e]));
 const participantPoints=new Map(latest.standings.flatMap(s=>latest.teams[s.team-1].map(n=>[n,s.points])));
 assert.equal(participantPoints.size,28);assert(!participantPoints.has('Iacob'));
-for(const [name,points] of participantPoints){const old=afterNovember.get(name)||{points:0,mp:0,goals:0,assists:0},now=afterNovember8.get(name);assert.equal(now.points,old.points+points);assert.equal(now.mp,old.mp+3);assert.equal(now.goals,old.goals);assert.equal(now.assists,old.assists);}
+for(const [name,points] of participantPoints){const old=afterNovember.get(name)||{points:0,mp:0,goals:0,assists:0},now=afterNovember8.get(name);assert.equal(now.points,old.points+points);assert.equal(now.mp,old.mp+3);assert.equal(now.goals,old.goals+(new Map(latest.goals).get(name)||0));assert.equal(now.assists,old.assists+(new Map(latest.assists).get(name)||0));}
 for(const [name,old] of afterNovember)if(!participantPoints.has(name))assert.deepEqual(afterNovember8.get(name),old);
 assert.deepEqual(upcomingGrid.children.map(c=>descendants(c).find(e=>e.tag==='h2').textContent),['Team 2','Team 4','Team 3','Team 1']);
 assert.deepEqual(upcomingGrid.children.map(c=>descendants(c).find(e=>e.className==='match-points').textContent),['9 pts','6 pts','3 pts','0 pts']);

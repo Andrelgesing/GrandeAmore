@@ -112,6 +112,7 @@
     .match-portrait { display: grid; place-items: center; width: 48px; height: 48px; transform: translateY(-8px) scale(1.56); margin: 0 auto 7px; border: 3px solid var(--metal, #d8dfe3); border-radius: 50%; background: #173e32; font-weight: 800; }
     .match-portrait { padding: 0; color: white; font-family: inherit; }
     .match-portrait:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .match-mvp { position: absolute; top: -22px; right: -17px; z-index: 1; font-size: 1.15rem; pointer-events: none; }
     .match-photo { position: relative; width: 48px; margin: 0 auto; }
     .match-captain { position: absolute; top: 23px; right: -27px; z-index: 1; width: 23px; padding: 1px 0; border: 2px solid #b28b2c; border-radius: 5px; background: #ffe082; color: #302812; font-size: .7rem; font-weight: 800; line-height: 1.15; pointer-events: none; }
     .match-archive { margin: 0 0 40px; }
@@ -286,7 +287,6 @@
       <h1 id="welcome">One team.<br>One great love.</h1>
       <p class="intro">Simply Grande Amore</p>
     </section>
-    <div id="november-mvp-preview"></div>
     <section class="fight" aria-labelledby="fight-title">
       <div class="fight-header"><span class="eyebrow">Fight / Grande Amore Arcade</span><h2 id="fight-title">Pick who would win</h2><p>Your decision will be used to update the players' ratings.</p></div>
       <div class="arena" id="fight-arena"><div id="fight-options" class="fight-options"></div></div>
@@ -307,13 +307,18 @@
       <div id="substitutes-section" hidden><h2>Substitutes</h2><div class="player-grid" id="substitutes-grid"></div></div>
     </section>
     <section id="matches-view" hidden aria-labelledby="matches-title">
-      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Tournament</h1><time class="match-date" datetime="2026-11-15">Sunday · 15 November 2026</time></div>
+      <div class="squad-heading"><div class="eyebrow">Grande Amore FC / Matches</div><h1 id="matches-title">Match</h1><time class="match-date" datetime="2026-11-22">Sunday · 22 November 2026</time><p>Meet-up 17:00 · Kickoff 17:30</p></div>
+      <div id="november-22-teams" class="match-teams"></div>
+      <section class="match-archive" aria-labelledby="match-archive-nov15-title">
+        <h2 id="match-archive-nov15-title">Previous tournament</h2>
+        <time class="match-date" datetime="2026-11-15">Sunday · 15 November 2026</time>
       <div class="match-teams" id="november-15-teams">
         <figure class="match-team-figure"><figcaption class="match-result-caption">Team 1 · 4 pts</figcaption><a href="assets/teams/2026-11-15/team-1.png" aria-label="Open Team 1 figure"><img src="assets/teams/2026-11-15/team-1.png" width="680" height="995" alt="Team 1, captain Loay: Shahrom, Loay, Iacob, Darius, Giorgios, Teodor, Hay"></a></figure>
         <figure class="match-team-figure"><figcaption class="match-result-caption">Team 2 · 4 pts</figcaption><a href="assets/teams/2026-11-15/team-2.png?v=20261115-newphotos" aria-label="Open Team 2 figure"><img src="assets/teams/2026-11-15/team-2.png?v=20261115-newphotos" width="680" height="995" alt="Team 2, captain Daniel: Philipp, Daniel, Steve Alex, Takunda, Ado, Danilo, Lucas"></a></figure>
         <figure class="match-team-figure"><figcaption class="match-result-caption">Team 3 · Champions · 7 pts</figcaption><a href="assets/teams/2026-11-15/team-3.png?v=20261115-newphotos" aria-label="Open Team 3 figure"><img src="assets/teams/2026-11-15/team-3.png?v=20261115-newphotos" width="680" height="995" alt="Team 3, captain Davide Polli: Vadim, fabian, Andreeas, Davide Polli, Nikita, Baraa, Laurenz"></a></figure>
         <figure class="match-team-figure"><figcaption class="match-result-caption">Team 4 · 1 pts</figcaption><a href="assets/teams/2026-11-15/team-4.png" aria-label="Open Team 4 figure"><img src="assets/teams/2026-11-15/team-4.png" width="680" height="995" alt="Team 4, captain Samu: Obaida, Alexandros, Momo, Alex (Samuel), Mostafa, Jack, Samu"></a></figure>
       </div>
+      </section>
       <section class="match-archive" aria-labelledby="match-archive-nov8-title">
         <h2 id="match-archive-nov8-title">Previous tournament</h2>
         <time class="match-date" datetime="2026-11-08">Sunday · 8 November 2026</time>
@@ -373,12 +378,11 @@
 <script src="placement-preview.js"></script>
 <script src="players.js?v=20261122-new-players"></script>
 <script src="goals.js?v=20261118-nov15-contributions"></script>
-<script src="matches.js?v=20261115-results"></script>
+<script src="matches.js?v=20261122-match"></script>
 <script src="season.js?v=20261118-nov15-contributions"></script>
 <script src="memories.js"></script>
 
 <script src="fight.js?v=20261115-duel-squad-inca"></script>
 <script src="local-accounts.js?v=20261115-mvp-signin"></script>
-<script src="mvp-november15.js?v=20261115-account-votes" defer></script>
 </body>
 </html>

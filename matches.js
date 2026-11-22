@@ -327,6 +327,14 @@ function matchPlayer({ player, role }, match, captains) {
     const captain = document.createElement('span'); captain.className = 'match-captain';
     captain.textContent = 'C'; captain.setAttribute('aria-label', 'Captain'); photo.append(captain);
   }
+  if (match.mvp === player.name) {
+    const crown = document.createElement('span');
+    crown.className = 'match-mvp';
+    crown.textContent = '👑';
+    crown.setAttribute('role', 'img');
+    crown.setAttribute('aria-label', 'Current MVP');
+    photo.append(crown);
+  }
   item.append(photo, name);
   if (match.showRatings !== false) item.append(stars(player.rating));
   item.append(position);
@@ -392,7 +400,18 @@ function renderMatch(match, standings, gridId) {
     card.append(heading, pitch); grid.append(card);
   });
 }
+const november22Match = {
+  roles: ['ST', 'ST', 'CM', 'CM', 'CB', 'CB', 'CB', 'GK'],
+  teams: [
+    ['Shahrom', 'Hay', 'gabi', 'Frederik', 'Giorgios', 'Paolo', 'Alexandre', 'Iacob'],
+    ['Steve Alex', 'Luc', 'Yahya', 'Raul', 'Baraa', 'fabian', 'Ikhsan', 'Christoph']
+  ],
+  captains: ['Giorgios', 'Raul'],
+  mvp: 'fabian'
+};
+
 function renderMatches() {
+  renderMatch(november22Match, [{ team: 1, points: null }, { team: 2, points: null }], 'november-22-teams');
   renderMatch(november8Match, november8Standings, 'november-8-teams');
   renderMatch(currentMatch, [...currentMatchStandings].reverse(), 'match-teams');
 }
