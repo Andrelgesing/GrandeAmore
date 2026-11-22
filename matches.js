@@ -310,7 +310,7 @@ function matchPlayer({ player, role }, match, captains) {
   if (player.photo) {
     const image = document.createElement('img');
     image.src = player.photo; image.alt = player.name; image.loading = 'lazy';
-    if (player.name === 'fabian') portrait.setAttribute('data-current-mvp', '');
+    if (player.name === match.mvp) portrait.setAttribute('data-current-mvp', '');
     portrait.append(image);
   } else {
     portrait.textContent = Array.from(player.name.replace(/^@/, ''))[0].toUpperCase();
@@ -399,7 +399,8 @@ const november22Match = {
     ['Shahrom', 'Hay', 'gabi', 'Frederik', 'Giorgios', 'Paolo', 'Alexandre', 'Iacob'],
     ['Steve Alex', 'Luc', 'Yahya', 'Raul', 'Baraa', 'fabian', 'Ikhsan', 'Christoph']
   ],
-  captains: ['Giorgios', 'Raul']
+  captains: ['Giorgios', 'Raul'],
+  mvp: 'fabian'
 };
 
 function renderMatches() {
